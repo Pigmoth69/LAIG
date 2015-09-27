@@ -53,6 +53,13 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 	if((elems = this.parseInitials(rootElement)) != 0)
 		return elems;
 
+	if((elems = this.parseIllumination(rootElement)) != 0)
+		return elems;
+
+
+	/*if((elems = this.parsesMaterials(rootElement))!=0)
+		return elems;*/
+
 };
 
 
@@ -96,7 +103,9 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	}
 
 	var info = rootElement.getElementsByTagName('frustum');
+
 	var frustum = info[0];
+
 	if(frustum == null) {
 		return "frustum tag is missing.";
 	}
@@ -115,6 +124,7 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 		return "either zero or more than 3 elements for rotation.";
 	}
 	var rotationX, rotationY, rotationZ, i;
+
 	for(i = 0; i < 3; i++)
 		if(this.reader.getString(info[i], 'axis', 1) == 'x')
 			rotationX = info[i];
@@ -143,6 +153,111 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
 	
 };
+
+MySceneGraph.prototype.parseIllumination= function(rootElement){
+
+	if(rootElement.getElementsByTagName('ILLUMINATION') == null){
+		return "ILLUMINATION element is missing.";
+	}
+
+	var info = rootElement.getElementsByTagName('ambient');
+
+	var ambient = info[0];
+
+	if(ambient == null) { 
+		return "ambient tag is missing.";
+	}
+	
+	info = rootElement.getElementsByTagName('doubleside');
+
+	var doubleside = info[0];
+	if(doubleside == null) {
+		return "doubleside tag is missing."; 
+	}
+
+
+	info = rootElement.getElementsByTagName('background');
+
+	if(background == null) {
+		return "background tag is missing."; 
+	}
+
+	console.log("ambient: " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1)+", "+this.reader.getInteger(ambient,'b',1)+", "+this.reader.getInteger(ambient,'a',1));
+	console.log("doubleside: " + this.reader.getInteger(translate, 'value', 1));
+	console.log("background: " + this.reader.getInteger(background, 'r', 1) + ", " + this.reader.getInteger(background, 'g', 1)+", "+this.reader.getInteger(background,'b',1)+", "+this.reader.getInteger(background,'a',1));
+}; 
+
+
+/*
+MySceneGraph.prototype.parsesMaterials= function(rootElement) {
+
+	var materials=[];
+
+	if(rootElement.getElementsByTagName('MATERIALS') == null){
+		return "MATERIALS element is missing.";
+	}
+
+	var info = rootElement.getElementsByTagName('MATERIAL');
+
+	var numMaterials = info.length;
+	var i;
+
+	for(i=0; i < numMaterials;i++){
+
+	}
+
+
+	var frustum = info[0];
+
+	if(frustum == null) {
+		return "frustum tag is missing.";
+	}
+	
+	info = rootElement.getElementsByTagName('translate');
+	var translate = info[0];
+	if(translate == null) {
+		return "translate tag is missing.";
+	}
+	
+	info = rootElement.getElementsByTagName('rotation');
+	if(info == null){
+		return "rotation tag is missing.";
+	}
+	else if(info.length != 3){
+		return "either zero or more than 3 elements for rotation.";
+	}
+	var rotationX, rotationY, rotationZ, i;
+
+	for(i = 0; i < 3; i++)
+		if(this.reader.getString(info[i], 'axis', 1) == 'x')
+			rotationX = info[i];
+		else if(this.reader.getString(info[i], 'axis', 1) == 'y')
+			rotationY = info[i];
+		else if(this.reader.getString(info[i], 'axis', 1) == 'z')
+			rotationZ = info[i];
+
+	info = null;
+	info = rootElement.getElementsByTagName('scale');
+	if(info == null){
+		return "scale tag is missing.";
+	}
+	var scale = info[0];
+
+	info = rootElement.getElementsByTagName('reference');
+	if(info == null){
+		return "reference tag is missing.";
+	}
+	var reference = info[0];
+
+	console.log("frustum: " + this.reader.getInteger(frustum, 'near', 1) + ", " + this.reader.getInteger(frustum, 'far', 1));
+	console.log("translate: " + this.reader.getInteger(translate, 'x', 1) + ", " + this.reader.getInteger(translate, 'y', 1) + ", " + this.reader.getInteger(translate, 'z', 1));
+	console.log("rotation: " + this.reader.getInteger(rotationX, 'angle', 1) + ", " + this.reader.getInteger(rotationY, 'angle', 1) + ", " + this.reader.getInteger(rotationZ, 'angle', 1))
+	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
+	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
+	
+};
+
+*/
 	
 /*
  * var to be executed on any read error
