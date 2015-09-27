@@ -188,7 +188,7 @@ MySceneGraph.prototype.parseIllumination= function(rootElement){
 }; 
 
 
-/*
+
 MySceneGraph.prototype.parsesMaterials= function(rootElement) {
 
 	var materials=[];
@@ -206,54 +206,6 @@ MySceneGraph.prototype.parsesMaterials= function(rootElement) {
 
 	}
 
-
-	var frustum = info[0];
-
-	if(frustum == null) {
-		return "frustum tag is missing.";
-	}
-	
-	info = rootElement.getElementsByTagName('translate');
-	var translate = info[0];
-	if(translate == null) {
-		return "translate tag is missing.";
-	}
-	
-	info = rootElement.getElementsByTagName('rotation');
-	if(info == null){
-		return "rotation tag is missing.";
-	}
-	else if(info.length != 3){
-		return "either zero or more than 3 elements for rotation.";
-	}
-	var rotationX, rotationY, rotationZ, i;
-
-	for(i = 0; i < 3; i++)
-		if(this.reader.getString(info[i], 'axis', 1) == 'x')
-			rotationX = info[i];
-		else if(this.reader.getString(info[i], 'axis', 1) == 'y')
-			rotationY = info[i];
-		else if(this.reader.getString(info[i], 'axis', 1) == 'z')
-			rotationZ = info[i];
-
-	info = null;
-	info = rootElement.getElementsByTagName('scale');
-	if(info == null){
-		return "scale tag is missing.";
-	}
-	var scale = info[0];
-
-	info = rootElement.getElementsByTagName('reference');
-	if(info == null){
-		return "reference tag is missing.";
-	}
-	var reference = info[0];
-
-	console.log("frustum: " + this.reader.getInteger(frustum, 'near', 1) + ", " + this.reader.getInteger(frustum, 'far', 1));
-	console.log("translate: " + this.reader.getInteger(translate, 'x', 1) + ", " + this.reader.getInteger(translate, 'y', 1) + ", " + this.reader.getInteger(translate, 'z', 1));
-	console.log("rotation: " + this.reader.getInteger(rotationX, 'angle', 1) + ", " + this.reader.getInteger(rotationY, 'angle', 1) + ", " + this.reader.getInteger(rotationZ, 'angle', 1))
-	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
-	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
 	
 };
 
