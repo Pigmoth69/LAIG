@@ -16,8 +16,8 @@ function MySceneGraph(filename, scene) {
 	 */
 	 
 	this.reader.open('scenes/'+filename, this);  
-	var lightsID = [];
-	var lights = [];
+	
+	var XMLLights = [];
 }
 
 /*
@@ -206,28 +206,42 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 	if(info[0] == null){
 		return "No LIGHT was added.";
 	}
-	console.log(info.length);
-	var i = 0;
-	for(i; i < info.length; i++){
-		var light;
+	
+	var light = [];
+	
+	var i, values;
+	for(i=0; i < info.length; i++) {
+				
+		light['id'] = this.reader.getString(info[i], 'id', 1);
+		
+		values = info[i].getElementsByTagName('enable')
+		light['enable'] = this.reader.getBoolean(values[0], 'value', 1);
+		
+		values = info[i].getElementsByTagName('position');
+		light['position'] = [this.reader.getFloat(values[0], 'x', 1),this.reader.getFloat(values[0], 'y', 1),this.reader.getFloat(values[0], 'z', 1),this.reader.getFloat(values[0], 'w', 1)];
+		
+		values = info[i].getElementsByTagName('ambient');
+		light['ambient'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+				
+		values = info[i].getElementsByTagName('diffuse');
+		light['diffuse'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		
+		values = info[i].getElementsByTagName('specular');
+		light['specular'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+	
+		
+		this.scene.lights[i].setPosition(light['position'][0], light['position'][1], light['position'][2], light['position'][3]);
+		this.scene.lights[i].setDiffuse(light['diffuse'][0], light['diffuse'][1], light['diffuse'][2], light['diffuse'][3]);
+		this.scene.lights[i].setSpecular(light['specular'][0], light['specular'][1], light['specular'][2], light['specular'][3]);
+		this.scene.lights[i].setAmbient(light['ambient'][0], light['ambient'][1], light['ambient'][2], light['ambient'][3]);
 
-	//	property = this.reader.getString(info[i], 'id', 1);
-	//	lightsID.push(property); 
-		light = {
-			enable:  this.reader.getInteger(property, 'value', 1),
-			
-			position.x: this.reader.getInteger(property, 'x', 1),
-			position.y: this.reader.getInteger(property, 'y', 1),
-			position.z: this.reader.getInteger(property, 'z', 1),
-			position.a: this.reader.getInteger(property, 'a', 1)
-		};
+	
 
-
-	//	lights.push(light);
+		
 	}
-
-//	console.log(lightsID[0]);
-//	console.log(lights[0].value);
+	
+	
+	
 	return 0;
 };
 
