@@ -16,6 +16,8 @@ function MySceneGraph(filename, scene) {
 	 */
 	 
 	this.reader.open('scenes/'+filename, this);  
+	var lightsID = [];
+	var lights = [];
 }
 
 /*
@@ -56,10 +58,15 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 	if((elems = this.parseIllumination(rootElement)) != 0)
 		return elems;
 
+	if((elems = this.parseLights(rootElement)) != 0)
+		return elems;
 
-	/*if((elems = this.parsesMaterials(rootElement))!=0)
-		return elems;*/
+/*	if((elems = this.parseTextures(rootElement)) != 0)
+		return elems;
 
+	if((elems = this.parseMaterials(rootElement)) != 0)
+		return elems;
+*/
 };
 
 
@@ -102,10 +109,8 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 		return "INITIALS element is missing.";
 	}
 
-	var info = rootElement.getElementsByTagName('frustum');
-
-	var frustum = info[0];
-
+	//var info = rootElement.getElementsByTagName('frustum');
+	var frustum = (rootElement.getElementsByTagName('frustum'))[0];
 	if(frustum == null) {
 		return "frustum tag is missing.";
 	}
@@ -124,7 +129,6 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 		return "either zero or more than 3 elements for rotation.";
 	}
 	var rotationX, rotationY, rotationZ, i;
-
 	for(i = 0; i < 3; i++)
 		if(this.reader.getString(info[i], 'axis', 1) == 'x')
 			rotationX = info[i];
@@ -146,75 +150,96 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	}
 	var reference = info[0];
 
+	//this.scene.camera.setPosition(vec3.fromValues(5, 5, 5));
+	//this.scene.camera.orbit(vec3.fromValues(0, 1, 0), 0.75);
+
 	console.log("frustum: " + this.reader.getInteger(frustum, 'near', 1) + ", " + this.reader.getInteger(frustum, 'far', 1));
 	console.log("translate: " + this.reader.getInteger(translate, 'x', 1) + ", " + this.reader.getInteger(translate, 'y', 1) + ", " + this.reader.getInteger(translate, 'z', 1));
 	console.log("rotation: " + this.reader.getInteger(rotationX, 'angle', 1) + ", " + this.reader.getInteger(rotationY, 'angle', 1) + ", " + this.reader.getInteger(rotationZ, 'angle', 1))
 	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
 	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
 	
+	return 0;
 };
 
-MySceneGraph.prototype.parseIllumination= function(rootElement){
+MySceneGraph.prototype.parseIllumination= function(rootElement) {
 
-	if(rootElement.getElementsByTagName('ILLUMINATION') == null){
-		return "ILLUMINATION element is missing.";
+	if(rootElement.getElementsByTagName('ILLUMINATION') == null) {
+		return "ILLUMINATION tag is missing.";
 	}
 
 	var info = rootElement.getElementsByTagName('ambient');
-
 	var ambient = info[0];
-
-	if(ambient == null) { 
+	if(ambient == null){
 		return "ambient tag is missing.";
 	}
-	
+
 	info = rootElement.getElementsByTagName('doubleside');
-
 	var doubleside = info[0];
-	if(doubleside == null) {
-		return "doubleside tag is missing."; 
+	if(doubleside == null){
+		return "doubleside tag is missing.";
 	}
-
 
 	info = rootElement.getElementsByTagName('background');
-
-	if(background == null) {
-		return "background tag is missing."; 
+	var background = info[0];
+	if(background == null){
+		return "background tag is missing";
 	}
 
-	console.log("ambient: " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1)+", "+this.reader.getInteger(ambient,'b',1)+", "+this.reader.getInteger(ambient,'a',1));
-	console.log("doubleside: " + this.reader.getInteger(translate, 'value', 1));
-	console.log("background: " + this.reader.getInteger(background, 'r', 1) + ", " + this.reader.getInteger(background, 'g', 1)+", "+this.reader.getInteger(background,'b',1)+", "+this.reader.getInteger(background,'a',1));
-}; 
+	console.log("ambient : " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1) + ", " + this.reader.getInteger(ambient, 'b', 1) + this.reader.getInteger(ambient, 'a', 1));
+	console.log("doubleside: " + this.reader.getInteger(doubleside, 'value', 1));
+	console.log("background : " + this.reader.getInteger(background, 'r', 1) + ", " + this.reader.getInteger(background, 'g', 1) + ", " + this.reader.getInteger(background, 'b', 1) + this.reader.getInteger(background, 'a', 1));
 
-
-
-MySceneGraph.prototype.parsesMaterials= function(rootElement) {
-
-	var materials=[];
-
-	if(rootElement.getElementsByTagName('MATERIALS') == null){
-		return "MATERIALS element is missing.";
-	}
-
-	var info = rootElement.getElementsByTagName('MATERIAL');
-
-	var numMaterials = info.length;
-	var i;
-
-	for(i=0; i < numMaterials;i++){
-
-	}
-
-	
-};
-
-*/
+	return 0;
+};	
 	
 /*
  * var to be executed on any read error
  */
  
+MySceneGraph.prototype.parseLights= function(rootElement) {
+	if(rootElement.getElementsByTagName('LIGHTS') == null) {
+		return "LIGHTS tag is missing.";
+	}
+
+	var info = rootElement.getElementsByTagName('LIGHT');
+	if(info[0] == null){
+		return "No LIGHT was added.";
+	}
+	console.log(info.length);
+	var i = 0;
+	for(i; i < info.length; i++){
+		var light;
+
+	//	property = this.reader.getString(info[i], 'id', 1);
+	//	lightsID.push(property); 
+		light = {
+			enable:  this.reader.getInteger(property, 'value', 1),
+			
+			position.x: this.reader.getInteger(property, 'x', 1),
+			position.y: this.reader.getInteger(property, 'y', 1),
+			position.z: this.reader.getInteger(property, 'z', 1),
+			position.a: this.reader.getInteger(property, 'a', 1)
+		};
+
+
+	//	lights.push(light);
+	}
+
+//	console.log(lightsID[0]);
+//	console.log(lights[0].value);
+	return 0;
+};
+
+
+MySceneGraph.prototype.parseTextures= function(rootElement) {
+return 0;
+};
+
+MySceneGraph.prototype.parseMeterials= function(rootElement) {
+return 0;
+};
+
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);	
 	this.loadedOk=false;
