@@ -49,12 +49,12 @@
 
 
 	<MATERIALS>
-	    <MATERIAL id="ss">                                  
-	        <shininess value="ff" />
-	        <specular r="ff" g="ff" b="ff" a="ff" />        <!-- specular reflection -->
-	        <diffuse r="ff" g="ff" b="ff" a="ff" />         <!-- diffuse reflection -->
-	        <ambient r="ff" g="ff" b="ff" a="ff" />         <!-- ambient reflection -->
-	        <emission r="ff" g="ff" b="ff" a="ff" />        <!-- emission component -->
+	    <MATERIAL id="M1">                                  
+	        <shininess value="1" />
+	        <specular r=".2" g=".3" b=".4" a=".5" />        <!-- specular reflection -->
+	        <diffuse r=".2" g=".3" b=".4" a=".5" />         <!-- diffuse reflection -->
+	        <ambient r=".2" g=".3" b=".4" a=".5" />         <!-- ambient reflection -->
+	        <emission r=".2" g=".3" b=".4" a=".5" />        <!-- emission component -->
 	    </MATERIAL>
 
 	    <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material requires a distinct "id" -->
