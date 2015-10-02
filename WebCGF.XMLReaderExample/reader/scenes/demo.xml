@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-16" standalone="yes"?>
 <SCENE>
 
-	<GLOBALS>
+	<GLOBALS>s
      <initials background="0 0 0 1" drawmode="fill" shading="gouraud" cullface="none" cullorder="CCW" />
  	</GLOBALS>
 
@@ -26,7 +26,7 @@
 	<LIGHTS>
 	    <LIGHT id="L1">                                    <!-- light identifier -->
 	        <enable value ="1" />                         <!-- enable/disable -->
-	        <position x="1" y="1" z="1" w="1" />       <!-- light position -->
+	        <position x="0.5" y="0.5" z="0.5" w="1" />       <!-- light position -->
 	        <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
 	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
 	        <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
@@ -45,7 +45,7 @@
 
 	    <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
 	    
-	</TEXTURES>
+	</TEXTURES> 
 
 
 	<MATERIALS>

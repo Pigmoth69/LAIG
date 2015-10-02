@@ -47,7 +47,7 @@ MySceneGraph.prototype.onXMLReady=function()
 MySceneGraph.prototype.parseElements= function(rootElement) {
 
 	var elems = rootElement.getElementsByTagName('SCENE');
-	if(elems == null) {
+	if(elems == null) { 
 		return "SCENE tag ig missing";
 	}
 
@@ -205,8 +205,8 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 	}
 
 	var info = rootElement.getElementsByTagName('LIGHT');
-	if(info[0] == null){
-		return "No LIGHT was added.";
+	if(info[0] == null || info[0]>8){
+		return "No LIGHT was added because there are too many lights or 0";
 	}
 	
 	var i, values;
@@ -260,9 +260,9 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 	
 		this.XMLTextures.push(texture);
 
-		console.log(this.XMLTextures[i]['id']);
+		/*console.log(this.XMLTextures[i]['id']);
 		console.log(this.XMLTextures[i]['path']);
-		console.log(this.XMLTextures[i]['amplif_factor']);
+		console.log(this.XMLTextures[i]['amplif_factor']);*/
 	}
 
 
@@ -302,12 +302,12 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 	
 		this.XMLMaterials.push(material);
 
-		console.log(this.XMLMaterials[i]['id']);
+		/*console.log(this.XMLMaterials[i]['id']);
 		console.log(this.XMLMaterials[i]['shininess']);
 		console.log(this.XMLMaterials[i]['specular']);
 		console.log(this.XMLMaterials[i]['diffuse']);
 		console.log(this.XMLMaterials[i]['ambient']);
-		console.log(this.XMLMaterials[i]['emission']);
+		console.log(this.XMLMaterials[i]['emission']);*/
 	}
 
 	return 0;

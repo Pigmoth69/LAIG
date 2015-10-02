@@ -9,11 +9,9 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) { 
     CGFscene.prototype.init.call(this, application);
 
-    this.initCameras();
+	this.initCameras();
 
-    
-
-    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0); 
 
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
@@ -25,16 +23,24 @@ XMLscene.prototype.init = function (application) {
 
 XMLscene.prototype.initLights = function () {
 
-    this.shader.bind();
+	this.shader.bind();
 
-    var i;
-    for(i=0; i < this.graph.XMLLights.lenght;i++){
-    	
-    	
-    }
-	/*this.lights[0].setPosition(2, 3, 3, 1);
-    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-    this.lights[0].update();*/
+	this.lights = this.graph.XMLLights;
+	var i;
+	console.log("iteração: 00");
+	console.log("asdasd: ",this.lights.lenght);
+	for(i = 0; i < this.lights.lenght;i++){ 
+		console.log("iteração: ",i);
+		this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
+	}
+	console.log(this.lights[0]); 
+
+	//alterar isto
+	/*this.lights[0].setPosition(0, 0, 0, 1); 
+    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);*/ 
+    //this.lights[0].update();
+
+    this.updateLights(); 
 
     this.shader.unbind();
 };
@@ -55,8 +61,14 @@ XMLscene.prototype.setDefaultAppearance = function () {
 XMLscene.prototype.onGraphLoaded = function () 
 {
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
-	this.lights[0].setVisible(true);
-    this.lights[0].enable();
+	
+	
+	this.initLights(); 
+
+	//alterar isto
+	//this.lights[0].setVisible(true);
+   //this.lights[0].enable();
+	//console.log(this.lights[0]);
 	
 };
 
@@ -64,8 +76,7 @@ XMLscene.prototype.updateLights = function ()
 {
 	var i;
 	for(i = 0; i < this.lights.lenght ;i++){
-		if(this.lights[0] instanceof Light)
-			this.light[0].update();
+			this.light[i].update();
 	}
 }
 
@@ -98,9 +109,9 @@ XMLscene.prototype.display = function () {
 
 	if (this.graph.loadedOk)
 	{
-		this.updateLights();
-		//this.initLights();
-		//this.lights[0].update();
+		//alterar isto
+		//this.updateLights();
+		this.lights[0].update();
 	};	
 
     this.shader.unbind();
