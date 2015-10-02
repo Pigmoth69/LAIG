@@ -27,13 +27,10 @@ XMLscene.prototype.initLights = function () {
 
 	this.lights = this.graph.XMLLights;
 	var i;
-	console.log("iteração: 00");
-	console.log("asdasd: ",this.lights.lenght);
-	for(i = 0; i < this.lights.lenght;i++){ 
-		console.log("iteração: ",i);
-		this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
-	}
-	console.log(this.lights[0]); 
+	for(i = 0; i < this.lights.length;i++){ 
+		if(this.lights[i] !=null)
+			this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
+	} 
 
 	//alterar isto
 	/*this.lights[0].setPosition(0, 0, 0, 1); 
@@ -75,8 +72,9 @@ XMLscene.prototype.onGraphLoaded = function ()
 XMLscene.prototype.updateLights = function ()
 {
 	var i;
-	for(i = 0; i < this.lights.lenght ;i++){
-			this.light[i].update();
+	for(i = 0; i < this.lights.length ;i++){
+		if(this.lights[i] !=null)
+			this.lights[i].update();
 	}
 }
 
@@ -109,9 +107,9 @@ XMLscene.prototype.display = function () {
 
 	if (this.graph.loadedOk)
 	{
-		//alterar isto
-		//this.updateLights();
-		this.lights[0].update();
+		//alterar 
+		this.updateLights();
+		//this.lights[0].update();
 	};	
 
     this.shader.unbind();

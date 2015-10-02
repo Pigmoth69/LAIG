@@ -32,6 +32,14 @@
 	        <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
 		</LIGHT>
 
+		<LIGHT id="L2">                                    <!-- light identifier -->
+	        <enable value ="1" />                          <!-- enable/disable -->
+	        <position x="2" y="2" z="2" w="1" />       <!-- light position -->
+	        <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
+	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
+	        <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
+		</LIGHT>
+
 	    <!-- NOTE: this block "LIGHT" must be repeated as necessary with different "id" -->
 	    
 	</LIGHTS>
