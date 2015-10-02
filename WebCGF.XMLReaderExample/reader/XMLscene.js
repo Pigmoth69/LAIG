@@ -6,12 +6,12 @@ function XMLscene() {
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
-XMLscene.prototype.init = function (application) {
+XMLscene.prototype.init = function (application) { 
     CGFscene.prototype.init.call(this, application);
 
     this.initCameras();
 
-    this.initLights();
+    
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -27,9 +27,16 @@ XMLscene.prototype.initLights = function () {
 
     this.shader.bind();
 
-	this.lights[0].setPosition(2, 3, 3, 1);
+    var i;
+    for(i=0; i < this.graph.XMLLights.lenght;i++){
+    	this.lights[i].setPosition();
+    	this.lights[i].setDiffuse();
+    	this.lights[i].setSpecular();
+    	
+    }
+	/*this.lights[0].setPosition(2, 3, 3, 1);
     this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-    this.lights[0].update();
+    this.lights[0].update();*/
 
     this.shader.unbind();
 };
@@ -81,8 +88,10 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
+
 	{
-		this.lights[0].update();
+		this.initLights();
+		//this.lights[0].update();
 	};	
 
     this.shader.unbind();

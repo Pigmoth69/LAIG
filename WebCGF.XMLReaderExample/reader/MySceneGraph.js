@@ -15,9 +15,8 @@ function MySceneGraph(filename, scene) {
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
 	 
+	this.XMLLights = [];
 	this.reader.open('scenes/'+filename, this);  
-	
-	var XMLLights = [];
 }
 
 /*
@@ -228,20 +227,18 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		
 		values = info[i].getElementsByTagName('specular');
 		light['specular'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
-	
-		
+
+
+		this.XMLLights.push(light);  
+		//console.log(light);
+
+		/*
 		this.scene.lights[i].setPosition(light['position'][0], light['position'][1], light['position'][2], light['position'][3]);
 		this.scene.lights[i].setDiffuse(light['diffuse'][0], light['diffuse'][1], light['diffuse'][2], light['diffuse'][3]);
 		this.scene.lights[i].setSpecular(light['specular'][0], light['specular'][1], light['specular'][2], light['specular'][3]);
 		this.scene.lights[i].setAmbient(light['ambient'][0], light['ambient'][1], light['ambient'][2], light['ambient'][3]);
-
-	
-
-		
-	}
-	
-	
-	
+		*/	
+	}	
 	return 0;
 };
 
