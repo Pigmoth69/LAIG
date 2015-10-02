@@ -28,7 +28,7 @@ XMLscene.prototype.initLights = function () {
 	this.lights = this.graph.XMLLights;
 	var i;
 	for(i = 0; i < this.lights.length;i++){ 
-		if(this.lights[i] !=null)
+		if(this.lights[i] instanceof Light)  
 			this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
 	} 
 
@@ -73,7 +73,7 @@ XMLscene.prototype.updateLights = function ()
 {
 	var i;
 	for(i = 0; i < this.lights.length ;i++){
-		if(this.lights[i] !=null)
+		if(this.lights[i] instanceof Light)  
 			this.lights[i].update();
 	}
 }
