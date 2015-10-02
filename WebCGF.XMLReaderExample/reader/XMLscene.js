@@ -29,9 +29,7 @@ XMLscene.prototype.initLights = function () {
 
     var i;
     for(i=0; i < this.graph.XMLLights.lenght;i++){
-    	this.lights[i].setPosition();
-    	this.lights[i].setDiffuse();
-    	this.lights[i].setSpecular();
+    	
     	
     }
 	/*this.lights[0].setPosition(2, 3, 3, 1);
@@ -62,6 +60,15 @@ XMLscene.prototype.onGraphLoaded = function ()
 	
 };
 
+XMLscene.prototype.updateLights = function ()
+{
+	var i;
+	for(i = 0; i < this.lights.lenght ;i++){
+		if(this.lights[0] instanceof Light)
+			this.light[0].update();
+	}
+}
+
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
     this.shader.bind();
@@ -87,10 +94,12 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-	if (this.graph.loadedOk)
 
+
+	if (this.graph.loadedOk)
 	{
-		this.initLights();
+		this.updateLights();
+		//this.initLights();
 		//this.lights[0].update();
 	};	
 

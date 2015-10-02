@@ -15,7 +15,7 @@ function MySceneGraph(filename, scene) {
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
 	 
-	this.XMLLights = [];
+	this.XMLLights = new Array(this.scene.lights.length); 
 	this.reader.open('scenes/'+filename, this);  
 }
 
@@ -206,38 +206,28 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		return "No LIGHT was added.";
 	}
 	
-	var light = [];
-	
 	var i, values;
 	for(i=0; i < info.length; i++) {
 				
-		light['id'] = this.reader.getString(info[i], 'id', 1);
+		var id = this.reader.getString(info[i], 'id', 1);
 		
 		values = info[i].getElementsByTagName('enable')
-		light['enable'] = this.reader.getBoolean(values[0], 'value', 1);
+		var enable = this.reader.getBoolean(values[0], 'value', 1);
 		
 		values = info[i].getElementsByTagName('position');
-		light['position'] = [this.reader.getFloat(values[0], 'x', 1),this.reader.getFloat(values[0], 'y', 1),this.reader.getFloat(values[0], 'z', 1),this.reader.getFloat(values[0], 'w', 1)];
+		var position = [this.reader.getFloat(values[0], 'x', 1),this.reader.getFloat(values[0], 'y', 1),this.reader.getFloat(values[0], 'z', 1),this.reader.getFloat(values[0], 'w', 1)];
 		
 		values = info[i].getElementsByTagName('ambient');
-		light['ambient'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var ambient= [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
 				
 		values = info[i].getElementsByTagName('diffuse');
-		light['diffuse'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var diffuse = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
 		
 		values = info[i].getElementsByTagName('specular');
-		light['specular'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var specular = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
 
 
-		this.XMLLights.push(light);  
-		//console.log(light);
-
-		/*
-		this.scene.lights[i].setPosition(light['position'][0], light['position'][1], light['position'][2], light['position'][3]);
-		this.scene.lights[i].setDiffuse(light['diffuse'][0], light['diffuse'][1], light['diffuse'][2], light['diffuse'][3]);
-		this.scene.lights[i].setSpecular(light['specular'][0], light['specular'][1], light['specular'][2], light['specular'][3]);
-		this.scene.lights[i].setAmbient(light['ambient'][0], light['ambient'][1], light['ambient'][2], light['ambient'][3]);
-		*/	
+		this.XMLLights[i] = new Light(this.scene,i,id,enable,position,ambient,diffuse,specular);
 	}	
 	return 0;
 };

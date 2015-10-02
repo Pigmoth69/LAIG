@@ -1,6 +1,6 @@
 
-function Light(id,enable,position,ambient,diffuse,specular) {
-    CGFlight.call(this);
+function Light(scene,indice,id,enable,position,ambient,diffuse,specular) {
+    CGFlight.call(this, scene, indice);
     this.id =id;
     this.enable = enable;
     this.position = position;
@@ -12,7 +12,3 @@ function Light(id,enable,position,ambient,diffuse,specular) {
 Light.prototype = Object.create(CGFlight.prototype);
 Light.prototype.constructor = Light;
 
-
-Light.prototype.init = function (application) {
-    CGFlight.prototype.init.call(this, application);   
-};
