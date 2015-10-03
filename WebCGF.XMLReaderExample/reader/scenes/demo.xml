@@ -2,13 +2,13 @@
 <SCENE>
 
 	<INITIALS>
-	    <frustum near="15" far="15"/>                      <!-- frustum planes-->
-	    <translate x="10" y="10" z="50" />                 <!-- initial translate -->
-	    <rotation axis="x" angle="90" />                  <!-- initial rotation 3 -->
-	    <rotation axis="y" angle="90" />                  <!-- initial rotation 2 -->
-	    <rotation axis="z" angle="180" />                  <!-- initial rotation 1 -->
-	    <scale sx="1" sy="1" sz="1" />                  <!-- initial scaling -->
-	    <reference length="10" />                          <!-- axis length; "0" means no axis-->
+	    <frustum near="2" far="500"/>                      <!-- frustum planes-->
+	    <translate x="-10" y="-10" z="-10" />                 <!-- initial translate -->
+	    <rotation axis="x" angle="10" />                  <!-- initial rotation 3 -->
+	    <rotation axis="y" angle="10" />                  <!-- initial rotation 2 -->
+	    <rotation axis="z" angle="10" />                  <!-- initial rotation 1 -->
+	    <scale sx="5" sy="5" sz="5" />                  <!-- initial scaling -->
+	    <reference length="4" />                          <!-- axis length; "0" means no axis-->
 	</INITIALS>
 
 

@@ -15,7 +15,7 @@ function MySceneGraph(filename, scene) {
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
 	 
-
+	this.XMLInitials = [];
 	this.XMLLights = new Array(this.scene.lights.length); 
 	this.XMLTextures = [];
 	this.XMLMaterials = [];
@@ -126,6 +126,25 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
 	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
 	
+	this.XMLInitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
+	this.XMLInitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
+
+	this.XMLInitials['translate_X']= this.reader.getInteger(translate, 'x', 1) ;
+	this.XMLInitials['translate_Y']= this.reader.getInteger(translate, 'y', 1) ;
+	this.XMLInitials['translate_Z']= this.reader.getInteger(translate, 'z', 1) ;
+
+	this.XMLInitials['rotation_X']= this.reader.getInteger(rotationX, 'angle', 1);
+	this.XMLInitials['rotation_Y']= this.reader.getInteger(rotationY, 'angle', 1);
+	this.XMLInitials['rotation_Z']= this.reader.getInteger(rotationZ, 'angle', 1);
+
+	this.XMLInitials['scale_X']= this.reader.getInteger(scale, 'sx', 1);
+	this.XMLInitials['scale_Y']= this.reader.getInteger(scale, 'sy', 1);
+	this.XMLInitials['scale_Z']= this.reader.getInteger(scale, 'sz', 1);
+
+	this.XMLInitials['reference']= this.reader.getInteger(reference, 'length', 1);
+
+
+
 	return 0;
 };
 

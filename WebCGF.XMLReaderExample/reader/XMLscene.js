@@ -8,8 +8,8 @@ XMLscene.prototype.constructor = XMLscene;
 
 XMLscene.prototype.init = function (application) { 
     CGFscene.prototype.init.call(this, application);
-
 	this.initCameras();
+	this.initLights();
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);  
 
@@ -23,9 +23,22 @@ XMLscene.prototype.init = function (application) {
     this.sphere = new MySphere(this, 30, 30);
 
 	this.axis=new CGFaxis(this);
+	
 };
 
+
 XMLscene.prototype.initLights = function () {
+
+    this.shader.bind();
+
+	this.lights[0].setPosition(2, 3, 3, 1);
+    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
+    this.lights[0].update();
+ 
+    this.shader.unbind();
+};
+
+XMLscene.prototype.reloadLights = function () {
 
 	this.shader.bind();
 
@@ -45,7 +58,30 @@ XMLscene.prototype.initLights = function () {
 
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-};
+}; 
+
+//alterar!!! 
+XMLscene.prototype.reloadCameras = function () {
+    this.camera.near = this.graph.XMLInitials['frustum_NEAR'];
+    this.camera.far = this.graph.XMLInitials['frustum_FAR'];
+    console.log("Perto: ",this.camera.near);
+    console.log("Longe: ",this.camera.far);
+};   
+
+//alterar!!!
+XMLscene.prototype.reloadScene = function () {
+    this.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
+    //this.graph.camera.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
+    //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Y'],0,1,0);
+    //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Z'],1,0,1);
+    //this.graph.scene.scale(this.graph.XMLInitials['scale_X'],this.graph.XMLInitials['scale_Y'],this.graph.XMLInitials['scale_Z']);
+}; 
+
+//alterar!!!
+XMLscene.prototype.reloadAxis = function () {
+    this.axis= new CGFaxis(this,this.graph.XMLInitials['reference']);
+}; 
+
 
 XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(1 , 0 , 0, 1.0);
@@ -60,8 +96,10 @@ XMLscene.prototype.onGraphLoaded = function ()
 {
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	
-	
-	this.initLights(); 
+	this.reloadCameras();
+	this.reloadScene();
+	this.reloadAxis();
+	this.reloadLights(); 
 
 };
 
@@ -90,11 +128,16 @@ XMLscene.prototype.display = function () {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
 	// Initialize Model-View matrix as identity (no transformation
+
+
 	this.updateProjectionMatrix();
-    this.loadIdentity();
+	this.loadIdentity();
+
 
 	// Apply transformations corresponding to the camera position relative to the origin
+	
 	this.applyViewMatrix();
+	
 
 	// Draw axis
 	this.axis.display();
