@@ -120,11 +120,13 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	//this.scene.camera.setPosition(vec3.fromValues(5, 5, 5));
 	//this.scene.camera.orbit(vec3.fromValues(0, 1, 0), 0.75);
 
+/*
 	console.log("frustum: " + this.reader.getInteger(frustum, 'near', 1) + ", " + this.reader.getInteger(frustum, 'far', 1));
 	console.log("translate: " + this.reader.getInteger(translate, 'x', 1) + ", " + this.reader.getInteger(translate, 'y', 1) + ", " + this.reader.getInteger(translate, 'z', 1));
 	console.log("rotation: " + this.reader.getInteger(rotationX, 'angle', 1) + ", " + this.reader.getInteger(rotationY, 'angle', 1) + ", " + this.reader.getInteger(rotationZ, 'angle', 1))
 	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
 	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
+	*/
 	
 	this.XMLInitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
 	this.XMLInitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);

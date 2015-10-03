@@ -70,7 +70,12 @@ XMLscene.prototype.reloadCameras = function () {
 
 //alterar!!!
 XMLscene.prototype.reloadScene = function () {
-    this.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
+	/*var xx,yy,zz;
+	xx = this.graph.XMLInitials['translate_X'];
+	yy = this.graph.XMLInitials['translate_Y'];
+	zz = this.graph.XMLInitials['translate_Z'];
+	 this.translate(xx,yy,zz);  */
+    //this.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
     //this.graph.camera.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Y'],0,1,0);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Z'],1,0,1);
