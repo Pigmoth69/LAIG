@@ -15,10 +15,11 @@ function MySceneGraph(filename, scene) {
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
 	 
-	this.XMLInitials = [];
-	this.XMLLights = new Array(this.scene.lights.length); 
-	this.XMLTextures = [];
-	this.XMLMaterials = [];
+	this.XMLinitials = [];
+	this.XMLillumination
+	this.XMLlights = new Array(this.scene.lights.length); 
+	this.XMLtextures = [];
+	this.XMLmaterials = [];
 	this.reader.open('scenes/'+filename, this);  
 }
 
@@ -127,23 +128,23 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
 	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
 	*/
-	
-	this.XMLInitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
-	this.XMLInitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
 
-	this.XMLInitials['translate_X']= this.reader.getInteger(translate, 'x', 1) ;
-	this.XMLInitials['translate_Y']= this.reader.getInteger(translate, 'y', 1) ;
-	this.XMLInitials['translate_Z']= this.reader.getInteger(translate, 'z', 1) ;
+	this.XMLinitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
+	this.XMLinitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
 
-	this.XMLInitials['rotation_X']= this.reader.getInteger(rotationX, 'angle', 1);
-	this.XMLInitials['rotation_Y']= this.reader.getInteger(rotationY, 'angle', 1);
-	this.XMLInitials['rotation_Z']= this.reader.getInteger(rotationZ, 'angle', 1);
+	this.XMLinitials['translate_X']= this.reader.getInteger(translate, 'x', 1) ;
+	this.XMLinitials['translate_Y']= this.reader.getInteger(translate, 'y', 1) ;
+	this.XMLinitials['translate_Z']= this.reader.getInteger(translate, 'z', 1) ;
 
-	this.XMLInitials['scale_X']= this.reader.getInteger(scale, 'sx', 1);
-	this.XMLInitials['scale_Y']= this.reader.getInteger(scale, 'sy', 1);
-	this.XMLInitials['scale_Z']= this.reader.getInteger(scale, 'sz', 1);
+	this.XMLinitials['rotation_X']= this.reader.getInteger(rotationX, 'angle', 1);
+	this.XMLinitials['rotation_Y']= this.reader.getInteger(rotationY, 'angle', 1);
+	this.XMLinitials['rotation_Z']= this.reader.getInteger(rotationZ, 'angle', 1);
 
-	this.XMLInitials['reference']= this.reader.getInteger(reference, 'length', 1);
+	this.XMLinitials['scale_X']= this.reader.getInteger(scale, 'sx', 1);
+	this.XMLinitials['scale_Y']= this.reader.getInteger(scale, 'sy', 1);
+	this.XMLinitials['scale_Z']= this.reader.getInteger(scale, 'sz', 1);
+
+	this.XMLinitials['reference']= this.reader.getInteger(reference, 'length', 1);
 
 
 
@@ -175,7 +176,7 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	}
 
 	this.background = [this.reader.getFloat(backgroundColor, 'r', 1), this.reader.getFloat(backgroundColor, 'g', 1), this.reader.getFloat(backgroundColor, 'b', 1), this.reader.getFloat(backgroundColor, 'a', 1)];
-
+	//this.scene.setAmbient(this.reader.getInteger(ambient, 'r', 1) , this.reader.getInteger(ambient, 'g', 1) ,  this.reader.getInteger(ambient, 'b', 1) , this.reader.getInteger(ambient, 'a', 1));
 
 /*	console.log("ambient : " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1) + ", " + this.reader.getInteger(ambient, 'b', 1) + this.reader.getInteger(ambient, 'a', 1));
 	console.log("doubleside: " + this.reader.getInteger(doubleside, 'value', 1));
@@ -215,7 +216,7 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		var specular = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
 
 
-		this.XMLLights[i] = new Light(this.scene,i,id,enable,position,ambient,diffuse,specular);
+		this.XMLlights[i] = new Light(this.scene,i,id,enable,position,ambient,diffuse,specular);
 	}	
 	return 0;
 };
@@ -243,7 +244,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 		values = info[i].getElementsByTagName('amplif_factor');
 		texture['amplif_factor'] = [this.reader.getFloat(values[0], 's', 1), this.reader.getFloat(values[0], 't', 1)];
 	
-		this.XMLTextures.push(texture);
+		this.XMLtextures.push(texture);
 
 		/*console.log(this.XMLTextures[i]['id']);
 		console.log(this.XMLTextures[i]['path']);
@@ -285,7 +286,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 		values = info[i].getElementsByTagName('emission');
 		material['emission'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
 	
-		this.XMLMaterials.push(material);
+		this.XMLmaterials.push(material);
 
 		/*console.log(this.XMLMaterials[i]['id']);
 		console.log(this.XMLMaterials[i]['shininess']);

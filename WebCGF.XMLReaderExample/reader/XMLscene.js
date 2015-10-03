@@ -42,7 +42,7 @@ XMLscene.prototype.reloadLights = function () {
 
 	this.shader.bind();
 
-	this.lights = this.graph.XMLLights;
+	this.lights = this.graph.XMLlights;
 	var i;
 	for(i = 0; i < this.lights.length;i++){ 
 		if(this.lights[i] instanceof Light)  
@@ -62,21 +62,21 @@ XMLscene.prototype.initCameras = function () {
 
 //alterar!!! 
 XMLscene.prototype.reloadCameras = function () {
-    this.camera.near = this.graph.XMLInitials['frustum_NEAR'];
-    this.camera.far = this.graph.XMLInitials['frustum_FAR'];
+
+// FALTA AQUI O setActiveCamera(camera) é preciso guardar a application
+    this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
+    this.camera.far = this.graph.XMLinitials['frustum_FAR'];
     console.log("Perto: ",this.camera.near);
     console.log("Longe: ",this.camera.far);
 };   
 
 //alterar!!!
 XMLscene.prototype.reloadScene = function () {
-	/*var xx,yy,zz;
-	xx = this.graph.XMLInitials['translate_X'];
-	yy = this.graph.XMLInitials['translate_Y'];
-	zz = this.graph.XMLInitials['translate_Z'];
-	 this.translate(xx,yy,zz);  */
-    //this.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
-    //this.graph.camera.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
+
+
+
+    //this.graph.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
+    //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Y'],0,1,0);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Z'],1,0,1);
     //this.graph.scene.scale(this.graph.XMLInitials['scale_X'],this.graph.XMLInitials['scale_Y'],this.graph.XMLInitials['scale_Z']);
@@ -84,15 +84,23 @@ XMLscene.prototype.reloadScene = function () {
 
 //alterar!!!
 XMLscene.prototype.reloadAxis = function () {
-    this.axis= new CGFaxis(this,this.graph.XMLInitials['reference']);
+    this.axis= new CGFaxis(this,this.graph.XMLinitials['reference']);
 }; 
 
 
 XMLscene.prototype.setDefaultAppearance = function () {
+
+    this.setAmbient(0 , 0 , 1, 1.0);
+    this.setDiffuse(0 , 0 , 1, 1.0);
+    this.setSpecular(0 , 0 , 1, 1.0); 
+    this.setShininess(10.0);	
+};
+
+XMLscene.prototype.reloadAppearance = function () {
     this.setAmbient(1 , 0 , 0, 1.0);
     this.setDiffuse(1 , 0 , 0, 1.0);
     this.setSpecular(1 , 0 , 0, 1.0);
-    this.setShininess(10.0);	
+    this.setShininess(10.0);	 
 };
 
 // Handler called when the graph is finally loaded. 
@@ -102,7 +110,8 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	
 	this.reloadCameras();
-	this.reloadScene();
+	this.reloadAppearance();
+	this.reloadScene(); // tem  de estar no display!!
 	this.reloadAxis();
 	this.reloadLights(); 
 
@@ -145,9 +154,11 @@ XMLscene.prototype.display = function () {
 	
 
 	// Draw axis
+	
 	this.axis.display();
 
-	this.setDefaultAppearance();
+	//this.setDefaultAppearance();
+	
 	
 	// ---- END Background, camera and axis setup
 
@@ -159,13 +170,18 @@ XMLscene.prototype.display = function () {
 	//this.cylinder.display();
 	this.sphere.display();
 
+	
 
 	if (this.graph.loadedOk)
 	{
-		//alterar 
+		this.reloadAppearance();
 		this.updateLights();
-	};	
+		//this.reloadScene();
+	}else{
+		this.setDefaultAppearance();
+	}
+	
 
-    this.shader.unbind();
+	this.shader.unbind(); 
 };
 
