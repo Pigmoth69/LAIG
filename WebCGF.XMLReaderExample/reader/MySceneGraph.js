@@ -51,9 +51,7 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 		return "SCENE tag ig missing";
 	}
 
-	/*if((elems = this.parseGlobalsExample(rootElement)) != 0)
-		return elems;
-*/
+
 	if((elems = this.parseInitials(rootElement)) != 0)
 		return elems;
 
@@ -71,39 +69,6 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 
 };
 
-
-
-/*
- * Example of method that parses elements of one block and stores information in a specific data structure
- */
-MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
-	
-	if (rootElement.getElementsByTagName('GLOBALS') == null) {
-		return "GLOBALS element is missing.";
-	}
-
-	var elems = rootElement.getElementsByTagName('initials');
-	if(elems == null){
-		return "initials element is missing.";
-	}
-
-	if (elems.length != 1) {
-		return "either zero or more than one 'globals' element found.  " + elems.length;
-	}
-
-
-	// various examples of different types of access
-	var globals = elems[0];
-	this.background = this.reader.getRGBA(globals, 'background');
-	console.log("back colors read: " + this.background[0] + " + " + this.background[1] );
-	this.drawmode = this.reader.getItem(globals, 'drawmode', ["fill","line","point"]);
-	this.cullface = this.reader.getItem(globals, 'cullface', ["back","front","none", "frontandback"]);
-	this.cullorder = this.reader.getItem(globals, 'cullorder', ["ccw","cw"]);
-
-	console.log("Globals read from file: {background=" + this.background + ", drawmode=" + this.drawmode + ", cullface=" + this.cullface + ", cullorder=" + this.cullorder + "}");
-
-	return 0;
-};
 
 MySceneGraph.prototype.parseInitials= function(rootElement) {
 
@@ -198,10 +163,6 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	return 0;
 };	
 	
-/*
- * var to be executed on any read error
- */
- 
 MySceneGraph.prototype.parseLights= function(rootElement) {
 	if(rootElement.getElementsByTagName('LIGHTS') == null) {
 		return "LIGHTS tag is missing.";

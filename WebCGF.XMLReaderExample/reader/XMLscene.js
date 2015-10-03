@@ -20,6 +20,7 @@ XMLscene.prototype.init = function (application) {
 
     this.rectangle = new MyRectangle(this, 0,0,0,0);
     this.cylinder = new MyCylinder(this, 30, 1);
+    this.sphere = new MySphere(this, 30, 30);
 
 	this.axis=new CGFaxis(this);
 };
@@ -33,7 +34,6 @@ XMLscene.prototype.initLights = function () {
 	for(i = 0; i < this.lights.length;i++){ 
 		if(this.lights[i] instanceof Light)  
 		{
-
 			this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
 		}
 	} 
@@ -108,9 +108,10 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 
 	//this.rectangle.display();
-	this.cylinder.display();
+	//this.cylinder.display();
+	this.sphere.display();
 
-	
+
 	if (this.graph.loadedOk)
 	{
 		//alterar 
