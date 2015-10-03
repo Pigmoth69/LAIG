@@ -11,14 +11,14 @@ XMLscene.prototype.init = function (application) {
 
 	this.initCameras();
 
-    this.gl.clearColor(0.0, 0.0, 0.0, 1.0); 
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);  
 
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    this.rectangle = new MyRectangle(this, 0,0,0,0);
+    //this.rectangle = new MyRectangle(this, 0,0,0,0);
     this.cylinder = new MyCylinder(this, 30, 1);
     this.sphere = new MySphere(this, 30, 30);
 
