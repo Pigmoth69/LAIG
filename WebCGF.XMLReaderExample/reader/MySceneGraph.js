@@ -51,9 +51,9 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 		return "SCENE tag ig missing";
 	}
 
-	if((elems = this.parseGlobalsExample(rootElement)) != 0)
+	/*if((elems = this.parseGlobalsExample(rootElement)) != 0)
 		return elems;
-
+*/
 	if((elems = this.parseInitials(rootElement)) != 0)
 		return elems;
 
@@ -183,15 +183,18 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	}
 
 	info = rootElement.getElementsByTagName('background');
-	var background = info[0];
-	if(background == null){
+	var backgroundColor = info[0];
+	if(backgroundColor == null){
 		return "background tag is missing";
 	}
 
-	console.log("ambient : " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1) + ", " + this.reader.getInteger(ambient, 'b', 1) + this.reader.getInteger(ambient, 'a', 1));
+	this.background = [this.reader.getFloat(backgroundColor, 'r', 1), this.reader.getFloat(backgroundColor, 'g', 1), this.reader.getFloat(backgroundColor, 'b', 1), this.reader.getFloat(backgroundColor, 'a', 1)];
+
+
+/*	console.log("ambient : " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1) + ", " + this.reader.getInteger(ambient, 'b', 1) + this.reader.getInteger(ambient, 'a', 1));
 	console.log("doubleside: " + this.reader.getInteger(doubleside, 'value', 1));
 	console.log("background : " + this.reader.getInteger(background, 'r', 1) + ", " + this.reader.getInteger(background, 'g', 1) + ", " + this.reader.getInteger(background, 'b', 1) + this.reader.getInteger(background, 'a', 1));
-
+*/
 	return 0;
 };	
 	

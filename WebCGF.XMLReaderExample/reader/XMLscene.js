@@ -18,6 +18,9 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.rectangle = new MyRectangle(this, 0,0,0,0);
+    this.cylinder = new MyCylinder(this, 30, 1);
+
 	this.axis=new CGFaxis(this);
 };
 
@@ -29,13 +32,11 @@ XMLscene.prototype.initLights = function () {
 	var i;
 	for(i = 0; i < this.lights.length;i++){ 
 		if(this.lights[i] instanceof Light)  
-			this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
-	} 
+		{
 
-	//alterar isto
-	/*this.lights[0].setPosition(0, 0, 0, 1); 
-    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);*/ 
-    //this.lights[0].update();
+			this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
+		}
+	} 
 
     this.updateLights(); 
 
@@ -62,11 +63,6 @@ XMLscene.prototype.onGraphLoaded = function ()
 	
 	this.initLights(); 
 
-	//alterar isto
-	//this.lights[0].setVisible(true);
-   //this.lights[0].enable();
-	//console.log(this.lights[0]);
-	
 };
 
 XMLscene.prototype.updateLights = function ()
@@ -74,7 +70,14 @@ XMLscene.prototype.updateLights = function ()
 	var i;
 	for(i = 0; i < this.lights.length ;i++){
 		if(this.lights[i] instanceof Light)  
+		{
+			if(this.lights[i].enabled)
+				this.lights[i].enable;
+			else
+				this.lights[i].disable;
+
 			this.lights[i].update();
+		}
 	}
 }
 
@@ -104,12 +107,14 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 
+	//this.rectangle.display();
+	this.cylinder.display();
 
+	
 	if (this.graph.loadedOk)
 	{
 		//alterar 
 		this.updateLights();
-		//this.lights[0].update();
 	};	
 
     this.shader.unbind();
