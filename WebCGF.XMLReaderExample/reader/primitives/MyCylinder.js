@@ -18,7 +18,7 @@ MyCylinder.prototype.initBuffers = function() {
 
 	this.indices = [];
 	this.vertices = [];
-	this.normals = [];
+	this.normals = []; 
 	this.texCoords = [];
 
 	var stepS = 0;

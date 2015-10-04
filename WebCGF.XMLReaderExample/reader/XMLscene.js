@@ -66,8 +66,6 @@ XMLscene.prototype.reloadCameras = function () {
 // FALTA AQUI O setActiveCamera(camera) é preciso guardar a application
     this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
     this.camera.far = this.graph.XMLinitials['frustum_FAR'];
-    console.log("Perto: ",this.camera.near);
-    console.log("Longe: ",this.camera.far);
 };   
 
 //alterar!!!
@@ -97,10 +95,12 @@ XMLscene.prototype.setDefaultAppearance = function () {
 };
 
 XMLscene.prototype.reloadAppearance = function () {
-    this.setAmbient(1 , 0 , 0, 1.0);
-    this.setDiffuse(1 , 0 , 0, 1.0);
-    this.setSpecular(1 , 0 , 0, 1.0);
-    this.setShininess(10.0);	 
+
+	if(this.graph.loadedOk){
+		this.setAmbient(this.graph.XMLillumination['ambient_R'],this.graph.XMLillumination['ambient_G'],this.graph.XMLillumination['ambient_B'],this.graph.XMLillumination['ambient_A']);
+    }else{
+    	this.setDefaultAppearance();
+    }	 
 };
 
 // Handler called when the graph is finally loaded. 
@@ -110,10 +110,10 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	
 	this.reloadCameras();
-	this.reloadAppearance();
 	this.reloadScene(); // tem  de estar no display!!
-	this.reloadAxis();
+	this.reloadAxis(); 
 	this.reloadLights(); 
+	
 
 };
 
@@ -157,7 +157,7 @@ XMLscene.prototype.display = function () {
 	
 	this.axis.display();
 
-	//this.setDefaultAppearance();
+	this.reloadAppearance();
 	
 	
 	// ---- END Background, camera and axis setup
@@ -166,20 +166,17 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 
+	
 	//this.rectangle.display();
 	//this.cylinder.display();
 	this.sphere.display();
 
-	
-
 	if (this.graph.loadedOk)
 	{
-		this.reloadAppearance();
 		this.updateLights();
-		//this.reloadScene();
-	}else{
-		this.setDefaultAppearance();
+		this.reloadScene();
 	}
+	
 	
 
 	this.shader.unbind(); 

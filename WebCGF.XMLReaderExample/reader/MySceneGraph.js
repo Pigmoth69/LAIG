@@ -16,7 +16,7 @@ function MySceneGraph(filename, scene) {
 	 */
 	 
 	this.XMLinitials = [];
-	this.XMLillumination
+	this.XMLillumination = [];
 	this.XMLlights = new Array(this.scene.lights.length); 
 	this.XMLtextures = [];
 	this.XMLmaterials = [];
@@ -163,11 +163,6 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 		return "ambient tag is missing.";
 	}
 
-	info = rootElement.getElementsByTagName('doubleside');
-	var doubleside = info[0];
-	if(doubleside == null){
-		return "doubleside tag is missing.";
-	}
 
 	info = rootElement.getElementsByTagName('background');
 	var backgroundColor = info[0];
@@ -176,10 +171,12 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	}
 
 	this.background = [this.reader.getFloat(backgroundColor, 'r', 1), this.reader.getFloat(backgroundColor, 'g', 1), this.reader.getFloat(backgroundColor, 'b', 1), this.reader.getFloat(backgroundColor, 'a', 1)];
-	//this.scene.setAmbient(this.reader.getInteger(ambient, 'r', 1) , this.reader.getInteger(ambient, 'g', 1) ,  this.reader.getInteger(ambient, 'b', 1) , this.reader.getInteger(ambient, 'a', 1));
+	this.XMLillumination['ambient_R']=this.reader.getInteger(ambient, 'r', 1);
+	this.XMLillumination['ambient_G']=this.reader.getInteger(ambient, 'g', 1);
+	this.XMLillumination['ambient_B']=this.reader.getInteger(ambient, 'b', 1);
+	this.XMLillumination['ambient_A']=this.reader.getInteger(ambient, 'a', 1);
 
 /*	console.log("ambient : " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1) + ", " + this.reader.getInteger(ambient, 'b', 1) + this.reader.getInteger(ambient, 'a', 1));
-	console.log("doubleside: " + this.reader.getInteger(doubleside, 'value', 1));
 	console.log("background : " + this.reader.getInteger(background, 'r', 1) + ", " + this.reader.getInteger(background, 'g', 1) + ", " + this.reader.getInteger(background, 'b', 1) + this.reader.getInteger(background, 'a', 1));
 */
 	return 0;
