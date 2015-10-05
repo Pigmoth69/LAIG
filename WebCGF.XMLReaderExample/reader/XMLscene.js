@@ -115,10 +115,13 @@ XMLscene.prototype.reloadLeaves = function () {
 
 			this.objects.push(rectangle);
 		}else if(this.graph.XMLleaves[i]['type'] == "sphere") {
-			
-			//var sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
-			var sphere = new MySphere(this,4,20,50);
+
+			var sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
 			this.objects.push(sphere);
+		}else if(this.graph.XMLleaves[i]['type'] == "cylinder") {
+
+			var cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
+			this.objects.push(cylinder);
 		}
 
 

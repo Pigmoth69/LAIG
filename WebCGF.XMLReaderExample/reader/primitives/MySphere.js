@@ -2,13 +2,13 @@
  * MySphere
  * @constructor
  */
- function MySphere(scene, radious, slices, stacks) 
+ function MySphere(scene, args) 
  {
  	CGFobject.call(this,scene);
 	
-	this.slices=slices;
-	this.stacks=stacks;
-	this.radious=radious;
+	this.radious=args[0];
+	this.slices=args[1];
+	this.stacks=args[2];
 	this.initBuffers();
  };
 

@@ -2,11 +2,19 @@
  * MyCylinder
  * @constructor
  */
-function MyCylinder(scene, slices, stacks) {
+function MyCylinder(scene, args) {
 	CGFobject.call(this,scene);
 
-	this.slices=slices;
-	this.stacks=stacks;
+	this.height=args[0];
+	this.bottomRadius=args[1];
+	this.topRadius=args[2];
+	this.stacks=args[3];
+	this.slices=args[4];
+
+	this.indices = [];
+	this.vertices = [];
+	this.normals = []; 
+	this.texCoords = [];
 
 	this.initBuffers();
 };
@@ -16,28 +24,26 @@ MyCylinder.prototype.constructor = MyCylinder;
 
 MyCylinder.prototype.initBuffers = function() {
 
-	this.indices = [];
-	this.vertices = [];
-	this.normals = []; 
-	this.texCoords = [];
-
 	var stepS = 0;
 	var stepT = 0;
+	var stepRadius = (this.bottomRadius - this.topRadius)/(this.stacks + 1)
 	var angle = 2 * Math.PI / (this.slices);
 
-	this.vertices.push(0, 0, 0.5);
+	this.vertices.push(0, 0, this.height/2);
 	this.normals.push(0, 0, 1);
 	this.texCoords.push(0.5, 0.5);	
-	this.vertices.push(0, 0, -0.5);
+	
+	this.vertices.push(0, 0, -this.height/2);
 	this.normals.push(0, 0, -1);
 	this.texCoords.push(0.5, 0.5);
 
 	var i = 0;
 
+	//bottom and top vertices
 	for (var slice = 0; slice < this.slices; slice++)
 	{
-		this.vertices.push(0.5 * Math.cos(slice * angle), 0.5 * Math.sin(slice * angle), 0.5);
-		this.vertices.push(0.5 * Math.cos(slice * angle), 0.5 * Math.sin(slice * angle), -0.5);
+		this.vertices.push(this.topRadius * Math.cos(slice * angle), this.topRadius * Math.sin(slice * angle), this.height/2);
+		this.vertices.push(this.bottomRadius * Math.cos(slice * angle), this.bottomRadius * Math.sin(slice * angle), -this.height/2);
 
 		this.normals.push(0, 0, 1);
 		this.normals.push(0, 0, -1);
@@ -48,7 +54,7 @@ MyCylinder.prototype.initBuffers = function() {
 		i++;
 
 	}
-
+	//bottom and top indices
 	for (var slice = 0; slice < this.slices; slice++)
 	{
 		if (slice + 1 == this.slices)
@@ -64,12 +70,13 @@ MyCylinder.prototype.initBuffers = function() {
 	}
 	
 	var numVertex = this.slices*2 + 2;
-
+	var currentRadius = this.topRadius;
+	//lateral surface
 	for (var stack = 0; stack < this.stacks + 1; stack++)
 	{
 		for (var slice = 0; slice < this.slices; slice++)
 		{
-			this.vertices.push(0.5*Math.cos(slice * angle), 0.5*Math.sin(slice * angle), -0.5 + stack / this.stacks);
+			this.vertices.push(currentRadius*Math.cos(slice * angle), currentRadius*Math.sin(slice * angle), -0.5 + stack / this.stacks);
 			this.normals.push(Math.cos(slice * angle), Math.sin(slice * angle),0);
 			this.texCoords.push(stepS, stepT);
 
@@ -77,6 +84,7 @@ MyCylinder.prototype.initBuffers = function() {
 		}
 		stepS = 0;
 		stepT+= 1/this.stacks;
+		currentRadius += stepRadius;
 	}
 
 
