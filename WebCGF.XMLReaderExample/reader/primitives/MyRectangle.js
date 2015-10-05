@@ -2,18 +2,37 @@
  * MyRectangle
  * @constructor
  */
- function MyRectangle(scene, minS, maxS, minT, maxT) {
+ function MyRectangle(scene, args) {
  	CGFobject.call(this,scene);
-
-    this.minS = minS||0;
- 	this.maxS = maxS||1;
- 	this.minT = minT||0;
- 	this.maxT = maxT||1;
  		
- 	this.vertices = [];
- 	this.indices = [];
- 	this.normals = [];
+ 	console.log(args);
 
+ 	this.vertices = [
+ 		args[0], args[1], 0,
+ 		args[1], args[2], 0,
+ 		args[2], args[3], 0,
+ 		args[0], args[3], 0
+ 	];
+ 	
+ 	this.indices = [
+		0, 3, 1,
+		1, 3, 2
+ 	];
+ 	
+ 	this.normals = [
+		0, 0, 1,
+		0, 0, 1,
+		0, 0, 1,
+		0, 0, 1
+ 	];
+	
+	this.texCoords = [
+      0, 0,
+      1, 0,
+      1, 1,
+      0, 1
+	];
+ 	
  	this.initBuffers();
 
 
@@ -26,15 +45,6 @@
 
  MyRectangle.prototype.initBuffers = function() {
  
-
- 	this.texCoords = [
-      this.minS,this.maxT,
-      this.maxS,this.maxT,
-      this.minS,this.minT,
-      this.maxS,this.minT
-	];
-
-
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
