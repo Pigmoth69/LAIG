@@ -105,34 +105,13 @@ XMLscene.prototype.reloadAppearance = function () {
 
 XMLscene.prototype.reloadLeaves = function () {
 	var i;
-	console.log("numero de Castros : " + this.graph.XMLleaves.length);
+
 	for(i = 0; i < this.graph.XMLleaves.length; i++){
+		
 		if(this.graph.XMLleaves[i]['type'] == "rectangle") {
-			var rectangle = new MyRectangle(this, 0, 1, 0, 1);
-			console.log(this.graph.XMLleaves[i]['args']);
-			rectangle.vertices = [
-				this.graph.XMLleaves[i]['args'][0], this.graph.XMLleaves[i]['args'][1], 0,
-				this.graph.XMLleaves[i]['args'][2], this.graph.XMLleaves[i]['args'][1], 0,
-				this.graph.XMLleaves[i]['args'][2], this.graph.XMLleaves[i]['args'][3], 0,
-				this.graph.XMLleaves[i]['args'][0], this.graph.XMLleaves[i]['args'][3], 0
-			];
+			
+			var rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
 
-			console.log(rectangle.vertices);
-
-			rectangle.indices = [
-				0, 3, 1,
-				1, 3, 2
-			];
-
-			rectangle.normals = [
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1
-			];
-
-			console.log(rectangle.vertices);
-			rectangle.initBuffers();
 			this.objects.push(rectangle);
 		}
 
