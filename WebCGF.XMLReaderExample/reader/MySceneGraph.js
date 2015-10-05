@@ -68,6 +68,9 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 	if((elems = this.parseMaterials(rootElement)) != 0)
 		return elems;
 
+	if((elems = this.parseLeaves(rootElement)) != 0)
+		return elems;
+
 };
 
 
@@ -118,17 +121,6 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	}
 	var reference = info[0];
 
-	//this.scene.camera.setPosition(vec3.fromValues(5, 5, 5));
-	//this.scene.camera.orbit(vec3.fromValues(0, 1, 0), 0.75);
-
-/*
-	console.log("frustum: " + this.reader.getInteger(frustum, 'near', 1) + ", " + this.reader.getInteger(frustum, 'far', 1));
-	console.log("translate: " + this.reader.getInteger(translate, 'x', 1) + ", " + this.reader.getInteger(translate, 'y', 1) + ", " + this.reader.getInteger(translate, 'z', 1));
-	console.log("rotation: " + this.reader.getInteger(rotationX, 'angle', 1) + ", " + this.reader.getInteger(rotationY, 'angle', 1) + ", " + this.reader.getInteger(rotationZ, 'angle', 1))
-	console.log("scale: " + this.reader.getInteger(scale, 'sx', 1) + ", " + this.reader.getInteger(scale, 'sy', 1) + ", " + this.reader.getInteger(scale, 'sz', 1));
-	console.log("reference: " + this.reader.getInteger(reference, 'length', 1));
-	*/
-
 	this.XMLinitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
 	this.XMLinitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
 
@@ -176,9 +168,6 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	this.XMLillumination['ambient_B']=this.reader.getInteger(ambient, 'b', 1);
 	this.XMLillumination['ambient_A']=this.reader.getInteger(ambient, 'a', 1);
 
-/*	console.log("ambient : " + this.reader.getInteger(ambient, 'r', 1) + ", " + this.reader.getInteger(ambient, 'g', 1) + ", " + this.reader.getInteger(ambient, 'b', 1) + this.reader.getInteger(ambient, 'a', 1));
-	console.log("background : " + this.reader.getInteger(background, 'r', 1) + ", " + this.reader.getInteger(background, 'g', 1) + ", " + this.reader.getInteger(background, 'b', 1) + this.reader.getInteger(background, 'a', 1));
-*/
 	return 0;
 };	
 	
@@ -192,60 +181,57 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		return "No LIGHT was added because there are too many lights or 0";
 	}
 	
-	var i, values;
+	var i;
 	for(i=0; i < info.length; i++) {
 				
 		var id = this.reader.getString(info[i], 'id', 1);
 		
-		values = info[i].getElementsByTagName('enable')
-		var enable = this.reader.getBoolean(values[0], 'value', 1);
+		var enable = info[i].getElementsByTagName('enable')
+		var value = this.reader.getBoolean(enable[0], 'value', 1);
 		
-		values = info[i].getElementsByTagName('position');
-		var position = [this.reader.getFloat(values[0], 'x', 1),this.reader.getFloat(values[0], 'y', 1),this.reader.getFloat(values[0], 'z', 1),this.reader.getFloat(values[0], 'w', 1)];
+		var positionValues = info[i].getElementsByTagName('position');
+		var position = [this.reader.getFloat(positionValues[0], 'x', 1),this.reader.getFloat(positionValues[0], 'y', 1),this.reader.getFloat(positionValues[0], 'z', 1),this.reader.getFloat(positionValues[0], 'w', 1)];
 		
-		values = info[i].getElementsByTagName('ambient');
-		var ambient= [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var ambientValues = info[i].getElementsByTagName('ambient');
+		var ambient= [this.reader.getFloat(ambientValues[0], 'r', 1), this.reader.getFloat(ambientValues[0], 'g', 1), this.reader.getFloat(ambientValues[0], 'b', 1), this.reader.getFloat(ambientValues[0], 'a', 1)];
 				
-		values = info[i].getElementsByTagName('diffuse');
-		var diffuse = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var diffuseValues = info[i].getElementsByTagName('diffuse');
+		var diffuse = [this.reader.getFloat(diffuseValues[0], 'r', 1), this.reader.getFloat(diffuseValues[0], 'g', 1), this.reader.getFloat(diffuseValues[0], 'b', 1), this.reader.getFloat(diffuseValues[0], 'a', 1)];
 		
-		values = info[i].getElementsByTagName('specular');
-		var specular = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var specularValues = info[i].getElementsByTagName('specular');
+		var specular = [this.reader.getFloat(specularValues[0], 'r', 1), this.reader.getFloat(specularValues[0], 'g', 1), this.reader.getFloat(specularValues[0], 'b', 1), this.reader.getFloat(specularValues[0], 'a', 1)];
 
 
-		this.XMLlights[i] = new Light(this.scene,i,id,enable,position,ambient,diffuse,specular);
+		this.XMLlights[i] = new Light(this.scene,i,id,value,position,ambient,diffuse,specular);
 	}	
 	return 0;
 };
 
-
 MySceneGraph.prototype.parseTextures= function(rootElement) {
-	if(rootElement.getElementsByTagName('TEXTURES') == null) {
+	var info;
+	if((info=rootElement.getElementsByTagName('TEXTURES')) == null) {
 		return "TEXTURES tag is missing.";
 	}
 
-	var info = rootElement.getElementsByTagName('TEXTURE');
+	info = info[0].getElementsByTagName('TEXTURE');
 	if(info[0] == null) {
 		return "No TEXTURE was added.";
 	}
 
 	var texture = [];
-	var i, values;
+	var i;
 
 	for(i = 0; i < info.length; i++) {
 		texture['id'] = this.reader.getString(info[i], 'id', 1);
 
-		values = info[i].getElementsByTagName('file');
-		texture['path'] = this.reader.getString(values[0], 'path', 1);
+		var file = info[i].getElementsByTagName('file');
+		texture['path'] = this.reader.getString(file[0], 'path', 1);
 
-		values = info[i].getElementsByTagName('amplif_factor');
-		texture['amplif_factor'] = [this.reader.getFloat(values[0], 's', 1), this.reader.getFloat(values[0], 't', 1)];
+		var amplif_factor = info[i].getElementsByTagName('amplif_factor');
+		texture['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
 	
 		this.XMLtextures.push(texture);
 
-		/*console.log(this.XMLTextures[i]['id']);
-		console.log(this.XMLTextures[i]['path']);
-		console.log(this.XMLTextures[i]['amplif_factor']);*/
 	}
 
 
@@ -253,47 +239,87 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseMaterials= function(rootElement) {
-	if(rootElement.getElementsByTagName('MATERIALS') == null) {
+	var info;
+	if((info=rootElement.getElementsByTagName('MATERIALS')) == null) {
 	return "MATERIALS tag is missing.";
 	}
 
-	var info = rootElement.getElementsByTagName('MATERIAL');
+	info = info[0].getElementsByTagName('MATERIAL');
 	if(info[0] == null) {
 		return "No MATERIAL was added.";
 	}
 
 	var material = [];
-	var i, values;
+	var i;
 
 	for(i = 0; i < info.length; i++) {
 		material['id'] = this.reader.getString(info[i], 'id', 1);
+		console.log(material['id']);
 
-		values = info[i].getElementsByTagName('shininess');
-		material['shininess'] = this.reader.getFloat(values[0], 'value', 1);
+		var shininess = info[i].getElementsByTagName('shininess');
+		material['shininess'] = this.reader.getFloat(shininess[0], 'value', 1);
 
-		values = info[i].getElementsByTagName('specular');
-		material['specular'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var specular = info[i].getElementsByTagName('specular');
+		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), this.reader.getFloat(specular[0], 'g', 1), this.reader.getFloat(specular[0], 'b', 1), this.reader.getFloat(specular[0], 'a', 1)];
 	
-		values = info[i].getElementsByTagName('diffuse');
-		material['diffuse'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var diffuse = info[i].getElementsByTagName('diffuse');
+		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), this.reader.getFloat(diffuse[0], 'g', 1), this.reader.getFloat(diffuse[0], 'b', 1), this.reader.getFloat(diffuse[0], 'a', 1)];
 	
-		values = info[i].getElementsByTagName('ambient');
-		material['ambient'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var ambient = info[i].getElementsByTagName('ambient');
+		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), this.reader.getFloat(ambient[0], 'g', 1), this.reader.getFloat(ambient[0], 'b', 1), this.reader.getFloat(ambient[0], 'a', 1)];
 	
-		values = info[i].getElementsByTagName('emission');
-		material['emission'] = [this.reader.getFloat(values[0], 'r', 1), this.reader.getFloat(values[0], 'g', 1), this.reader.getFloat(values[0], 'b', 1), this.reader.getFloat(values[0], 'a', 1)];
+		var emission = info[i].getElementsByTagName('emission');
+		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), this.reader.getFloat(emission[0], 'g', 1), this.reader.getFloat(emission[0], 'b', 1), this.reader.getFloat(emission[0], 'a', 1)];
 	
 		this.XMLmaterials.push(material);
-
-		/*console.log(this.XMLMaterials[i]['id']);
-		console.log(this.XMLMaterials[i]['shininess']);
-		console.log(this.XMLMaterials[i]['specular']);
-		console.log(this.XMLMaterials[i]['diffuse']);
-		console.log(this.XMLMaterials[i]['ambient']);
-		console.log(this.XMLMaterials[i]['emission']);*/
 	}
 
 	return 0;
+};
+
+MySceneGraph.prototype.parseLeaves= function(rootElement) {
+	var info;
+	if((info = rootElement.getElementsByTagName('LEAVES')) == null){
+		return "LEAVES tag is missing.";
+	}
+
+	var leaves = info[0].getElementsByTagName('LEAF');
+	if(leaves[0] == null){
+		return "No LEAF was added.";
+	}
+
+	var leaf = [];
+	var i;
+
+	for(i = 0; i < leaves.length; i++){
+
+		leaf['id'] = this.reader.getString(leaves[i], 'id', 1);
+		leaf['type'] = this.reader.getString(leaves[i], 'type', 1);
+		leaf['args'] = this.getArgs(leaves[i], 'args', 1);
+		console.log(leaf['args']);
+	}
+
+};
+
+MySceneGraph.prototype.getArgs = function(a, b, c) {
+    if (c == undefined) c = true;
+    if (a == null) {
+        console.error("element is null.");
+        return null;
+    }
+    if (b == null) {
+        console.error("args attribute name is null.");
+        return null;
+    }
+    var d = a.getAttribute(b);
+    if (d == null) {
+        if (c) console.error(" is null for attribute " + b + ".");
+        return null;
+    }
+    var e = d.split('  ');
+    var f = new Array();
+    for (var g = 0; g < e.length; g++) if(e[g] != ' ') f.push(parseFloat(e[g]));
+    return f;
 };
 
 MySceneGraph.prototype.onXMLError=function (message) {

@@ -18,7 +18,7 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    //this.rectangle = new MyRectangle(this, 0,0,0,0);
+    this.rectangle = new MyRectangle(this, 0,0,0,0);
     this.cylinder = new MyCylinder(this, 30, 1);
     this.sphere = new MySphere(this, 30, 30);
 
@@ -70,8 +70,6 @@ XMLscene.prototype.reloadCameras = function () {
 
 //alterar!!!
 XMLscene.prototype.reloadScene = function () {
-
-
 
     //this.graph.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
@@ -146,10 +144,9 @@ XMLscene.prototype.display = function () {
 
 	this.updateProjectionMatrix();
 	this.loadIdentity();
-
-
 	// Apply transformations corresponding to the camera position relative to the origin
-	
+	//this.translate(this.graph.XMLinitials['translate_X'],this.graph.XMLinitials['translate_Y'],this.graph.XMLinitials['translate_Z']);
+	//
 	this.applyViewMatrix();
 	
 
@@ -181,4 +178,3 @@ XMLscene.prototype.display = function () {
 
 	this.shader.unbind(); 
 };
-
