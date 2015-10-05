@@ -18,20 +18,21 @@
  		0, 1, 2
  		];
 
- 		var U,V,Nx,Ny,Nz;
+ 		var Nx,Ny,Nz;
+ 		var p1 = [args[0], args[1], args[2]];
+ 		var p2 = [args[3], args[4], args[5]];
+ 		var p3 = [args[6], args[7], args[8]];
 
- 		U = [args[3]-args[0], args[4]-args[1], args[5]-args[2]]; 
- 		V = [args[6]-args[0], args[7]-args[1], args[8]-args[2]];
+ 		var A = [p2[0] - p1[0], p2[1] - p1[1], p2[2] - p1[2]];
+ 		var B = [p3[0] - p1[0], p3[1] - p1[1], p3[2] - p1[2]];
 
- 		Nx= U[1]*V[2] - U[2]*V[1];
- 		Ny= U[2]*V[0] - U[0]*V[2];
- 		Nx= U[0]*V[1] - U[1]*V[0];
+ 		var result = [A[1]*B[2] - A[2]*B[1], A[2]*B[0] - A[0]*B[2], A[0]*B[1] - A[1]*B[0]];
 
 
  		this.normals = [
-		Nx, Ny, Nz,
-		Nx, Ny, Nz,
-		Nx, Ny, Nz 
+		result[0], result[1], result[2],
+		result[0], result[1], result[2],
+		result[0], result[1], result[2]
 		];
 
 	//isto tem de ser alterado que está errado

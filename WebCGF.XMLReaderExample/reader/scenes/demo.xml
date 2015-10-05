@@ -79,7 +79,7 @@
 	    <!-- <LEAF id="ss" type="rectangle" args="-4 4 4 -4" /> -->
 	    <!-- <LEAF id="ss" type="cylinder" args="10 1 2 1 60" /> -->
 	    <!-- <LEAF id="ss" type="sphere" args="4 20 50" /> -->
-	    <LEAF id="ss" type="triangle" args="0 0 0  2 0 2  2 2 2" />
+	    <LEAF id="ss" type="triangle" args="0 0 0  3 0 0  2 2 0" />
 
 	    <!-- Parameters of the above primitives:                                                         -->
 	        <!--rectangle: 2D coordinates for left-top and right-bottom vertices.                        -->
