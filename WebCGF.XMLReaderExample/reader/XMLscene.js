@@ -122,7 +122,10 @@ XMLscene.prototype.reloadLeaves = function () {
 
 			var cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
 			this.objects.push(cylinder);
-		}
+		}else if(this.graph.XMLleaves[i]['type'] == "triangle") {
+
+			var triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
+		} 
 
 
 	}
