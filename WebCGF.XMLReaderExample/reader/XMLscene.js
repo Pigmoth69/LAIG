@@ -125,6 +125,8 @@ XMLscene.prototype.reloadLeaves = function () {
 		}else if(this.graph.XMLleaves[i]['type'] == "triangle") {
 
 			var triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
+			this.objects.push(triangle);
+			//this.objects.push(new MyTriangle(this, 0));
 		} 
 
 
