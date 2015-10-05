@@ -289,11 +289,11 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		return "No LEAF was added.";
 	}
 
-	var leaf = [];
+	
 	var i;
 
 	for(i = 0; i < leaves.length; i++){
-
+		var leaf = [];
 		leaf['id'] = this.reader.getString(leaves[i], 'id', 1);
 		leaf['type'] = this.reader.getString(leaves[i], 'type', 1);
 		leaf['args'] = this.getArgs(leaves[i], 'args', 1);

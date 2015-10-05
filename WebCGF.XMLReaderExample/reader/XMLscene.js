@@ -18,9 +18,7 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    this.rectangle = new MyRectangle(this, 0,0,0,0);
-    this.cylinder = new MyCylinder(this, 30, 1);
-    this.sphere = new MySphere(this, 30, 30);
+    this.objects = new Array();
 
 	this.axis=new CGFaxis(this);
 	
@@ -70,7 +68,11 @@ XMLscene.prototype.reloadCameras = function () {
 
 //alterar!!!
 XMLscene.prototype.reloadScene = function () {
+	var i = 0;
+	for(i; i < this.objects.length; i++){
 
+		this.objects[i].display();
+	}
     //this.graph.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Y'],0,1,0);
@@ -101,6 +103,44 @@ XMLscene.prototype.reloadAppearance = function () {
     }	 
 };
 
+XMLscene.prototype.reloadLeaves = function () {
+	var i;
+	console.log("numero de Castros : " + this.graph.XMLleaves.length);
+	for(i = 0; i < this.graph.XMLleaves.length; i++){
+		if(this.graph.XMLleaves[i]['type'] == "rectangle") {
+			var rectangle = new MyRectangle(this, 0, 1, 0, 1);
+			console.log(this.graph.XMLleaves[i]['args']);
+			rectangle.vertices = [
+				this.graph.XMLleaves[i]['args'][0], this.graph.XMLleaves[i]['args'][1], 0,
+				this.graph.XMLleaves[i]['args'][2], this.graph.XMLleaves[i]['args'][1], 0,
+				this.graph.XMLleaves[i]['args'][2], this.graph.XMLleaves[i]['args'][3], 0,
+				this.graph.XMLleaves[i]['args'][0], this.graph.XMLleaves[i]['args'][3], 0
+			];
+
+			console.log(rectangle.vertices);
+
+			rectangle.indices = [
+				0, 3, 1,
+				1, 3, 2
+			];
+
+			rectangle.normals = [
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1
+			];
+
+			console.log(rectangle.vertices);
+			rectangle.initBuffers();
+			this.objects.push(rectangle);
+		}
+
+
+	}
+
+};
+
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () 
@@ -111,7 +151,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.reloadScene(); // tem  de estar no display!!
 	this.reloadAxis(); 
 	this.reloadLights(); 
-	
+	this.reloadLeaves();
 
 };
 
@@ -163,10 +203,6 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 
-	
-	//this.rectangle.display();
-	//this.cylinder.display();
-	this.sphere.display();
 
 	if (this.graph.loadedOk)
 	{
