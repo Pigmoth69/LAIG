@@ -49,7 +49,7 @@ XMLscene.prototype.reloadLights = function () {
 		}
 	} 
 
-    this.updateLights(); 
+    this.updateLights();  
 
     this.shader.unbind();
 };
@@ -72,6 +72,7 @@ XMLscene.prototype.reloadScene = function () {
 	for(i; i < this.objects.length; i++){
 
 		this.objects[i].display();
+
 	}
     //this.graph.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
     //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
@@ -113,6 +114,11 @@ XMLscene.prototype.reloadLeaves = function () {
 			var rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
 
 			this.objects.push(rectangle);
+		}else if(this.graph.XMLleaves[i]['type'] == "sphere") {
+			
+			//var sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
+			var sphere = new MySphere(this,4,20,50);
+			this.objects.push(sphere);
 		}
 
 

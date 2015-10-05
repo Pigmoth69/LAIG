@@ -76,9 +76,9 @@
 	<LEAVES>
 
 	    <!-- next lines define nodes of type leaf; they may be repeated, in any order, as necessary -->
-	    <LEAF id="ss" type="rectangle" args="-3 3 3 -3" />
+	    <LEAF id="ss" type="rectangle" args="-4 4 4 -4" />
 	    <LEAF id="ss" type="cylinder" args="0.1 0.1 0.1 1 1" /> 
-	    <LEAF id="ss" type="sphere" args="0.1 1 1" />
+	    <LEAF id="ss" type="sphere" args="4 20 50" />
 	    <LEAF id="ss" type="triangle" args="0.1 0.1 0.1  0.1 0.1 0.1  0.1 0.1 0.1" />
 
 	    <!-- Parameters of the above primitives:                                                         -->
