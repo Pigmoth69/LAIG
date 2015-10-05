@@ -20,6 +20,7 @@ function MySceneGraph(filename, scene) {
 	this.XMLlights = new Array(this.scene.lights.length); 
 	this.XMLtextures = [];
 	this.XMLmaterials = [];
+	this.XMLleaves = [];
 	this.reader.open('scenes/'+filename, this);  
 }
 
@@ -296,7 +297,8 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		leaf['id'] = this.reader.getString(leaves[i], 'id', 1);
 		leaf['type'] = this.reader.getString(leaves[i], 'type', 1);
 		leaf['args'] = this.getArgs(leaves[i], 'args', 1);
-		console.log(leaf['args']);
+
+		this.XMLleaves.push(leaf);
 	}
 
 };
@@ -316,9 +318,13 @@ MySceneGraph.prototype.getArgs = function(a, b, c) {
         if (c) console.error(" is null for attribute " + b + ".");
         return null;
     }
-    var e = d.split('  ');
+    var e = d.split(' ');
     var f = new Array();
-    for (var g = 0; g < e.length; g++) if(e[g] != ' ') f.push(parseFloat(e[g]));
+    for (var g = 0; g < e.length; g++) {
+    	if(e[g] != "")
+    		f.push(parseFloat(e[g]));
+
+    }
     return f;
 };
 
