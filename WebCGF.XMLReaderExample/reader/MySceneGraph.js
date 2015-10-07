@@ -109,7 +109,7 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	var rotationX, rotationY, rotationZ, i;
 	for(i = 0; i < 3; i++)
 		if(this.reader.getString(info[i], 'axis', 1) == 'x')
-			rotationX = info[i];
+			rotationX = info[i]; 
 		else if(this.reader.getString(info[i], 'axis', 1) == 'y')
 			rotationY = info[i];
 		else if(this.reader.getString(info[i], 'axis', 1) == 'z')
@@ -327,7 +327,7 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 	}
 
 
-	var i, node = [];
+	var i,k, node = [];
 	for(i = 0; i < nodes.length; i++){
 		node['id'] = this.reader.getString(nodes[i], 'id', 1);
 		
@@ -341,16 +341,82 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		}
 		var descendants = nodes[i].getElementsByTagName('DESCENDANT');
 		//falta ciclo 'for' para inserir os diferentes id's dos descendentes
-
-		//calcula numero de transformaçoes associadas ao node
-		var numTransformations = all.length - (1 + descendants.length);
-
-		var j;
-		//adiciona info das transformacoes do node
-		for(j = 2; j < numTransformations + 2; j++){
-			node['descendants'].push(this.reader.getString(all[j], 'id', 1));
+		
+		var desc = [];
+		for(k=0; k < descendants.length;k++){
+			desc.push(this.reader.getString(descendants[k], 'id', 1));
 		}
 
+
+
+		var transformations = [];
+		transformations['TRANSLATION']=null;
+		transformations['ROTATION']=null;
+		transformations['SCALE']=null;
+
+		var translation = nodes[i].getElementsByTagName('TRANSLATION');
+		var rotation = nodes[i].getElementsByTagName('ROTATION');
+		var scale = nodes[i].getElementsByTagName('SCALE');
+
+		if(translation != null){
+			console.log("TRANSLATION exists!");
+			var x,y,z;
+			x= this.reader.getFloat(translation[0], 'x', 1);
+			y= this.reader.getFloat(translation[0], 'y', 1);
+			z= this.reader.getFloat(translation[0], 'z', 1); 
+
+			var mat= mat4.create();
+			mat4.identity(mat);
+			mat4.translate(mat,mat,[x,y,z]);
+			transformations['TRANSLATION'] =mat;
+			transformations.push(transformations['TRANSLATION']);
+
+		}
+
+		if(rotation != null){
+			console.log("ROTATION exists!");
+			var axis,angle;
+
+			if(this.reader.getString(rotation[0], 'axis', 1) == 'x')
+				axis= new Array(1,0,0);
+			else if(this.reader.getString(rotation[0], 'axis', 1) == 'y')
+				axis= new Array(0,1,0);
+			else if(this.reader.getString(rotation[0], 'axis', 1) == 'z')
+					axis= new Array(0,0,1);
+			else{
+				return "Error on node id: "+node['id']+" rotation AXIS!!";
+			}
+
+			angle = this.reader.getInteger(rotation[0],'angle',1);
+
+			var mat= mat4.create();
+			mat4.identity(mat);
+			mat4.rotate(mat,mat,Math.PI*angle/180,axis);
+			transformations['ROTATION'] =mat;
+			transformations.push(transformations['ROTATION']);
+			}
+
+		if(scale != null){
+			console.log("SCALE exists!");
+			var sx,sy,sz;
+			x= this.reader.getFloat(scale[0], 'sx', 1);
+			y= this.reader.getFloat(scale[0], 'sy', 1);
+			z= this.reader.getFloat(scale[0], 'sz', 1); 
+
+			var mat= mat4.create();
+			mat4.identity(mat);
+			mat4.scale(mat,mat,[x,y,z]);
+			transformations['SCALE'] =mat;
+			transformations.push(transformations['SCALE']);
+
+		}
+		/*console.log("TRANSFORMAÇÕES");
+		console.log(transformations);*/
+
+		var NewNode = new Node();
+		NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
+		
+		this.XMLnodes.push(NewNode);
 
 	}
 

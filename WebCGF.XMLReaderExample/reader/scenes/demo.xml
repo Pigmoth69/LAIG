@@ -106,9 +106,9 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0" y="0" z="0" />
-	        <ROTATION axis="0" angle="0" />
-	        <SCALE sx="1" sy="1" sz="1" />
+	        <TRANSLATION x="1" y="2" z="3" />
+	        <ROTATION axis="x" angle="90" />
+	        <SCALE sx="2" sy="2" sz="2" />
 
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
