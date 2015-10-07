@@ -17,9 +17,17 @@ Node.prototype.setMaterial = function(material){
 	this.material= material;
 }
 
+Node.prototype.setDescendents = function(descendents){
+	this.descendents= descendents;
+}
+
+Node.prototype.setTexture = function(texture){
+	this.texture= texture;
+}
+
 Node.prototype.setMatrix = function(matrix){
 	this.matrix = matrix;
-}
+} 
 
 Node.prototype.translateMatrix = function(matrix){
 	mat4.translate(this.matrix,this.matrix,matrix);
@@ -33,4 +41,12 @@ Node.prototype.scaleMatrix = function(matrix){
 	mat4.scale(this.matrix,this.matrix,matrix);
 } 
 
+Node.prototype.setNode = function(materias,texture,matrix,descendents){
+	this.setMaterial(material);
+	this.setTexture(texture);
+	this.setMatrix(matrix);
+	this.setDescendents(descendents);
+
+
+}
 
