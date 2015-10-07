@@ -39,7 +39,6 @@ XMLscene.prototype.initLights = function () {
 
 XMLscene.prototype.reloadLights = function () {
 
-	this.shader.bind();
 
 	this.lights = this.graph.XMLlights;
 	var i;
@@ -48,11 +47,10 @@ XMLscene.prototype.reloadLights = function () {
 		{
 			this.lights[i].setVisible(true); // isto está certo? :/ é para todas que temos de por visible?
 		}
-	} 
+	}
 
     this.updateLights();  
 
-    this.shader.unbind();
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -153,15 +151,8 @@ XMLscene.prototype.updateLights = function ()
 {
 	var i;
 	for(i = 0; i < this.lights.length ;i++){
-		if(this.lights[i] instanceof Light)  
-		{
-			if(this.lights[i].enabled)
-				this.lights[i].enable;
-			else
-				this.lights[i].disable;
-
+		if(this.lights[i] instanceof Light)
 			this.lights[i].update();
-		}
 	}
 }
 

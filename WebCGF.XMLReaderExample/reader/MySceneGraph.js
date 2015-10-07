@@ -14,13 +14,16 @@ function MySceneGraph(filename, scene) {
 	 * After the file is read, the reader calls onXMLReady on this object.
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
-	 
+	
+	this.rootID = null; 
 	this.XMLinitials = [];
 	this.XMLillumination = [];
 	this.XMLlights = new Array(this.scene.lights.length); 
 	this.XMLtextures = [];
 	this.XMLmaterials = [];
 	this.XMLleaves = [];
+	this.XMLnodes = [];
+
 	this.reader.open('scenes/'+filename, this);  
 }
 
@@ -72,6 +75,8 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 	if((elems = this.parseLeaves(rootElement)) != 0)
 		return elems;
 
+	if((elems = this.parseNodes(rootElement)) != 0)
+		return elems;
 };
 
 
@@ -299,6 +304,41 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		leaf['args'] = this.getArgs(leaves[i], 'args', 1);
 
 		this.XMLleaves.push(leaf);
+	}
+
+};
+
+MySceneGraph.prototype.parseNodes= function(rootElement) {
+	var info;
+	if((info = rootElement.getElementsByTagName('NODES')) == null){
+		return "NODES tag is missing.";
+	}
+
+	var root = info.getElementsByTagName('ROOT');
+	if(root[0] == null){
+		return "ROOT tag is missing.";
+	}
+	this.rootID = root[0];
+
+	var nodes = info.getElementsByTagName('NODE');
+	if(nodes[0] == null){
+		return "No NODE was added.";
+	}
+
+	var i, node = [];
+	for(i = 0; i < nodes.length; i++){
+		node['id'] = this.reader.getString(nodes[i], 'id', 1);
+		
+		var materialID = nodes[i].getElementsByTagName('MATERIAL');
+		node['materialID'] = this.reader.getString(materialID, 'id', 1);
+
+		var textureID = nodes[i].getElementsByTagName('TEXTURE');
+		node['textureID'] = this.reader.getString(textureID, 'id', 1);
+
+		var materialID = nodes[i].getElementsByTagName('MATERIAL');
+		node['materialID'] = this.reader.getString(materialID, 'id', 1);
+
+		console.log(node[i]);
 	}
 
 };
