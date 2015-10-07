@@ -4,8 +4,7 @@
  */
  function MyRectangle(scene, args) {
  	CGFobject.call(this,scene);
- 		
- 	console.log(args);
+ 	
 
  	this.vertices = [
  		args[0], args[1], 0,

@@ -71,13 +71,13 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 
 	if((elems = this.parseMaterials(rootElement)) != 0)
 		return elems;
-/*
+
 	if((elems = this.parseLeaves(rootElement)) != 0)
 		return elems;
 
 	if((elems = this.parseNodes(rootElement)) != 0)
 		return elems;
-*/
+
 };
 
 
@@ -294,7 +294,6 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		return "No LEAF was added.";
 	}
 
-	
 	var i;
 
 	for(i = 0; i < leaves.length; i++){
@@ -306,6 +305,8 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		this.XMLleaves.push(leaf);
 	}
 
+	return 0;
+
 };
 
 MySceneGraph.prototype.parseNodes= function(rootElement) {
@@ -314,16 +315,17 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		return "NODES tag is missing.";
 	}
 
-	var root = info.getElementsByTagName('ROOT');
+	var root = info[0].getElementsByTagName('ROOT');
 	if(root[0] == null){
 		return "ROOT tag is missing.";
 	}
 	this.rootID = root[0];
 
-	var nodes = info.getElementsByTagName('NODE');
+	var nodes = info[0].getElementsByTagName('NODE');
 	if(nodes[0] == null){
 		return "No NODE was added.";
 	}
+
 
 	var i, node = [];
 	for(i = 0; i < nodes.length; i++){
@@ -333,7 +335,23 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		node['materialID'] = this.reader.getString(all[0], 'id', 1);
 		node['textureID'] = this.reader.getString(all[1], 'id', 1);
 
-		//console.log(all.length);
+		//obtem descendentes
+		if(nodes[i].getElementsByTagName('DESCENDANTS') == null){
+			return "DESCENDANTS tag is missing.";
+		}
+		var descendants = nodes[i].getElementsByTagName('DESCENDANT');
+		//falta ciclo 'for' para inserir os diferentes id's dos descendentes
+
+		//calcula numero de transformaçoes associadas ao node
+		var numTransformations = all.length - (1 + descendants.length);
+
+		var j;
+		//adiciona info das transformacoes do node
+		for(j = 2; j < numTransformations + 2; j++){
+			node['descendants'].push(this.reader.getString(all[j], 'id', 1));
+		}
+
+
 	}
 
 };

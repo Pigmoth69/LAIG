@@ -12,7 +12,6 @@
  		args[3], args[4], args[5], //p2
  		args[6], args[7], args[8]  //p3
  		];
- 		console.log("Vertices: "+ this.vertices);
 
  		this.indices = [
  		0, 1, 2
