@@ -71,12 +71,13 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 
 	if((elems = this.parseMaterials(rootElement)) != 0)
 		return elems;
-
+/*
 	if((elems = this.parseLeaves(rootElement)) != 0)
 		return elems;
 
 	if((elems = this.parseNodes(rootElement)) != 0)
 		return elems;
+*/
 };
 
 
@@ -260,7 +261,6 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 
 	for(i = 0; i < info.length; i++) {
 		material['id'] = this.reader.getString(info[i], 'id', 1);
-		console.log(material['id']);
 
 		var shininess = info[i].getElementsByTagName('shininess');
 		material['shininess'] = this.reader.getFloat(shininess[0], 'value', 1);
@@ -329,16 +329,11 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 	for(i = 0; i < nodes.length; i++){
 		node['id'] = this.reader.getString(nodes[i], 'id', 1);
 		
-		var materialID = nodes[i].getElementsByTagName('MATERIAL');
-		node['materialID'] = this.reader.getString(materialID, 'id', 1);
+		var all = nodes[i].getElementsByTagName('*');
+		node['materialID'] = this.reader.getString(all[0], 'id', 1);
+		node['textureID'] = this.reader.getString(all[1], 'id', 1);
 
-		var textureID = nodes[i].getElementsByTagName('TEXTURE');
-		node['textureID'] = this.reader.getString(textureID, 'id', 1);
-
-		var materialID = nodes[i].getElementsByTagName('MATERIAL');
-		node['materialID'] = this.reader.getString(materialID, 'id', 1);
-
-		console.log(node[i]);
+		//console.log(all.length);
 	}
 
 };

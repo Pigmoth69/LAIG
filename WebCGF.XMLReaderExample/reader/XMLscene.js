@@ -18,6 +18,11 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.rectangle = null;
+    this.cylinder = null;
+    this.sphere = null;
+    this.triangle = null;
+
     this.objects = new Array();
 
 	this.axis=new CGFaxis(this);
@@ -28,7 +33,6 @@ XMLscene.prototype.init = function (application) {
 XMLscene.prototype.initLights = function () {
 
     this.shader.bind();
-
     
 	this.lights[0].setPosition(2, 3, 3, 1);
     this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
@@ -39,6 +43,7 @@ XMLscene.prototype.initLights = function () {
 
 XMLscene.prototype.reloadLights = function () {
 
+	this.shader.bind(); 
 
 	this.lights = this.graph.XMLlights;
 	var i;
@@ -51,6 +56,7 @@ XMLscene.prototype.reloadLights = function () {
 
     this.updateLights();  
 
+	this.shader.unbind(); 
 };
 
 XMLscene.prototype.initCameras = function () {
@@ -73,12 +79,7 @@ XMLscene.prototype.reloadScene = function () {
 		this.objects[i].display();
 
 	}
-    //this.graph.translate(this.graph.XMLInitials['translate_X'],this.graph.XMLInitials['translate_Y'],this.graph.XMLInitials['translate_Z']);
-    //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_X'],1,0,0);
-    //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Y'],0,1,0);
-    //this.graph.scene.rotate((Math.PI/180)*this.graph.XMLInitials['rotate_Z'],1,0,1);
-    //this.graph.scene.scale(this.graph.XMLInitials['scale_X'],this.graph.XMLInitials['scale_Y'],this.graph.XMLInitials['scale_Z']);
-}; 
+ }; 
 
 //alterar!!!
 XMLscene.prototype.reloadAxis = function () {
@@ -107,29 +108,16 @@ XMLscene.prototype.reloadLeaves = function () {
 	var i;
 
 	for(i = 0; i < this.graph.XMLleaves.length; i++){
-		
-		if(this.graph.XMLleaves[i]['type'] == "rectangle") {
-			
-			var rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
-
-			this.objects.push(rectangle);
-		}else if(this.graph.XMLleaves[i]['type'] == "sphere") {
-
-			var sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
-			this.objects.push(sphere);
-		}else if(this.graph.XMLleaves[i]['type'] == "cylinder") {
-
-			var cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
-			this.objects.push(cylinder);
-		}else if(this.graph.XMLleaves[i]['type'] == "triangle") {
-
-			var triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
-			this.objects.push(triangle);
-			//this.objects.push(new MyTriangle(this, 0));
+		if(this.graph.XMLleaves[i]['type'] == "rectangle")
+			rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
+		else if(this.graph.XMLleaves[i]['type'] == "sphere") 
+			sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
+		else if(this.graph.XMLleaves[i]['type'] == "cylinder")
+			cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
+		else if(this.graph.XMLleaves[i]['type'] == "triangle")
+			triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
 		} 
 
-
-	}
 
 };
 
