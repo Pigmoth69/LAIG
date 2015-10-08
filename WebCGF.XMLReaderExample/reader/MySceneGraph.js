@@ -91,10 +91,10 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 		return "frustum tag is missing.";
 	}
 	
-	info = rootElement.getElementsByTagName('translate');
-	var translate = info[0];
-	if(translate == null) {
-		return "translate tag is missing.";
+	info = rootElement.getElementsByTagName('translation');
+	var translation = info[0];
+	if(translation == null) {
+		return "translation tag is missing.";
 	}
 	
 	info = rootElement.getElementsByTagName('rotation');
@@ -129,9 +129,9 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.XMLinitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
 	this.XMLinitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
 
-	this.XMLinitials['translate_X']= this.reader.getInteger(translate, 'x', 1) ;
-	this.XMLinitials['translate_Y']= this.reader.getInteger(translate, 'y', 1) ;
-	this.XMLinitials['translate_Z']= this.reader.getInteger(translate, 'z', 1) ;
+	this.XMLinitials['translation_X']= this.reader.getInteger(translation, 'x', 1) ;
+	this.XMLinitials['translation_Y']= this.reader.getInteger(translation, 'y', 1) ;
+	this.XMLinitials['translation_Z']= this.reader.getInteger(translation, 'z', 1) ;
 
 	this.XMLinitials['rotation_X']= this.reader.getInteger(rotationX, 'angle', 1);
 	this.XMLinitials['rotation_Y']= this.reader.getInteger(rotationY, 'angle', 1);
@@ -361,7 +361,6 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		mat4.identity(mat);
 
 		for(j = 0; j < numTransformations; j++){
-			var transf = [];
 			if(all[j + 2].tagName == 'TRANSLATION')
 			{
 				var x,y,z;
@@ -399,8 +398,8 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 
 		}
 
-		var NewNode = new Node(node['id'], node['materialID'], node['textureID']);
-		NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
+		var NewNode = new Node(node['id'], node['materialID'], node['textureID'], mat, desc);
+		//NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
 
 		this.XMLnodes.push(NewNode);
 

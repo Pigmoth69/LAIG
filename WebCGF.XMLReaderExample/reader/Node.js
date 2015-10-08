@@ -1,10 +1,10 @@
 
 function Node(id, material, texture, matrix, descendents) {
-	this.id = null;
-	this.material = null;
-	this.texture = null;
-	this.matrix = null; // matriz de transformação do nó
-	this.descendents = [];
+	this.id = id;
+	this.material = material;
+	this.texture = texture;
+	this.matrix = matrix; // matriz de transformação do nó
+	this.descendents = descendents;
 }
 
 Node.prototype.constructor = Node;

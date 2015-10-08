@@ -81,7 +81,8 @@ XMLscene.prototype.reloadScene = function () {
  }; 
 
  XMLscene.prototype.loadNode = function (node_id) {
- 	
+ 	this.pushMatrix();
+
  	var i,newNode;
  	
  	newNode = this.getNode(node_id);
@@ -91,13 +92,16 @@ XMLscene.prototype.reloadScene = function () {
  		return;
  	}
 
+ 	this.multMatrix(newNode.matrix);
+ 	//console.log(newNode.matrix);
+
  	for(i = 0; i < newNode.getDescendents().length;i++){
  		console.log("ID do node: "+ newNode.getDescendents()[i]);
  		var desc_id = newNode.getDescendents()[i];
  		var desc_node = this.getNode(desc_id);
  		
 
- 		var l= this.getLeaf(desc_id);
+ 		var l = this.getLeaf(desc_id);
  		if(l!= null){
  			if(l['type'] == 'rectangle'){
  				this.rectangle.display();
@@ -113,6 +117,8 @@ XMLscene.prototype.reloadScene = function () {
  			this.loadNode(newNode.getDescendents()[i]);
 
  	}
+
+ 	this.popMatrix();
  }
 
 //alterar!!!
@@ -163,7 +169,6 @@ XMLscene.prototype.onGraphLoaded = function ()
 	
 	this.reloadCameras();
 	this.reloadLeaves();
-	//this.reloadScene(); // tem  de estar no display!!
 	this.reloadAxis(); 
 	this.reloadLights(); 
 	
