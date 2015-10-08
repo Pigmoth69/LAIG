@@ -129,19 +129,19 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.XMLinitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
 	this.XMLinitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
 
-	this.XMLinitials['translation_X']= this.reader.getInteger(translation, 'x', 1) ;
-	this.XMLinitials['translation_Y']= this.reader.getInteger(translation, 'y', 1) ;
-	this.XMLinitials['translation_Z']= this.reader.getInteger(translation, 'z', 1) ;
+	this.XMLinitials['translation_X']= this.reader.getFloat(translation, 'x', 1) ;
+	this.XMLinitials['translation_Y']= this.reader.getFloat(translation, 'y', 1) ;
+	this.XMLinitials['translation_Z']= this.reader.getFloat(translation, 'z', 1) ;
 
-	this.XMLinitials['rotation_X']= this.reader.getInteger(rotationX, 'angle', 1);
-	this.XMLinitials['rotation_Y']= this.reader.getInteger(rotationY, 'angle', 1);
-	this.XMLinitials['rotation_Z']= this.reader.getInteger(rotationZ, 'angle', 1);
+	this.XMLinitials['rotation_X']= this.reader.getFloat(rotationX, 'angle', 1);
+	this.XMLinitials['rotation_Y']= this.reader.getFloat(rotationY, 'angle', 1);
+	this.XMLinitials['rotation_Z']= this.reader.getFloat(rotationZ, 'angle', 1);
 
-	this.XMLinitials['scale_X']= this.reader.getInteger(scale, 'sx', 1);
-	this.XMLinitials['scale_Y']= this.reader.getInteger(scale, 'sy', 1);
-	this.XMLinitials['scale_Z']= this.reader.getInteger(scale, 'sz', 1);
+	this.XMLinitials['scale_X']= this.reader.getFloat(scale, 'sx', 1);
+	this.XMLinitials['scale_Y']= this.reader.getFloat(scale, 'sy', 1);
+	this.XMLinitials['scale_Z']= this.reader.getFloat(scale, 'sz', 1);
 
-	this.XMLinitials['reference']= this.reader.getInteger(reference, 'length', 1);
+	this.XMLinitials['reference']= this.reader.getFloat(reference, 'length', 1);
 
 
 

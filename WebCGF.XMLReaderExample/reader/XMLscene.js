@@ -71,6 +71,9 @@ XMLscene.prototype.reloadCameras = function () {
 // FALTA AQUI O setActiveCamera(camera) é preciso guardar a application
     this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
     this.camera.far = this.graph.XMLinitials['frustum_FAR'];
+
+   
+
 };   
 
 //alterar!!!
@@ -96,7 +99,7 @@ XMLscene.prototype.reloadScene = function () {
  	//console.log(newNode.matrix);
 
  	for(i = 0; i < newNode.getDescendents().length;i++){
- 		console.log("ID do node: "+ newNode.getDescendents()[i]);
+ 		
  		var desc_id = newNode.getDescendents()[i];
  		var desc_node = this.getNode(desc_id);
  		
@@ -166,7 +169,7 @@ XMLscene.prototype.reloadLeaves = function () {
 XMLscene.prototype.onGraphLoaded = function () 
 {
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
-	
+
 	this.reloadCameras();
 	this.reloadLeaves();
 	this.reloadAxis(); 
@@ -215,9 +218,25 @@ XMLscene.prototype.display = function () {
 
 	this.updateProjectionMatrix();
 	this.loadIdentity();
-	// Apply transformations corresponding to the camera position relative to the origin
-	//this.translate(this.graph.XMLinitials['translate_X'],this.graph.XMLinitials['translate_Y'],this.graph.XMLinitials['translate_Z']);
-	//
+
+
+	//inicio
+	var matrix = mat4.create();
+    mat4.identity(matrix);
+
+	mat4.translate(matrix, matrix, [this.graph.XMLinitials['translation_X'], this.graph.XMLinitials['translation_Y'], this.graph.XMLinitials['translation_Z']]);
+	
+	mat4.rotate(matrix, matrix, this.graph.XMLinitials['rotation_X']*Math.PI/180, [1,0,0]);
+	mat4.rotate(matrix, matrix, this.graph.XMLinitials['rotation_Y']*Math.PI/180, [0,1,0]);
+	mat4.rotate(matrix, matrix, this.graph.XMLinitials['rotation_Z']*Math.PI/180, [0,0,1]);
+
+	mat4.scale(matrix, matrix, [this.graph.XMLinitials['scale_X'], this.graph.XMLinitials['scale_Y'], this.graph.XMLinitials['scale_Z']]);
+
+
+	this.multMatrix(matrix);
+	//fim
+
+
 	this.applyViewMatrix();
 	
 
@@ -226,7 +245,7 @@ XMLscene.prototype.display = function () {
 	this.axis.display();
 
 	this.reloadAppearance();
-	
+
 	
 	
 	// ---- END Background, camera and axis setup
