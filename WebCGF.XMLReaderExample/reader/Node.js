@@ -22,6 +22,10 @@ Node.prototype.setDescendents = function(descendents){
 	this.descendents= descendents;
 }
 
+Node.prototype.getDescendents = function(){
+	return this.descendents;
+}
+
 Node.prototype.setTexture = function(texture){
 	this.texture= texture;
 }

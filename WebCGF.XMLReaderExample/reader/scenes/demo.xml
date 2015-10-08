@@ -113,9 +113,27 @@
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
+	        	<DESCENDANT id="cenas" />
 	            <DESCENDANT id="RECT" />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	        </DESCENDANTS>
+
+	    </NODE>
+
+	    <!--node de teste -->
+	    <NODE id="cenas">       
+
+	        
+	        <MATERIAL id="default" />      
+	        <TEXTURE id="none1" />       
+
+	        <TRANSLATION x="4" y="5" z="6" />
+	        <ROTATION axis="y" angle="60" />
+	        <SCALE sx="3" sy="3" sz="3" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="RECT" />       
 	        </DESCENDANTS>
 
 	    </NODE>

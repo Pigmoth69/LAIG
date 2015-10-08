@@ -23,7 +23,6 @@ XMLscene.prototype.init = function (application) {
     this.sphere = null;
     this.triangle = null;
 
-    this.objects = new Array();
 
 	this.axis=new CGFaxis(this);
 	
@@ -73,13 +72,28 @@ XMLscene.prototype.reloadCameras = function () {
 
 //alterar!!!
 XMLscene.prototype.reloadScene = function () {
-	var i = 0;
-	for(i; i < this.objects.length; i++){
 
-		this.objects[i].display();
-
-	}
+	var root = this.graph.rootID;
+	this.loadNode(root);
  }; 
+
+ XMLscene.prototype.loadNode = function (node_id) {
+ 	/*TENHO DE ARRANJAR ESTA MERDA FDS!! ESTOU AZIADO CARALHO!!!*/
+
+ 	/*var i,newNode;
+ 	console.log("O id do node é : "+node_id);
+ 	newNode = this.getNode(node_id);
+ 	console.log();
+ 	for(i = 0; i < newNode.getDescendents().length;i++){
+ 		var desc_id = newNode.getDescendents()[i].getNodeID();
+ 		console.log("descendentes: "+ desc_id);
+ 		if(this.getLeaf(desc_id)){
+ 			console.log("DESENHA A FOLHA!");
+ 		}else
+ 			loadNode(newNode.getDescendents()[i]);
+
+ 	}*/
+ }
 
 //alterar!!!
 XMLscene.prototype.reloadAxis = function () {
@@ -144,12 +158,22 @@ XMLscene.prototype.updateLights = function ()
 	}
 }
 
-XMLscene.prototype.getNodePosition = function (nodeId){
+XMLscene.prototype.getLeaf = function (nodeId){
+
+	for(i = 0; i < this.graph.XMLleaves.length;i++){
+		if(this.graph.XMLleaves[i].leaf['id'] == nodeId)
+			return this.graph.XMLleaves[i];
+	}
+	return null
+}
+
+XMLscene.prototype.getNode = function (nodeId){
 
 	for(i = 0; i < this.graph.XMLnodes.length;i++){
 		if(this.graph.XMLnodes[i].getNodeID() == nodeId)
 			return this.graph.XMLnodes[i];
 	}
+	return null
 }
 
 XMLscene.prototype.display = function () {
