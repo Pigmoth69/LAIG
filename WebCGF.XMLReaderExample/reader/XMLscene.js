@@ -18,6 +18,9 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.materials = [];
+    var textures = [];
+
     this.rectangle = null;
     this.cylinder = null;
     this.sphere = null;

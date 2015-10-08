@@ -1,5 +1,5 @@
 
-function Node() {
+function Node(id, material, texture, matrix, descendents) {
 	this.id = null;
 	this.material = null;
 	this.texture = null;

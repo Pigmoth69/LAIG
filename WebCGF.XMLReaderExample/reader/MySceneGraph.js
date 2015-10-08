@@ -77,9 +77,7 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 
 	if((elems = this.parseNodes(rootElement)) != 0)
 		return elems;
-
 };
-
 
 MySceneGraph.prototype.parseInitials= function(rootElement) {
 
@@ -277,7 +275,15 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 		var emission = info[i].getElementsByTagName('emission');
 		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), this.reader.getFloat(emission[0], 'g', 1), this.reader.getFloat(emission[0], 'b', 1), this.reader.getFloat(emission[0], 'a', 1)];
 	
-		this.XMLmaterials.push(material);
+		var newMaterial = [];
+		newMaterial['id'] = material['id'];
+		newMaterial['material'] = new CGFappearance(this.scene);
+		newMaterial['material'].setShininess(material['shininess']);
+		newMaterial['material'].setSpecular(material['specular'][0], material['specular'][1], material['specular'][2], material['specular'][3]);
+		newMaterial['material'].setDiffuse(material['diffuse'][0], material['diffuse'][1], material['diffuse'][2], material['diffuse'][3]);
+		newMaterial['material'].setAmbient(material['ambient'][0], material['ambient'][1], material['ambient'][2], material['ambient'][3]);
+		newMaterial['material'].setEmission(material['emission'][0], material['emission'][1], material['emission'][2], material['emission'][3]);
+		this.XMLmaterials.push(newMaterial);
 	}
 
 	return 0;
@@ -306,7 +312,6 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 	}
 
 	return 0;
-
 };
 
 MySceneGraph.prototype.parseNodes= function(rootElement) {
@@ -348,72 +353,51 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		}
 
 
+		var numTransformations = all.length - (2 + 1 + descendants.length);
+		var j, transformations = [];
+		var mat = mat4.create();
+		mat4.identity(mat);
 
-		var transformations = [];
-		transformations['TRANSLATION']=null;
-		transformations['ROTATION']=null;
-		transformations['SCALE']=null;
+		for(j = 0; j < numTransformations; j++){
+			var transf = [];
+			if(all[j + 2].tagName == 'TRANSLATION')
+			{
+				var x,y,z;
+				x= this.reader.getFloat(all[j + 2], 'x', 1);
+				y= this.reader.getFloat(all[j + 2], 'y', 1);
+				z= this.reader.getFloat(all[j + 2], 'z', 1);
 
-		var translation = nodes[i].getElementsByTagName('TRANSLATION');
-		var rotation = nodes[i].getElementsByTagName('ROTATION');
-		var scale = nodes[i].getElementsByTagName('SCALE');
+				mat4.translate(mat,mat,[x,y,z]);
+			}
+			else if(all[j + 2].tagName == 'ROTATION')
+			{
+				var axis,angle;
 
-		if(translation != null){
-			console.log("TRANSLATION exists!");
-			var x,y,z;
-			x= this.reader.getFloat(translation[0], 'x', 1);
-			y= this.reader.getFloat(translation[0], 'y', 1);
-			z= this.reader.getFloat(translation[0], 'z', 1); 
+				if(this.reader.getString(all[j + 2], 'axis', 1) == 'x')
+					axis= new Array(1,0,0);
+				else if(this.reader.getString(all[j + 2], 'axis', 1) == 'y')
+					axis= new Array(0,1,0);
+				else if(this.reader.getString(all[j + 2], 'axis', 1) == 'z')
+						axis= new Array(0,0,1);
+				else return "Error on node id: "+node['id']+" rotation AXIS!!";
 
-			var mat= mat4.create();
-			mat4.identity(mat);
-			mat4.translate(mat,mat,[x,y,z]);
-			transformations['TRANSLATION'] =mat;
-			transformations.push(transformations['TRANSLATION']);
+				angle = this.reader.getFloat(all[j + 2],'angle',1);
+
+				mat4.rotate(mat,mat,Math.PI*angle/180,axis);
+			}
+			else if(all[j + 2].tagName == 'SCALE')
+			{
+				var sx,sy,sz;
+				sx= this.reader.getFloat(all[j + 2], 'sx', 1);
+				sy= this.reader.getFloat(all[j + 2], 'sy', 1);
+				sz= this.reader.getFloat(all[j + 2], 'sz', 1); 
+
+				mat4.scale(mat,mat,[sx,sy,sz]);
+			}
 
 		}
 
-		if(rotation != null){
-			console.log("ROTATION exists!");
-			var axis,angle;
-
-			if(this.reader.getString(rotation[0], 'axis', 1) == 'x')
-				axis= new Array(1,0,0);
-			else if(this.reader.getString(rotation[0], 'axis', 1) == 'y')
-				axis= new Array(0,1,0);
-			else if(this.reader.getString(rotation[0], 'axis', 1) == 'z')
-					axis= new Array(0,0,1);
-			else{
-				return "Error on node id: "+node['id']+" rotation AXIS!!";
-			}
-
-			angle = this.reader.getInteger(rotation[0],'angle',1);
-
-			var mat= mat4.create();
-			mat4.identity(mat);
-			mat4.rotate(mat,mat,Math.PI*angle/180,axis);
-			transformations['ROTATION'] =mat;
-			transformations.push(transformations['ROTATION']);
-			}
-
-		if(scale != null){
-			console.log("SCALE exists!");
-			var sx,sy,sz;
-			x= this.reader.getFloat(scale[0], 'sx', 1);
-			y= this.reader.getFloat(scale[0], 'sy', 1);
-			z= this.reader.getFloat(scale[0], 'sz', 1); 
-
-			var mat= mat4.create();
-			mat4.identity(mat);
-			mat4.scale(mat,mat,[x,y,z]);
-			transformations['SCALE'] =mat;
-			transformations.push(transformations['SCALE']);
-
-		}
-		/*console.log("TRANSFORMAÇÕES");
-		console.log(transformations);*/
-
-		var NewNode = new Node();
+		var NewNode = new Node(node['id'], node['materialID'], node['textureID']);
 		console.log("id do node");
 		console.log(node['id']);
 		NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
