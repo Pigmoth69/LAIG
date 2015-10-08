@@ -82,20 +82,36 @@ XMLscene.prototype.reloadScene = function () {
 
  XMLscene.prototype.loadNode = function (node_id) {
  	/*TENHO DE ARRANJAR ESTA MERDA FDS!! ESTOU AZIADO CARALHO!!!*/
-
- 	/*var i,newNode;
- 	console.log("O id do node é : "+node_id);
+ 	var i,newNode;
+ 	
  	newNode = this.getNode(node_id);
- 	console.log();
- 	for(i = 0; i < newNode.getDescendents().length;i++){
- 		var desc_id = newNode.getDescendents()[i].getNodeID();
- 		console.log("descendentes: "+ desc_id);
- 		if(this.getLeaf(desc_id)){
- 			console.log("DESENHA A FOLHA!");
- 		}else
- 			loadNode(newNode.getDescendents()[i]);
+ 	
+ 	if(newNode==null){
+ 		console.log("The node is null!!");
+ 		return;
+ 	}
 
- 	}*/
+ 	for(i = 0; i < newNode.getDescendents().length;i++){
+ 		var desc_id = newNode.getDescendents()[i];
+ 		var desc_node = this.getNode(desc_id);
+ 		console.log("ID do node: "+ desc_id);
+
+ 		var l= this.getLeaf(desc_id);
+ 		if(l!= null){
+ 			if(l['type'] == 'rectangle'){
+ 				this.rectangle.display();
+ 			}else if(l['type'] == 'cylinder'){
+ 				this.cylinder.display();
+ 			}else if(l['type'] == 'sphere'){
+ 				this.sphere.display();
+ 			}else if(l['type'] == 'triangle'){
+ 				this.triangle.display();
+ 			}else
+ 				return "ERROR ON THE LEAFT!!";
+ 		}else
+ 			this.loadNode(newNode.getDescendents()[i]);
+
+ 	}
  }
 
 //alterar!!!
@@ -126,15 +142,15 @@ XMLscene.prototype.reloadLeaves = function () {
 
 	for(i = 0; i < this.graph.XMLleaves.length; i++){
 		if(this.graph.XMLleaves[i]['type'] == "rectangle")
-			rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
+			this.rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
 		else if(this.graph.XMLleaves[i]['type'] == "sphere") 
-			sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
+			this.sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
 		else if(this.graph.XMLleaves[i]['type'] == "cylinder")
-			cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
+			this.cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
 		else if(this.graph.XMLleaves[i]['type'] == "triangle")
-			triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
+			this.triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
 		} 
-
+ 
 
 };
 
@@ -145,10 +161,11 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	
 	this.reloadCameras();
+	this.reloadLeaves();
 	this.reloadScene(); // tem  de estar no display!!
 	this.reloadAxis(); 
 	this.reloadLights(); 
-	this.reloadLeaves();
+	
 
 };
 
@@ -164,7 +181,7 @@ XMLscene.prototype.updateLights = function ()
 XMLscene.prototype.getLeaf = function (nodeId){
 
 	for(i = 0; i < this.graph.XMLleaves.length;i++){
-		if(this.graph.XMLleaves[i].leaf['id'] == nodeId)
+		if(this.graph.XMLleaves[i]['id'] == nodeId)
 			return this.graph.XMLleaves[i];
 	}
 	return null
@@ -203,6 +220,7 @@ XMLscene.prototype.display = function () {
 	this.axis.display();
 
 	this.reloadAppearance();
+	
 	
 	
 	// ---- END Background, camera and axis setup

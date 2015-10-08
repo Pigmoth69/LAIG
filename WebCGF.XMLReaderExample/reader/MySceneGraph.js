@@ -324,7 +324,9 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 	if(root[0] == null){
 		return "ROOT tag is missing.";
 	}
-	this.rootID = root[0];
+	
+	this.rootID =this.reader.getString(root[0],'id',1);
+
 
 	var nodes = info[0].getElementsByTagName('NODE');
 	if(nodes[0] == null){
@@ -398,8 +400,6 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		}
 
 		var NewNode = new Node(node['id'], node['materialID'], node['textureID']);
-		console.log("id do node");
-		console.log(node['id']);
 		NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
 
 		this.XMLnodes.push(NewNode);
