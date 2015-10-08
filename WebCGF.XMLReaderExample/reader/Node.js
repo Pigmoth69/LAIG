@@ -1,7 +1,7 @@
 
 function Node() {
 	this.id = null;
-	this.materials = null;
+	this.material = null;
 	this.texture = null;
 	this.matrix = null; // matriz de transformação do nó
 	this.descendents = [];
@@ -46,7 +46,12 @@ Node.prototype.scaleMatrix = function(matrix){
 	mat4.scale(this.matrix,this.matrix,matrix);
 } 
 
+Node.prototype.getNodeID = function(){
+	return this.id;
+} 
+
 Node.prototype.setNode = function(id,material,texture,matrix,descendents){
+	this.id=id;
 	this.setMaterial(material);
 	this.setTexture(texture);
 	this.setMatrix(matrix);

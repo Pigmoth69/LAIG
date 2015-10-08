@@ -414,8 +414,10 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		console.log(transformations);*/
 
 		var NewNode = new Node();
+		console.log("id do node");
+		console.log(node['id']);
 		NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
-		
+
 		this.XMLnodes.push(NewNode);
 
 	}

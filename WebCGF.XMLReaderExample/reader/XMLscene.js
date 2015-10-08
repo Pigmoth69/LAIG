@@ -144,6 +144,14 @@ XMLscene.prototype.updateLights = function ()
 	}
 }
 
+XMLscene.prototype.getNodePosition = function (nodeId){
+
+	for(i = 0; i < this.graph.XMLnodes.length;i++){
+		if(this.graph.XMLnodes[i].getNodeID() == nodeId)
+			return this.graph.XMLnodes[i];
+	}
+}
+
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
     this.shader.bind();
