@@ -81,7 +81,7 @@ XMLscene.prototype.reloadScene = function () {
  }; 
 
  XMLscene.prototype.loadNode = function (node_id) {
- 	/*TENHO DE ARRANJAR ESTA MERDA FDS!! ESTOU AZIADO CARALHO!!!*/
+ 	
  	var i,newNode;
  	
  	newNode = this.getNode(node_id);
@@ -92,9 +92,10 @@ XMLscene.prototype.reloadScene = function () {
  	}
 
  	for(i = 0; i < newNode.getDescendents().length;i++){
+ 		console.log("ID do node: "+ newNode.getDescendents()[i]);
  		var desc_id = newNode.getDescendents()[i];
  		var desc_node = this.getNode(desc_id);
- 		console.log("ID do node: "+ desc_id);
+ 		
 
  		var l= this.getLeaf(desc_id);
  		if(l!= null){
@@ -162,7 +163,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	
 	this.reloadCameras();
 	this.reloadLeaves();
-	this.reloadScene(); // tem  de estar no display!!
+	//this.reloadScene(); // tem  de estar no display!!
 	this.reloadAxis(); 
 	this.reloadLights(); 
 	
