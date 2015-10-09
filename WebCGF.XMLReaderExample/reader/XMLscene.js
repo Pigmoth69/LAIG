@@ -84,7 +84,7 @@ XMLscene.prototype.reloadScene = function () {
  }; 
 
  XMLscene.prototype.loadNode = function (node_id) {
- 	this.pushMatrix();
+ 	
 
  	var i,newNode;
  	
@@ -94,7 +94,7 @@ XMLscene.prototype.reloadScene = function () {
  		console.log("The node is null!!");
  		return;
  	}
-
+ 	this.pushMatrix();
  	this.multMatrix(newNode.matrix);
  	//console.log(newNode.matrix);
 
@@ -144,7 +144,7 @@ XMLscene.prototype.reloadAppearance = function () {
 		this.setAmbient(this.graph.XMLillumination['ambient_R'],this.graph.XMLillumination['ambient_G'],this.graph.XMLillumination['ambient_B'],this.graph.XMLillumination['ambient_A']);
     }else{
     	this.setDefaultAppearance();
-    }	 
+    }	
 };
 
 XMLscene.prototype.reloadLeaves = function () {
@@ -232,12 +232,12 @@ XMLscene.prototype.display = function () {
 
 	mat4.scale(matrix, matrix, [this.graph.XMLinitials['scale_X'], this.graph.XMLinitials['scale_Y'], this.graph.XMLinitials['scale_Z']]);
 
-
+	this.applyViewMatrix();
 	this.multMatrix(matrix);
 	//fim
 
 
-	this.applyViewMatrix();
+	
 	
 
 	// Draw axis

@@ -29,11 +29,11 @@ MyCylinder.prototype.initBuffers = function() {
 	var stepRadius = (this.topRadius - this.bottomRadius)/(this.stacks);
 	var angle = 2 * Math.PI / (this.slices);
 
-	this.vertices.push(0, 0, this.height/2);
+	this.vertices.push(0, 0, this.height);
 	this.normals.push(0, 0, 1);
 	this.texCoords.push(0.5, 0.5);	
 	
-	this.vertices.push(0, 0, -this.height/2);
+	this.vertices.push(0, 0, 0);
 	this.normals.push(0, 0, -1);
 	this.texCoords.push(0.5, 0.5);
 
@@ -42,8 +42,8 @@ MyCylinder.prototype.initBuffers = function() {
 	//bottom and top vertices
 	for (var slice = 0; slice < this.slices; slice++)
 	{
-		this.vertices.push(this.topRadius * Math.cos(slice * angle), this.topRadius * Math.sin(slice * angle), this.height/2);
-		this.vertices.push(this.bottomRadius * Math.cos(slice * angle), this.bottomRadius * Math.sin(slice * angle), -this.height/2);
+		this.vertices.push(this.topRadius * Math.cos(slice * angle), this.topRadius * Math.sin(slice * angle), this.height);
+		this.vertices.push(this.bottomRadius * Math.cos(slice * angle), this.bottomRadius * Math.sin(slice * angle), 0);
 
 		this.normals.push(0, 0, 1);
 		this.normals.push(0, 0, -1);
@@ -76,7 +76,7 @@ MyCylinder.prototype.initBuffers = function() {
 	{
 		for (var slice = 0; slice < this.slices; slice++)
 		{
-			this.vertices.push(currentRadius*Math.cos(slice * angle), currentRadius*Math.sin(slice * angle), -this.height/2 + this.height*stack/this.stacks);
+			this.vertices.push(currentRadius*Math.cos(slice * angle), currentRadius*Math.sin(slice * angle),this.height*stack/this.stacks);
 			this.normals.push(Math.cos(slice * angle), Math.sin(slice * angle),0);
 			this.texCoords.push(stepS, stepT);
 

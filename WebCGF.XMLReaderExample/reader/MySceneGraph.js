@@ -307,7 +307,9 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		leaf['id'] = this.reader.getString(leaves[i], 'id', 1);
 		leaf['type'] = this.reader.getString(leaves[i], 'type', 1);
 		leaf['args'] = this.getArgs(leaves[i], 'args', 1);
-
+		
+		console.log("ID: "+ leaf['id']);
+		console.log("args: "+leaf['args']);
 		this.XMLleaves.push(leaf);
 	}
 
@@ -355,9 +357,9 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		}
 
 
-		var numTransformations = all.length - (2 + 1 + descendants.length);
+		var numTransformations = all.length - (2 + 1  /*descendants.length*/);
 		var j, transformations = [];
-		var mat = mat4.create();
+		var mat = mat4.create(); 
 		mat4.identity(mat);
 
 		for(j = 0; j < numTransformations; j++){

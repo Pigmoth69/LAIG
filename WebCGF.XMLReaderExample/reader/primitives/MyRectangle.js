@@ -8,14 +8,14 @@
 
  	this.vertices = [
  		args[0], args[1], 0,
- 		args[1], args[2], 0,
+ 		args[0], args[3], 0,
  		args[2], args[3], 0,
- 		args[0], args[3], 0
+ 		args[2], args[1], 0
  	];
  	
  	this.indices = [
-		0, 3, 1,
-		1, 3, 2
+		0, 1, 2,
+		0, 2, 3
  	];
  	
  	this.normals = [
@@ -26,10 +26,10 @@
  	];
 	
 	this.texCoords = [
+      0, 1,
       0, 0,
       1, 0,
-      1, 1,
-      0, 1
+      1, 1
 	];
  	
  	this.initBuffers();
