@@ -33,10 +33,6 @@
 	];
  	
  	this.initBuffers();
-
-
- 	
- 	
  };
 
  MyRectangle.prototype = Object.create(CGFobject.prototype);

@@ -18,23 +18,67 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.defaultAppearance = new CGFappearance(this);
+	this.defaultAppearance.loadTexture("tecto.jpg");
+	this.defaultAppearance.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
+	this.defaultAppearance.setSpecular(0.5, 0.5, 0.5, 1);
+	this.defaultAppearance.setShininess(50);
+	this.defaultAppearance.setDiffuse(0.5, 0.5, 0.5, 1);
+
     this.materials = new Array();
     this.textures = new Array();
     this.leaves = new Array();
+    this.matrix = mat4.create();
 
 	this.axis=new CGFaxis(this);
 	
 };
 
 
-XMLscene.prototype.initLights = function () {
+XMLscene.prototype.initLights = function () {};
 
-    this.shader.bind();
- 
-    this.shader.unbind();
+XMLscene.prototype.initCameras = function () {
+
+    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
-XMLscene.prototype.reloadLights = function () {
+XMLscene.prototype.setDefaultAppearance = function () {
+/*	this.defaultAppearance.setAmbient(1, 0, 0, 1);
+	this.defaultAppearance.setDiffuse(1, 0, 0, 1);
+	this.defaultAppearance.setSpecular(1, 0, 0, 1);
+	this.defaultAppearance.setEmission(1, 0, 0, 1);
+	this.defaultAppearance.setShininess(2);
+*/
+};
+
+
+XMLscene.prototype.onGraphLoaded = function () 
+{
+	this.loadInitials();
+	this.loadIllumination();
+	this.loadLights(); 
+	this.loadLeaves();
+};
+
+XMLscene.prototype.loadInitials = function () {
+    this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
+    this.camera.far = this.graph.XMLinitials['frustum_FAR'];
+
+	mat4.translate(this.matrix, this.matrix, [this.graph.XMLinitials['translation_X'], this.graph.XMLinitials['translation_Y'], this.graph.XMLinitials['translation_Z']]);
+	mat4.rotate(this.matrix, this.matrix, this.graph.XMLinitials['rotation_X']*Math.PI/180, [1,0,0]);
+	mat4.rotate(this.matrix, this.matrix, this.graph.XMLinitials['rotation_Y']*Math.PI/180, [0,1,0]);
+	mat4.rotate(this.matrix, this.matrix, this.graph.XMLinitials['rotation_Z']*Math.PI/180, [0,0,1]);
+	mat4.scale(this.matrix, this.matrix, [this.graph.XMLinitials['scale_X'], this.graph.XMLinitials['scale_Y'], this.graph.XMLinitials['scale_Z']]);
+
+    this.axis= new CGFaxis(this,this.graph.XMLinitials['reference']);
+};   
+
+XMLscene.prototype.loadIllumination = function() {
+	this.setAmbient(this.graph.XMLillumination['ambient_R'],this.graph.XMLillumination['ambient_G'],this.graph.XMLillumination['ambient_B'],this.graph.XMLillumination['ambient_A']);
+	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
+};
+
+XMLscene.prototype.loadLights = function (){
 
 	this.shader.bind(); 
 
@@ -52,110 +96,16 @@ XMLscene.prototype.reloadLights = function () {
 	this.shader.unbind(); 
 };
 
-XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-}; 
-
-//alterar!!! 
-XMLscene.prototype.reloadCameras = function () {
-// FALTA AQUI O setActiveCamera(camera) é preciso guardar a application
-    this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
-    this.camera.far = this.graph.XMLinitials['frustum_FAR'];
-
-};   
-
-//alterar!!!
-XMLscene.prototype.reloadScene = function () {
-
-	var root = this.graph.rootID;
-	this.loadNode(root);
- }; 
-
-XMLscene.prototype.loadNode = function (node_id) {
-	
-	var i,newNode;
-	
-	newNode = this.getNode(node_id);
-	
-	if(newNode==null){
-		console.log("The node is null!!");
-		return;
-	}
-	this.pushMatrix();
-	this.multMatrix(newNode.matrix);
-
-/*	if(newNode.material['id'] != 'none' || newNode.material['id'] != 'null')
-		this.applyMaterial(newNode.material);
-*/
-	if(newNode.texture['id'] != 'none' || newNode.texture['id'] != 'null')
-		this.applyTexture(newNode.texture);
-	
-	for(i = 0; i < newNode.getDescendents().length; i++){
-		
-		var desc_id = newNode.getDescendents()[i];
-		
-		var l = this.getLeaf(desc_id);
-		if(l != null)
-			l['object'].display();
-		else
-			this.loadNode(desc_id);
-
-	}
-
-	this.popMatrix();
-};
-
-XMLscene.prototype.applyMaterial = function(materialID) {
+XMLscene.prototype.updateLights = function (){
 	var i;
-	for(i = 0; i < this.materials.length; i++) {
-		if(this.materials[i]['id'] == materialID)
-		{
-			this.materials[i]['material'].apply();
-			break;
-		}
+	for(i = 0; i < this.lights.length ;i++){
+		if(this.lights[i] instanceof Light)
+			this.lights[i].update();
 	}
-
 };
 
-XMLscene.prototype.applyTexture = function(textureID) {
+XMLscene.prototype.loadLeaves = function (){
 	var i;
-
-	for(i = 0; i < this.textures.length; i++) {
-		if(this.textures[i]['id'] == textureID)
-		{
-			console.log("wert");
-			this.textures[i]['texture'].apply();
-			break;
-		}
-	}
-
-};
-
-//alterar!!!
-XMLscene.prototype.reloadAxis = function () {
-    this.axis= new CGFaxis(this,this.graph.XMLinitials['reference']);
-}; 
-
-XMLscene.prototype.setDefaultAppearance = function () {
-
-    this.setAmbient(1 , 1 , 1, 1.0);
-    this.setDiffuse(1 , 1 , 1, 1.0);
-    this.setSpecular(1 , 1 , 1, 1.0); 
-    this.setShininess(10.0);	
-};
-
-XMLscene.prototype.reloadAppearance = function () {
-
-	if(this.graph.loadedOk){
-		this.setAmbient(this.graph.XMLillumination['ambient_R'],this.graph.XMLillumination['ambient_G'],this.graph.XMLillumination['ambient_B'],this.graph.XMLillumination['ambient_A']);
-    }else{
-    	this.setDefaultAppearance();
-    }	
-};
-
-XMLscene.prototype.reloadLeaves = function () {
-	var i;
-
 	for(i = 0; i < this.graph.XMLleaves.length; i++){
 
 		var object = [];
@@ -179,32 +129,47 @@ XMLscene.prototype.reloadLeaves = function () {
 			
 			this.leaves.push(object);
 		} 
-
-
 };
 
-// Handler called when the graph is finally loaded. 
-// As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function () 
-{
-	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
+XMLscene.prototype.reloadScene = function () {
 
-	this.reloadCameras();
-	this.reloadLeaves();
-	this.reloadAxis(); 
-	this.reloadLights(); 
+	var root = this.graph.rootID;
+	this.loadNode(root);
+}; 
+
+XMLscene.prototype.loadNode = function (node_id) {
 	
-
-};
-
-XMLscene.prototype.updateLights = function ()
-{
-	var i;
-	for(i = 0; i < this.lights.length ;i++){
-		if(this.lights[i] instanceof Light)
-			this.lights[i].update();
+	var i,newNode;
+	
+	newNode = this.getNode(node_id);
+	
+	if(newNode==null){
+		console.log("The node is null!! " + node_id);
+		return;
 	}
-}
+	this.pushMatrix();
+	this.multMatrix(newNode.matrix);
+
+/*	if(newNode.material['id'] != 'none' || newNode.material['id'] != 'null')
+		this.applyMaterial(newNode.material);
+
+	if(newNode.texture['id'] != 'none' || newNode.texture['id'] != 'null')
+		this.applyTexture(newNode.texture);
+*/	
+	for(i = 0; i < newNode.getDescendents().length; i++){
+		
+		var desc_id = newNode.getDescendents()[i];
+		
+		var l = this.getLeaf(desc_id);
+		if(l != null)
+			l['object'].display();
+		else
+			this.loadNode(desc_id);
+
+	}
+
+	this.popMatrix();
+};
 
 XMLscene.prototype.getLeaf = function (nodeId){
 
@@ -213,7 +178,7 @@ XMLscene.prototype.getLeaf = function (nodeId){
 			return this.leaves[i];
 	}
 	return null
-}
+};
 
 XMLscene.prototype.getNode = function (nodeId){
 
@@ -222,7 +187,30 @@ XMLscene.prototype.getNode = function (nodeId){
 			return this.graph.XMLnodes[i];
 	}
 	return null
-}
+};
+
+XMLscene.prototype.applyMaterial = function(materialID) {
+	var i;
+	for(i = 0; i < this.materials.length; i++) {
+		if(this.materials[i]['id'] == materialID)
+		{
+			this.materials[i]['material'].apply();
+			break;
+		}
+	}
+};
+
+XMLscene.prototype.applyTexture = function(textureID) {
+	var i;
+
+	for(i = 0; i < this.textures.length; i++) {
+		if(this.textures[i]['id'] == textureID)
+		{
+			this.textures[i]['texture'].apply();
+			break;
+		}
+	}
+};
 
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
@@ -233,45 +221,23 @@ XMLscene.prototype.display = function () {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
 	// Initialize Model-View matrix as identity (no transformation
-
-
 	this.updateProjectionMatrix();
 	this.loadIdentity();
-
-
-	//inicio
-	var matrix = mat4.create();
-    mat4.identity(matrix);
-
-	mat4.translate(matrix, matrix, [this.graph.XMLinitials['translation_X'], this.graph.XMLinitials['translation_Y'], this.graph.XMLinitials['translation_Z']]);
-	
-	mat4.rotate(matrix, matrix, this.graph.XMLinitials['rotation_X']*Math.PI/180, [1,0,0]);
-	mat4.rotate(matrix, matrix, this.graph.XMLinitials['rotation_Y']*Math.PI/180, [0,1,0]);
-	mat4.rotate(matrix, matrix, this.graph.XMLinitials['rotation_Z']*Math.PI/180, [0,0,1]);
-
-	mat4.scale(matrix, matrix, [this.graph.XMLinitials['scale_X'], this.graph.XMLinitials['scale_Y'], this.graph.XMLinitials['scale_Z']]);
-
 	this.applyViewMatrix();
-	this.multMatrix(matrix);
-	//fim
-
-
-	
+	this.multMatrix(this.matrix);
 
 	// Draw axis
-	
 	this.axis.display();
 
-	this.reloadAppearance();
-
-	
-	
 	// ---- END Background, camera and axis setup
 
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 
+
+    //this.setDefaultAppearance();
+    this.defaultAppearance.apply();
 
 	if (this.graph.loadedOk)
 	{
@@ -283,3 +249,11 @@ XMLscene.prototype.display = function () {
 
 	this.shader.unbind(); 
 };
+
+
+
+
+
+
+
+

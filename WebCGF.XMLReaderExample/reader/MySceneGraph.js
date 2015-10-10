@@ -19,8 +19,6 @@ function MySceneGraph(filename, scene) {
 	this.XMLinitials = [];
 	this.XMLillumination = [];
 	this.XMLlights = new Array(this.scene.lights.length); 
-	this.XMLtextures = [];
-	this.XMLmaterials = [];
 	this.XMLleaves = [];
 	this.XMLnodes = [];
 
@@ -220,7 +218,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 
 	info = info[0].getElementsByTagName('TEXTURE');
 	if(info[0] == null) {
-		return "No TEXTURE was added.";
+		return 0;
 	}
 
 	var texture = [];

@@ -2,158 +2,205 @@
 <SCENE>
 
 	<INITIALS>
-	    <frustum near="2" far="500"/>                      <!-- frustum planes-->
-	    <translation x="0" y="0" z="0" />                 <!-- initial translate -->
-	    <rotation axis="x" angle="0" />                  <!-- initial rotation 3 -->
-	    <rotation axis="y" angle="0" />                  <!-- initial rotation 2 --> 
-	    <rotation axis="z" angle="0" />                  <!-- initial rotation 1 -->
-	    <scale sx="1" sy="1" sz="1" />                  <!-- initial scaling -->
-	    <reference length="4" />                          <!-- axis length; "0" means no axis-->
+	    <frustum near="1" far="500"/>                    
+	    <translation x="0" y="0" z="0" />            
+	    <rotation axis="x" angle="0" />   
+	    <rotation axis="y" angle="0" />            
+	    <rotation axis="z" angle="0" />             
+	    <scale sx="1" sy="1" sz="1" />                
+	    <reference length="1" />                  
 	</INITIALS>
 
 
 	<ILLUMINATION>
-	    <ambient r="0" g="0" b="1" a="1" />            <!-- global ambient -->
-	    <background r="0" g="0" b="0" a="1" />         <!-- background color -->
+	    <ambient r="1" g="1" b="1" a="1" />          
+	    <background r="0.82" g="0.83" b="0.82" a="1" />       
 	</ILLUMINATION>
 	
 
 	<LIGHTS>
-	    <LIGHT id="L1">                                    <!-- light identifier -->
-	        <enable value="1" />                         <!-- enable/disable -->
-	        <position x="0.5" y="0.5" z="1" w="1" />       <!-- light position -->
-	        <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
-	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
-	        <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
+	    <LIGHT id="L1">                              
+	        <enable value="1" />                       
+	        <position x="10" y="5" z="5" w="1" />      
+	        <ambient r="0" g="0" b="0" a="1" />       
+	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />     
+	        <specular r="0.9" g="0.9" b="0.9" a="1" />    
 		</LIGHT>
-
-		<LIGHT id="L2">                                    <!-- light identifier -->
-	        <enable value ="1" />                          <!-- enable/disable -->
-	        <position x="2" y="2" z="-2" w="0.1" />       <!-- light position -->
-	        <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
-	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
-	        <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
-		</LIGHT>
-
-		<LIGHT id="L3">                                    <!-- light identifier -->
-	        <enable value ="1" />                          <!-- enable/disable -->
-	        <position x="3" y="3" z="3" w="0.1" />       <!-- light position -->
-	        <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
-	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />        <!-- diffuse component -->
-	        <specular r="0.5" g="0.5" b="0.5" a="1" />       <!-- specular component -->
-		</LIGHT>
-
-	    <!-- NOTE: this block "LIGHT" must be repeated as necessary with different "id" -->
 	    
 	</LIGHTS>
 
 
-	<TEXTURES>
-	    <TEXTURE id="T1">
-	        <file path="textures/boda-de-gelado.jpg" />                             <!-- path to file -->
-	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
-	    </TEXTURE>
-
-	    <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
-	    
+	<TEXTURES>  
 	</TEXTURES> 
 
 
 	<MATERIALS>
-	    <MATERIAL id="M1">                                  
-	        <shininess value="1" />
-	        <specular r="0" g="1" b="0" a=".5" />        <!-- specular reflection -->
-	        <diffuse r="0" g="1" b="0" a=".5" />         <!-- diffuse reflection -->
-	        <ambient r="0" g="1" b="0" a=".5" />         <!-- ambient reflection -->
-	        <emission r="0" g="0" b="0" a=".5" />        <!-- emission component -->
+	    <MATERIAL id="FEUP">                                  
+	        <shininess value="10" />
+	        <specular r="0.55" g="0.18" b="0.1" a=".5" />       
+	        <diffuse r="0.55" g="0.18" b="0.1" a=".5" />         
+	        <ambient r="0.55" g="0.18" b="0.1" a=".5" />      
+	        <emission r="0" g="0" b="0" a=".5" />       
 	    </MATERIAL>
 
-	    <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material requires a distinct "id" -->
 
 	</MATERIALS>
 
 
 	<LEAVES>
-
-	    <!-- next lines define nodes of type leaf; they may be repeated, in any order, as necessary -->
-	    <LEAF id="RECT" type="rectangle" args="-4 4 4 -4" />
+	    <LEAF id="RECT" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
 	    <LEAF id="CYL" type="cylinder" args="10 1 2 1 60" />
 	    <LEAF id="SPH" type="sphere" args="1 20 50" />
 	    <LEAF id="TRI" type="triangle" args="0 0 0  3 0 0  2 2 0" />
-
-	    <!-- Parameters of the above primitives:                                                         -->
-	        <!--rectangle: 2D coordinates for left-top and right-bottom vertices.                        -->
-	        <!-- cylinder:  height, bottom radius, top radius, sections along height, parts per section  -->
-	        <!-- sphere:    radius, parts along radius, parts per section                                -->
-	        <!-- triangle:   coordinates of each vertex                                                  -->
-
 	</LEAVES>
 
 
 	<NODES>
+	    <ROOT id="root" />  
 
-	    <ROOT id="root" />     <!-- identifier of root node of the scene graph; this node     -->
-	                         <!--   must be defined in one of the following NODE declarations -->
-
-	    <NODE id="root">       <!--   defines one intermediate node; may be repeated as necessary -->
-
-	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="M1" />      <!-- declared material superimposes the material received from parent node -->
-	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="T1" />       <!-- declared texture superimposes the texture received from parent node -->
-	                                  <!-- id="null" maintains texture from parent node       -->
-	                                  <!-- id="clear" clears texture declaration received from parent node      -->
-
-
-	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0" y="0" z="2" />
-	        <ROTATION axis="x" angle="0" />
-	        <SCALE sx="1" sy="1" sz="1" />
-			
-
-	        <!-- declaring descendents, ate least one node or one leaf must be present -->
+	    <NODE id="root">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />       
+	        <TRANSLATION x="0" y="0" z="0" />
 	        <DESCENDANTS>
-	        	<!--<DESCENDANT id="cenas" /> -->
-	            <DESCENDANT id="RECT" />       <!-- "ss" is the identifier of a node or of leaf; -->
-	                                         <!-- may be repeatad as necessary. It can refer an -->
-	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	        	<DESCENDANT id="F" />
 	        </DESCENDANTS>
-
 	    </NODE>
 
-	    <!--node de teste -->
-	    <NODE id="cenas">       
-
-	        
-	        <MATERIAL id="M1" />      
-	        <TEXTURE id="T1" />       
-
-	        <TRANSLATION x="0" y="0" z="-3" />
-	        <ROTATION axis="y" angle="0" />
-	        <SCALE sx="3" sy="3" sz="3" />
-
+	    <NODE id="F">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />       
+	        <TRANSLATION x="0" y="0" z="0" />
 	        <DESCENDANTS>
-	            <DESCENDANT id="extra" />       
+	        	<DESCENDANT id="body_front" />
+	        	<DESCENDANT id="body_back" />
+	        	<DESCENDANT id="body_left" />
+	        	<DESCENDANT id="body_right" />
+	        	<DESCENDANT id="body_top" />
+	        	<DESCENDANT id="body_bottom" />
+	        	<DESCENDANT id="hor_top_front" />
+	        	<DESCENDANT id="hor_top_back" />
+	        	<DESCENDANT id="hor_top_bottom" />
+	        	<DESCENDANT id="hor_top_top" />
+	        	<DESCENDANT id="hor_top_right" />
 	        </DESCENDANTS>
-
 	    </NODE>
 
-	     <NODE id="extra">       
-
-	        
-	        <MATERIAL id="M1" />      
-	        <TEXTURE id="T1" />       
-
-	        <TRANSLATION x="3" y="0" z="0" />
-	        <ROTATION axis="y" angle="0" />
-	        <SCALE sx="1" sy="1" sz="1" />
-
+	    <NODE id="body_front">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />       
+	        <TRANSLATION x="0" y="0" z="0.5" />
+	        <SCALE sx="1" sy="6" sz="1" />
 	        <DESCENDANTS>
-	            <DESCENDANT id="SPH" />       
+	        	<DESCENDANT id="RECT" />
 	        </DESCENDANTS>
-
 	    </NODE>
 
+	    <NODE id="body_back">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <ROTATION axis="y" angle="180" />
+	        <TRANSLATION x="0" y="0" z="0.5" />  
+	        <SCALE sx="1" sy="6" sz="1" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="body_left">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <ROTATION axis="y" angle="-90" />
+	        <TRANSLATION x="0" y="0" z="0.5" />  
+	        <SCALE sx="1" sy="6" sz="1" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="body_right">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <ROTATION axis="y" angle="90" />
+	        <TRANSLATION x="0" y="0" z="0.5" />  
+	        <SCALE sx="1" sy="6" sz="1" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="body_top">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="0" y="3" z="0" />
+	        <ROTATION axis="x" angle="-90" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="body_bottom">       
+	        <MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="0" y="-3" z="0" />
+	        <ROTATION axis="x" angle="90" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="hor_top_front">
+	    	<MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="1.75" y="2.5" z="0.5" />
+	        <SCALE sx="2.5" sy="1" sz="1" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="hor_top_back">
+	    	<MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="1.75" y="2.5" z="-0.5" />
+	        <SCALE sx="2.5" sy="1" sz="1" />
+	        <ROTATION axis="x" angle="180" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="hor_top_bottom">
+	    	<MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="1.75" y="2" z="0" />
+	        <SCALE sx="2.5" sy="1" sz="1" />
+	        <ROTATION axis="x" angle="90" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="hor_top_top">
+	    	<MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="1.75" y="3" z="0" />
+	        <SCALE sx="2.5" sy="1" sz="1" />
+	        <ROTATION axis="x" angle="-90" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
+
+	    <NODE id="hor_top_right">
+	    	<MATERIAL id="FEUP" />             
+	        <TEXTURE id="null" />     
+	        <TRANSLATION x="3" y="2.5" z="0" />
+	        <ROTATION axis="y" angle="90" />
+	        <DESCENDANTS>
+	        	<DESCENDANT id="RECT" />
+	        </DESCENDANTS>
+	    </NODE>
 
 	</NODES>
 
