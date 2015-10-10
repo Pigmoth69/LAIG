@@ -1,4 +1,4 @@
-
+ 
 function XMLscene() {
     CGFscene.call(this);
 }
@@ -18,14 +18,9 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    this.materials = [];
-    var textures = [];
-
-    this.rectangle = null;
-    this.cylinder = null;
-    this.sphere = null;
-    this.triangle = null;
-
+    this.materials = new Array();
+    this.textures = new Array();
+    this.leaves = new Array();
 
 	this.axis=new CGFaxis(this);
 	
@@ -35,10 +30,6 @@ XMLscene.prototype.init = function (application) {
 XMLscene.prototype.initLights = function () {
 
     this.shader.bind();
-    
-	this.lights[0].setPosition(2, 3, 3, 1);
-    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-    this.lights[0].update();
  
     this.shader.unbind();
 };
@@ -67,12 +58,9 @@ XMLscene.prototype.initCameras = function () {
 
 //alterar!!! 
 XMLscene.prototype.reloadCameras = function () {
-
 // FALTA AQUI O setActiveCamera(camera) é preciso guardar a application
     this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
     this.camera.far = this.graph.XMLinitials['frustum_FAR'];
-
-   
 
 };   
 
@@ -83,58 +71,76 @@ XMLscene.prototype.reloadScene = function () {
 	this.loadNode(root);
  }; 
 
- XMLscene.prototype.loadNode = function (node_id) {
- 	
+XMLscene.prototype.loadNode = function (node_id) {
+	
+	var i,newNode;
+	
+	newNode = this.getNode(node_id);
+	
+	if(newNode==null){
+		console.log("The node is null!!");
+		return;
+	}
+	this.pushMatrix();
+	this.multMatrix(newNode.matrix);
 
- 	var i,newNode;
- 	
- 	newNode = this.getNode(node_id);
- 	
- 	if(newNode==null){
- 		console.log("The node is null!!");
- 		return;
- 	}
- 	this.pushMatrix();
- 	this.multMatrix(newNode.matrix);
- 	//console.log(newNode.matrix);
+/*	if(newNode.material['id'] != 'none' || newNode.material['id'] != 'null')
+		this.applyMaterial(newNode.material);
+*/
+	if(newNode.texture['id'] != 'none' || newNode.texture['id'] != 'null')
+		this.applyTexture(newNode.texture);
+	
+	for(i = 0; i < newNode.getDescendents().length; i++){
+		
+		var desc_id = newNode.getDescendents()[i];
+		
+		var l = this.getLeaf(desc_id);
+		if(l != null)
+			l['object'].display();
+		else
+			this.loadNode(desc_id);
 
- 	for(i = 0; i < newNode.getDescendents().length;i++){
- 		
- 		var desc_id = newNode.getDescendents()[i];
- 		var desc_node = this.getNode(desc_id);
- 		
+	}
 
- 		var l = this.getLeaf(desc_id);
- 		if(l!= null){
- 			if(l['type'] == 'rectangle'){
- 				this.rectangle.display();
- 			}else if(l['type'] == 'cylinder'){
- 				this.cylinder.display();
- 			}else if(l['type'] == 'sphere'){
- 				this.sphere.display();
- 			}else if(l['type'] == 'triangle'){
- 				this.triangle.display();
- 			}else
- 				return "ERROR ON THE LEAFT!!";
- 		}else
- 			this.loadNode(newNode.getDescendents()[i]);
+	this.popMatrix();
+};
 
- 	}
+XMLscene.prototype.applyMaterial = function(materialID) {
+	var i;
+	for(i = 0; i < this.materials.length; i++) {
+		if(this.materials[i]['id'] == materialID)
+		{
+			this.materials[i]['material'].apply();
+			break;
+		}
+	}
 
- 	this.popMatrix();
- }
+};
+
+XMLscene.prototype.applyTexture = function(textureID) {
+	var i;
+
+	for(i = 0; i < this.textures.length; i++) {
+		if(this.textures[i]['id'] == textureID)
+		{
+			console.log("wert");
+			this.textures[i]['texture'].apply();
+			break;
+		}
+	}
+
+};
 
 //alterar!!!
 XMLscene.prototype.reloadAxis = function () {
     this.axis= new CGFaxis(this,this.graph.XMLinitials['reference']);
 }; 
 
-
 XMLscene.prototype.setDefaultAppearance = function () {
 
-    this.setAmbient(0 , 0 , 1, 1.0);
-    this.setDiffuse(0 , 0 , 1, 1.0);
-    this.setSpecular(0 , 0 , 1, 1.0); 
+    this.setAmbient(1 , 1 , 1, 1.0);
+    this.setDiffuse(1 , 1 , 1, 1.0);
+    this.setSpecular(1 , 1 , 1, 1.0); 
     this.setShininess(10.0);	
 };
 
@@ -151,16 +157,29 @@ XMLscene.prototype.reloadLeaves = function () {
 	var i;
 
 	for(i = 0; i < this.graph.XMLleaves.length; i++){
-		if(this.graph.XMLleaves[i]['type'] == "rectangle")
-			this.rectangle = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
-		else if(this.graph.XMLleaves[i]['type'] == "sphere") 
-			this.sphere = new MySphere(this, this.graph.XMLleaves[i]['args']);
-		else if(this.graph.XMLleaves[i]['type'] == "cylinder")
-			this.cylinder = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
-		else if(this.graph.XMLleaves[i]['type'] == "triangle")
-			this.triangle = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
+
+		var object = [];
+
+			if(this.graph.XMLleaves[i]['type'] == "rectangle"){
+				object['id'] = this.graph.XMLleaves[i]['id'];
+				object['object'] = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
+			}
+			else if(this.graph.XMLleaves[i]['type'] == "sphere") {
+				object['id'] = this.graph.XMLleaves[i]['id'];
+				object['object'] = new MySphere(this, this.graph.XMLleaves[i]['args']);
+			}
+			else if(this.graph.XMLleaves[i]['type'] == "cylinder"){
+				object['id'] = this.graph.XMLleaves[i]['id'];
+				object['object'] = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
+			}
+			else if(this.graph.XMLleaves[i]['type'] == "triangle"){
+				object['id'] = this.graph.XMLleaves[i]['id'];
+				object['object'] = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
+			}
+			
+			this.leaves.push(object);
 		} 
- 
+
 
 };
 
@@ -190,8 +209,8 @@ XMLscene.prototype.updateLights = function ()
 XMLscene.prototype.getLeaf = function (nodeId){
 
 	for(i = 0; i < this.graph.XMLleaves.length;i++){
-		if(this.graph.XMLleaves[i]['id'] == nodeId)
-			return this.graph.XMLleaves[i];
+		if(this.leaves[i]['id'] == nodeId)
+			return this.leaves[i];
 	}
 	return null
 }
@@ -237,7 +256,6 @@ XMLscene.prototype.display = function () {
 	//fim
 
 
-	
 	
 
 	// Draw axis

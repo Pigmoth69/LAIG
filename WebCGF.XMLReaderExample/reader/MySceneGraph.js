@@ -231,11 +231,19 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 
 		var file = info[i].getElementsByTagName('file');
 		texture['path'] = this.reader.getString(file[0], 'path', 1);
+		
 
 		var amplif_factor = info[i].getElementsByTagName('amplif_factor');
 		texture['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
-	
-		this.XMLtextures.push(texture);
+
+		var newTexture = [];
+		newTexture['id'] = texture['id'];
+		newTexture['texture'] = new CGFappearance(this.scene);
+		newTexture['texture'].loadTexture(texture['path']);
+		newTexture['texture'].setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
+
+		console.log(newTexture['texture']);
+		this.scene.textures.push(newTexture);
 
 	}
 
@@ -283,7 +291,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 		newMaterial['material'].setDiffuse(material['diffuse'][0], material['diffuse'][1], material['diffuse'][2], material['diffuse'][3]);
 		newMaterial['material'].setAmbient(material['ambient'][0], material['ambient'][1], material['ambient'][2], material['ambient'][3]);
 		newMaterial['material'].setEmission(material['emission'][0], material['emission'][1], material['emission'][2], material['emission'][3]);
-		this.XMLmaterials.push(newMaterial);
+		this.scene.materials.push(newMaterial);
 	}
 
 	return 0;
@@ -308,8 +316,6 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 		leaf['type'] = this.reader.getString(leaves[i], 'type', 1);
 		leaf['args'] = this.getArgs(leaves[i], 'args', 1);
 		
-		console.log("ID: "+ leaf['id']);
-		console.log("args: "+leaf['args']);
 		this.XMLleaves.push(leaf);
 	}
 
@@ -343,7 +349,7 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 		var all = nodes[i].getElementsByTagName('*');
 		node['materialID'] = this.reader.getString(all[0], 'id', 1);
 		node['textureID'] = this.reader.getString(all[1], 'id', 1);
-
+		
 		//obtem descendentes
 		if(nodes[i].getElementsByTagName('DESCENDANTS') == null){
 			return "DESCENDANTS tag is missing.";
@@ -400,10 +406,9 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 
 		}
 
-		var NewNode = new Node(node['id'], node['materialID'], node['textureID'], mat, desc);
-		//NewNode.setNode(node['id'],node['materialID'],node['textureID'],transformations,desc);
+		var newNode = new Node(node['id'], node['materialID'], node['textureID'], mat, desc);
 
-		this.XMLnodes.push(NewNode);
+		this.XMLnodes.push(newNode);
 
 	}
 

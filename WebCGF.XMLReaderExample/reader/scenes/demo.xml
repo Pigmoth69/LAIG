@@ -50,7 +50,7 @@
 
 	<TEXTURES>
 	    <TEXTURE id="T1">
-	        <file path="#" />                             <!-- path to file -->
+	        <file path="textures/boda-de-gelado.jpg" />                             <!-- path to file -->
 	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
 	    </TEXTURE>
 
@@ -62,10 +62,10 @@
 	<MATERIALS>
 	    <MATERIAL id="M1">                                  
 	        <shininess value="1" />
-	        <specular r=".2" g=".3" b=".4" a=".5" />        <!-- specular reflection -->
-	        <diffuse r=".2" g=".3" b=".4" a=".5" />         <!-- diffuse reflection -->
-	        <ambient r=".2" g=".3" b=".4" a=".5" />         <!-- ambient reflection -->
-	        <emission r=".2" g=".3" b=".4" a=".5" />        <!-- emission component -->
+	        <specular r="0" g="1" b="0" a=".5" />        <!-- specular reflection -->
+	        <diffuse r="0" g="1" b="0" a=".5" />         <!-- diffuse reflection -->
+	        <ambient r="0" g="1" b="0" a=".5" />         <!-- ambient reflection -->
+	        <emission r="0" g="0" b="0" a=".5" />        <!-- emission component -->
 	    </MATERIAL>
 
 	    <!-- NOTE: the "MATERIAL" block may be repeated as required. Each defined material requires a distinct "id" -->
@@ -78,7 +78,7 @@
 	    <!-- next lines define nodes of type leaf; they may be repeated, in any order, as necessary -->
 	    <LEAF id="RECT" type="rectangle" args="-4 4 4 -4" />
 	    <LEAF id="CYL" type="cylinder" args="10 1 2 1 60" />
-	    <LEAF id="SPH" type="sphere" args="4 20 50" />
+	    <LEAF id="SPH" type="sphere" args="1 20 50" />
 	    <LEAF id="TRI" type="triangle" args="0 0 0  3 0 0  2 2 0" />
 
 	    <!-- Parameters of the above primitives:                                                         -->
@@ -98,22 +98,22 @@
 	    <NODE id="root">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="M1" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="none" />       <!-- declared texture superimposes the texture received from parent node -->
+	        <TEXTURE id="T1" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
 	                                  <!-- id="clear" clears texture declaration received from parent node      -->
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0" y="0" z="3" />
+	        <TRANSLATION x="0" y="0" z="2" />
 	        <ROTATION axis="x" angle="0" />
 	        <SCALE sx="1" sy="1" sz="1" />
 			
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
-	        	<DESCENDANT id="cenas" />
+	        	<!--<DESCENDANT id="cenas" /> -->
 	            <DESCENDANT id="RECT" />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
@@ -125,18 +125,35 @@
 	    <NODE id="cenas">       
 
 	        
-	        <MATERIAL id="default" />      
-	        <TEXTURE id="none1" />       
+	        <MATERIAL id="M1" />      
+	        <TEXTURE id="T1" />       
 
 	        <TRANSLATION x="0" y="0" z="-3" />
+	        <ROTATION axis="y" angle="0" />
+	        <SCALE sx="3" sy="3" sz="3" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="extra" />       
+	        </DESCENDANTS>
+
+	    </NODE>
+
+	     <NODE id="extra">       
+
+	        
+	        <MATERIAL id="M1" />      
+	        <TEXTURE id="T1" />       
+
+	        <TRANSLATION x="3" y="0" z="0" />
 	        <ROTATION axis="y" angle="0" />
 	        <SCALE sx="1" sy="1" sz="1" />
 
 	        <DESCENDANTS>
-	            <DESCENDANT id="RECT" />       
+	            <DESCENDANT id="SPH" />       
 	        </DESCENDANTS>
 
 	    </NODE>
+
 
 	</NODES>
 
