@@ -11,6 +11,8 @@ XMLscene.prototype.init = function (application) {
 	this.initCameras();
 	this.initLights();
 
+	this.enableTextures(true);
+
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);  
 
     this.gl.clearDepth(100.0);
@@ -19,11 +21,6 @@ XMLscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.defaultAppearance = new CGFappearance(this);
-	this.defaultAppearance.loadTexture("tecto.jpg");
-	this.defaultAppearance.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
-	this.defaultAppearance.setSpecular(0.5, 0.5, 0.5, 1);
-	this.defaultAppearance.setShininess(50);
-	this.defaultAppearance.setDiffuse(0.5, 0.5, 0.5, 1);
 
     this.materials = new Array();
     this.textures = new Array();
@@ -43,12 +40,12 @@ XMLscene.prototype.initCameras = function () {
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
-/*	this.defaultAppearance.setAmbient(1, 0, 0, 1);
+	this.defaultAppearance.setAmbient(1, 0, 0, 1);
 	this.defaultAppearance.setDiffuse(1, 0, 0, 1);
 	this.defaultAppearance.setSpecular(1, 0, 0, 1);
 	this.defaultAppearance.setEmission(1, 0, 0, 1);
 	this.defaultAppearance.setShininess(2);
-*/
+
 };
 
 
@@ -150,12 +147,12 @@ XMLscene.prototype.loadNode = function (node_id) {
 	this.pushMatrix();
 	this.multMatrix(newNode.matrix);
 
-/*	if(newNode.material['id'] != 'none' || newNode.material['id'] != 'null')
+	if(newNode.material['id'] != 'none' || newNode.material['id'] != 'null')
 		this.applyMaterial(newNode.material);
 
 	if(newNode.texture['id'] != 'none' || newNode.texture['id'] != 'null')
 		this.applyTexture(newNode.texture);
-*/	
+	
 	for(i = 0; i < newNode.getDescendents().length; i++){
 		
 		var desc_id = newNode.getDescendents()[i];
