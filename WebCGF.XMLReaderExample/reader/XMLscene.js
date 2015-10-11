@@ -129,9 +129,18 @@ XMLscene.prototype.loadLeaves = function (){
 };
 
 XMLscene.prototype.reloadScene = function () {
+	this.pushMatrix();
+
+	if(this.graph.XMLinitials['reference'] > 0)
+		this.axis.display();
+
+	this.multMatrix(this.matrix);
+
+    this.defaultAppearance.apply();
 
 	var root = this.graph.rootID;
 	this.loadNode(root);
+	this.popMatrix();
 }; 
 
 XMLscene.prototype.loadNode = function (node_id) {
@@ -221,10 +230,8 @@ XMLscene.prototype.display = function () {
 	this.updateProjectionMatrix();
 	this.loadIdentity();
 	this.applyViewMatrix();
-	this.multMatrix(this.matrix);
 
 	// Draw axis
-	this.axis.display();
 
 	// ---- END Background, camera and axis setup
 
@@ -234,7 +241,6 @@ XMLscene.prototype.display = function () {
 
 
     //this.setDefaultAppearance();
-    this.defaultAppearance.apply();
 
 	if (this.graph.loadedOk)
 	{

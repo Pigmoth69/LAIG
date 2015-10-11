@@ -3,12 +3,12 @@
 
 	<INITIALS>
 	    <frustum near="1" far="500"/>                    
-	    <translation x="0" y="0" z="0" />            
+	    <translation x="1" y="0" z="0" />            
 	    <rotation axis="x" angle="0" />   
 	    <rotation axis="y" angle="0" />            
 	    <rotation axis="z" angle="0" />             
-	    <scale sx="1" sy="1" sz="1" />                
-	    <reference length="1" />                  
+	    <scale sx="2" sy="1" sz="1" />                
+	    <reference length="0" />                  
 	</INITIALS>
 
 
@@ -21,8 +21,8 @@
 	<LIGHTS>
 	    <LIGHT id="L1">                              
 	        <enable value="1" />                       
-	        <position x="0" y="0" z="1" w="1" />      
-	        <ambient r="0" g="0" b="0" a="1" />       
+	        <position x="0" y="0" z="3" w="1" />      
+	        <ambient r="0.5" g="0.5" b="0.5" a="1" />       
 	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />     
 	        <specular r="0.9" g="0.9" b="0.9" a="1" />    
 		</LIGHT>
@@ -36,7 +36,7 @@
 
 	<MATERIALS>
 	    <MATERIAL id="FEUP">                                  
-	        <shininess value="10" />
+	        <shininess value="0" />
 	        <specular r="0.55" g="0.18" b="0.1" a=".5" />       
 	        <diffuse r="0.55" g="0.18" b="0.1" a=".5" />         
 	        <ambient r="0.55" g="0.18" b="0.1" a=".5" />      
@@ -58,246 +58,16 @@
 	<NODES>
 	    <ROOT id="root" />  
 
-
-
 	    <NODE id="root">       
 	        <MATERIAL id="FEUP" />             
 	        <TEXTURE id="null" />       
-	        <TRANSLATION x="0" y="0" z="0" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="F" />
-	        	<DESCENDANT id="E" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="F">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />       
-	        <TRANSLATION x="0" y="0" z="0" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="body_front" />
-	        	<DESCENDANT id="body_back" />
-	        	<DESCENDANT id="body_left" />
-	        	<DESCENDANT id="body_right" />
-	        	<DESCENDANT id="body_top" />
-	        	<DESCENDANT id="body_bottom" />
-	        	<DESCENDANT id="hor_top_front" />
-	        	<DESCENDANT id="hor_top_back" />
-	        	<DESCENDANT id="hor_top_bottom" />
-	        	<DESCENDANT id="hor_top_top" />
-	        	<DESCENDANT id="hor_top_right" />
-	        	<DESCENDANT id="hor_mid_front" />
-	        	<DESCENDANT id="hor_mid_back" />
-	        	<DESCENDANT id="hor_mid_bottom" />
-	        	<DESCENDANT id="hor_mid_top" />
-	        	<DESCENDANT id="hor_mid_right" />
-	        </DESCENDANTS>
-	    </NODE>
-		
-		<NODE id="E">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />       
-	        <TRANSLATION x="4" y="0" z="0" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="body_front" />
-	        	<DESCENDANT id="body_back" />
-	        	<DESCENDANT id="body_left" />
-	        	<DESCENDANT id="body_right" />
-	        	<DESCENDANT id="body_top" />
-	        	<DESCENDANT id="body_bottom" />
-	        	<DESCENDANT id="hor_top_front" />
-	        	<DESCENDANT id="hor_top_back" />
-	        	<DESCENDANT id="hor_top_bottom" />
-	        	<DESCENDANT id="hor_top_top" />
-	        	<DESCENDANT id="hor_top_right" />
-	        	<DESCENDANT id="hor_mid_front" />
-	        	<DESCENDANT id="hor_mid_back" />
-	        	<DESCENDANT id="hor_mid_bottom" />
-	        	<DESCENDANT id="hor_mid_top" />
-	        	<DESCENDANT id="hor_mid_right" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="solid">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />       
-	        <TRANSLATION x="4" y="0" z="0" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="front" />
-	        	<DESCENDANT id="back" />
-	        	<DESCENDANT id="left" />
-	        	<DESCENDANT id="right" />
-	        	<DESCENDANT id="top" />
-	        	<DESCENDANT id="bottom" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="front">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />       
-	        <TRANSLATION x="0" y="0" z="0.5" />
 	        <DESCENDANTS>
 	        	<DESCENDANT id="RECT" />
 	        </DESCENDANTS>
 	    </NODE>
 
-	    <NODE id="back">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <ROTATION axis="y" angle="180" />
-	        <TRANSLATION x="0" y="0" z="0.5" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
 
-	    <NODE id="left">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <ROTATION axis="y" angle="-90" />
-	        <TRANSLATION x="0" y="0" z="0.5" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="body_right">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <ROTATION axis="y" angle="90" />
-	        <TRANSLATION x="0" y="0" z="0.5" />  
-	        <SCALE sx="1" sy="6" sz="1" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="body_top">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="0" y="3" z="0" />
-	        <ROTATION axis="x" angle="-90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="body_bottom">       
-	        <MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="0" y="-3" z="0" />
-	        <ROTATION axis="x" angle="90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_top_front">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.75" y="2.5" z="0.5" />
-	        <SCALE sx="2.5" sy="1" sz="1" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_top_back">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.75" y="2.5" z="-0.5" />
-	        <SCALE sx="2.5" sy="1" sz="1" />
-	        <ROTATION axis="x" angle="180" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_top_bottom">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.75" y="2" z="0" />
-	        <SCALE sx="2.5" sy="1" sz="1" />
-	        <ROTATION axis="x" angle="90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_top_top">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.75" y="3" z="0" />
-	        <SCALE sx="2.5" sy="1" sz="1" />
-	        <ROTATION axis="x" angle="-90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_top_right">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="3" y="2.5" z="0" />
-	        <ROTATION axis="y" angle="90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_mid_front">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.5" y="0" z="0.5" />
-	        <SCALE sx="2" sy="1" sz="1" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_mid_back">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.5" y="0" z="-0.5" />
-	        <SCALE sx="2" sy="1" sz="1" />
-	        <ROTATION axis="x" angle="180" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_mid_bottom">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.5" y="-0.5" z="0" />
-	        <SCALE sx="2" sy="1" sz="1" />
-	        <ROTATION axis="x" angle="90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_mid_top">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="1.5" y="0.5" z="0" />
-	        <SCALE sx="2" sy="1" sz="1" />
-	        <ROTATION axis="x" angle="-90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
-	    <NODE id="hor_mid_right">
-	    	<MATERIAL id="FEUP" />             
-	        <TEXTURE id="null" />     
-	        <TRANSLATION x="2.5" y="0" z="0" />
-	        <ROTATION axis="y" angle="90" />
-	        <DESCENDANTS>
-	        	<DESCENDANT id="RECT" />
-	        </DESCENDANTS>
-	    </NODE>
-
+		   
 	</NODES>
 
 </SCENE> 

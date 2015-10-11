@@ -139,6 +139,8 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.XMLinitials['scale_Y']= this.reader.getFloat(scale, 'sy', 1);
 	this.XMLinitials['scale_Z']= this.reader.getFloat(scale, 'sz', 1);
 
+	console.log(scale);
+
 	this.XMLinitials['reference']= this.reader.getFloat(reference, 'length', 1);
 
 
@@ -363,8 +365,7 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 
 		var numTransformations = all.length - (2 + 1  /*descendants.length*/);
 		var j, transformations = [];
-		var mat = mat4.create(); 
-		mat4.identity(mat);
+		var mat = mat4.create();
 
 		for(j = 0; j < numTransformations; j++){
 			if(all[j + 2].tagName == 'TRANSLATION')
@@ -394,12 +395,12 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 			}
 			else if(all[j + 2].tagName == 'SCALE')
 			{
-				var sx,sy,sz;
-				sx= this.reader.getFloat(all[j + 2], 'sx', 1);
-				sy= this.reader.getFloat(all[j + 2], 'sy', 1);
-				sz= this.reader.getFloat(all[j + 2], 'sz', 1); 
+				var array = new Array();
+				array.push(this.reader.getFloat(all[j + 2], 'sx', 1));
+				array.push(this.reader.getFloat(all[j + 2], 'sy', 1));
+				array.push(this.reader.getFloat(all[j + 2], 'sz', 1)); 
 
-				mat4.scale(mat,mat,[sx,sy,sz]);
+				mat4.scale(mat,mat,array);
 			}
 
 		}
