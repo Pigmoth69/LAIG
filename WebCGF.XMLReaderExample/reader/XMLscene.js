@@ -11,6 +11,15 @@ XMLscene.prototype.init = function (application) {
 	this.initCameras();
 	this.initLights();
 
+	this.light0=true;
+	this.light1=true;
+	this.light2=true;
+	this.light3=true;
+	this.light4=true;
+	this.light5=true;
+	this.light6=true;
+	this.light7=true;
+
 	this.enableTextures(true);
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);  

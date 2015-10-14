@@ -38,6 +38,17 @@
  MyRectangle.prototype = Object.create(CGFobject.prototype);
  MyRectangle.prototype.constructor = MyRectangle;
 
+MyRectangle.prototype.updateTextCoords = function(ampS,ampT){
+
+	this.textCoords=[
+		0,0,
+		0,1/ampT,
+		1/ampS,1/ampT,
+		1/ampS,0
+	];
+
+	this.updateTexCoordsGLBuffers();
+}
  MyRectangle.prototype.initBuffers = function() {
  
  	this.primitiveType = this.scene.gl.TRIANGLES;
