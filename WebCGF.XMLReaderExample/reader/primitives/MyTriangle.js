@@ -34,16 +34,19 @@
 		Normal[0], Normal[1], Normal[2],
     ];
 
-    //alterar isto!!
-	var tCoords = (vec3.sqrLen(p1p2) + vec3.sqrLen(p1p3) - vec3.sqrLen(p2p3))/ (2 * vec3.length(p1p2));
-	var sCoords = Math.sqrt(vec3.sqrLen(p1p3) - tCoords * tCoords);
-	this.nonScaledTexCoords = [
-		sCoords, tCoords,
+   
+   	var cosB = (vec3.sqrLen(p1p3) - vec3.sqrLen(p1p2) + vec3.sqrLen(p2p3)) / (2 * vec3.length(p1p3) * vec3.length(p2p3));
+	var sinB = Math.sqrt(vec3.sqrLen(p1p3) - Math.pow(vec3.length(p1p3) * cosB, 2));
+	var sCoords = (vec3.length(p2p3) - vec3.length(p1p3) * cosB) / vec3.length(p2p3);
+	var tCoords = (vec3.length(p1p3)*sinB) / vec3.length(p2p3);
+	
+	this.texCoords = [
+		sCoords, tCoords/1.2,
 		0, 0,
-		vec3.length(p1p2), 0
+		1, 0
 	];
 
-	this.texCoords = this.nonScaledTexCoords.slice(0);
+	//this.texCoords = this.nonScaledTexCoords;
 	
 
 	this.initBuffers();
