@@ -32,10 +32,11 @@ XMLscene.prototype.init = function (application) {
 
     this.defaultAppearance = new CGFappearance(this);
 
+	
     this.materials = new Array();
     this.textures = new Array();
     this.leaves = new Array();
-    this.matrix = mat4.create();
+    
 
 	this.axis=new CGFaxis(this);
 	
@@ -68,21 +69,14 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 XMLscene.prototype.loadInitials = function () {
-    this.camera.near = this.graph.XMLinitials['frustum_NEAR'];
-    this.camera.far = this.graph.XMLinitials['frustum_FAR'];
-
-	mat4.translate(this.matrix, this.matrix, [this.graph.XMLinitials['translation_X'], this.graph.XMLinitials['translation_Y'], this.graph.XMLinitials['translation_Z']]);
-	mat4.rotate(this.matrix, this.matrix, this.graph.XMLinitials['rotation_X']*Math.PI/180, [1,0,0]);
-	mat4.rotate(this.matrix, this.matrix, this.graph.XMLinitials['rotation_Y']*Math.PI/180, [0,1,0]);
-	mat4.rotate(this.matrix, this.matrix, this.graph.XMLinitials['rotation_Z']*Math.PI/180, [0,0,1]);
-	mat4.scale(this.matrix, this.matrix, [this.graph.XMLinitials['scale_X'], this.graph.XMLinitials['scale_Y'], this.graph.XMLinitials['scale_Z']]);
-
-    this.axis= new CGFaxis(this,this.graph.XMLinitials['reference']);
+    this.camera.near = this.graph.LSXinitials.frustum.near;
+    this.camera.far = this.graph.LSXinitials.frustum.far;
+    this.axis= new CGFaxis(this,this.graph.LSXinitials.refLength);
 };   
 
 XMLscene.prototype.loadIllumination = function() {
-	this.setAmbient(this.graph.XMLillumination['ambient_R'],this.graph.XMLillumination['ambient_G'],this.graph.XMLillumination['ambient_B'],this.graph.XMLillumination['ambient_A']);
-	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
+	this.setAmbient(this.graph.LSXillumination.ambient[0],this.graph.LSXillumination.ambient[1],this.graph.LSXillumination.ambient[2],this.graph.LSXillumination.ambient[3]);
+	this.gl.clearColor(this.graph.LSXillumination.background[0],this.graph.LSXillumination.background[1],this.graph.LSXillumination.background[2],this.graph.LSXillumination.background[3]);
 };
 
 XMLscene.prototype.loadLights = function (){
@@ -141,10 +135,10 @@ XMLscene.prototype.loadLeaves = function (){
 XMLscene.prototype.reloadScene = function () {
 	this.pushMatrix();
 
-	if(this.graph.XMLinitials['reference'] > 0)
+	if(this.graph.LSXinitials.refLength > 0)
 		this.axis.display();
 
-	this.multMatrix(this.matrix);
+	this.multMatrix(this.graph.LSXinitials.transMatrix);
 
     this.defaultAppearance.apply();
 
@@ -222,7 +216,7 @@ XMLscene.prototype.applyTexture = function(textureID) {
 	for(i = 0; i < this.textures.length; i++) {
 		if(this.textures[i].id == textureID)
 		{
-			//OK, faz-se o bind... e então quando se faz o unbind?
+			//OK, faz-se o bind... e então quando se faz o unbind() ?
 			this.textures[i].bind();
 			//this.textures[i].apply();
 			//this.textures[i].bind();

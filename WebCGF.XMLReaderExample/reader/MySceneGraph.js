@@ -16,12 +16,12 @@ function MySceneGraph(filename, scene) {
 	 */
 	
 	this.rootID = null; 
-	this.XMLinitials = [];
-	this.XMLillumination = [];
+	
+	this.LSXillumination = new Illumination();
 	this.XMLlights = new Array(this.scene.lights.length); 
 	this.XMLleaves = [];
 	this.XMLnodes = [];
-
+	this.LSXinitials = new Initials();
 	this.reader.open('scenes/'+filename, this);  
 }
 
@@ -122,29 +122,36 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	if(info == null){
 		return "reference tag is missing.";
 	}
+
 	var reference = info[0];
+	var initialFrustum={near:0,far:0};
+	var initialTranslation = new vec3.create();
+	var initialScale = new vec3.create();
+	var refLength;
+	initialFrustum.near= this.reader.getInteger(frustum, 'near', 1);
+	initialFrustum.far = this.reader.getInteger(frustum, 'far', 1);
 
-	this.XMLinitials['frustum_NEAR']= this.reader.getInteger(frustum, 'near', 1);
-	this.XMLinitials['frustum_FAR'] = this.reader.getInteger(frustum, 'far', 1);
+	initialTranslation[0]= this.reader.getFloat(translation, 'x', 1) ;
+	initialTranslation[1]= this.reader.getFloat(translation, 'y', 1) ;
+	initialTranslation[2]= this.reader.getFloat(translation, 'z', 1) ;
 
-	this.XMLinitials['translation_X']= this.reader.getFloat(translation, 'x', 1) ;
-	this.XMLinitials['translation_Y']= this.reader.getFloat(translation, 'y', 1) ;
-	this.XMLinitials['translation_Z']= this.reader.getFloat(translation, 'z', 1) ;
+	rotationX= this.reader.getFloat(rotationX, 'angle', 1);
+	rotationY= this.reader.getFloat(rotationY, 'angle', 1);
+	rotationZ= this.reader.getFloat(rotationZ, 'angle', 1);
 
-	this.XMLinitials['rotation_X']= this.reader.getFloat(rotationX, 'angle', 1);
-	this.XMLinitials['rotation_Y']= this.reader.getFloat(rotationY, 'angle', 1);
-	this.XMLinitials['rotation_Z']= this.reader.getFloat(rotationZ, 'angle', 1);
+	initialScale[0]= this.reader.getFloat(scale, 'sx', 1);
+	initialScale[1]= this.reader.getFloat(scale, 'sy', 1);
+	initialScale[2]= this.reader.getFloat(scale, 'sz', 1);
 
-	this.XMLinitials['scale_X']= this.reader.getFloat(scale, 'sx', 1);
-	this.XMLinitials['scale_Y']= this.reader.getFloat(scale, 'sy', 1);
-	this.XMLinitials['scale_Z']= this.reader.getFloat(scale, 'sz', 1);
+	reference = this.reader.getFloat(reference, 'length', 1);
 
-	console.log(scale);
-
-	this.XMLinitials['reference']= this.reader.getFloat(reference, 'length', 1);
-
-
-
+	this.LSXinitials.setFrustum(initialFrustum.near,initialFrustum.far);
+	this.LSXinitials.translateMatrix(initialTranslation);
+	this.LSXinitials.rotateMatrix('x',rotationX);
+	this.LSXinitials.rotateMatrix('y',rotationY);
+	this.LSXinitials.rotateMatrix('z',rotationZ);
+	this.LSXinitials.scaleMatrix(initialScale);
+	this.LSXinitials.setReferenceLength(reference);
 	return 0;
 };
 
@@ -167,11 +174,21 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 		return "background tag is missing";
 	}
 
-	this.background = [this.reader.getFloat(backgroundColor, 'r', 1), this.reader.getFloat(backgroundColor, 'g', 1), this.reader.getFloat(backgroundColor, 'b', 1), this.reader.getFloat(backgroundColor, 'a', 1)];
-	this.XMLillumination['ambient_R']=this.reader.getInteger(ambient, 'r', 1);
-	this.XMLillumination['ambient_G']=this.reader.getInteger(ambient, 'g', 1);
-	this.XMLillumination['ambient_B']=this.reader.getInteger(ambient, 'b', 1);
-	this.XMLillumination['ambient_A']=this.reader.getInteger(ambient, 'a', 1);
+	var background = [];
+	var finalAmbient = [];	
+
+	background[0] = this.reader.getFloat(backgroundColor, 'r', 1);
+	background[1] = this.reader.getFloat(backgroundColor, 'g', 1);
+	background[2] = this.reader.getFloat(backgroundColor, 'b', 1);
+	background[3] = this.reader.getFloat(backgroundColor, 'a', 1);
+
+	finalAmbient[0] = this.reader.getInteger(ambient, 'r', 1);;
+	finalAmbient[1] = this.reader.getInteger(ambient, 'g', 1);;
+	finalAmbient[2] = this.reader.getInteger(ambient, 'b', 1);
+	finalAmbient[3] = this.reader.getInteger(ambient, 'a', 1);;
+
+	this.LSXillumination.setBackground(background);
+	this.LSXillumination.setAmbient(finalAmbient);
 
 	return 0;
 };	
