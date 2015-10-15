@@ -3,7 +3,6 @@ function Initials() {
     this.frustum = {near: 0,
                     far: 0};
     this.transMatrix = mat4.create();
-    mat4.identity(this.transMatrix);
     
     this.refLength = 0;
 };

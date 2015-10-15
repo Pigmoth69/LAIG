@@ -75,7 +75,6 @@ XMLscene.prototype.loadInitials = function () {
 };   
 
 XMLscene.prototype.loadIllumination = function() {
-	//this.setGlobalAmbientLight(1,0,0,1);
 	this.setGlobalAmbientLight(this.graph.LSXillumination.ambient[0],this.graph.LSXillumination.ambient[1],this.graph.LSXillumination.ambient[2],this.graph.LSXillumination.ambient[3]);
 	this.gl.clearColor(this.graph.LSXillumination.background[0],this.graph.LSXillumination.background[1],this.graph.LSXillumination.background[2],this.graph.LSXillumination.background[3]);
 };

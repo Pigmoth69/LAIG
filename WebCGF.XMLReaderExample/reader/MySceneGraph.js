@@ -79,71 +79,68 @@ MySceneGraph.prototype.parseElements= function(rootElement) {
 
 MySceneGraph.prototype.parseInitials= function(rootElement) {
 
-	if(rootElement.getElementsByTagName('INITIALS') == null){
-		return "INITIALS element is missing.";
+	var initials = rootElement.getElementsByTagName('INITIALS');
+
+	if(initials == null){
+		return "INITIALS tag is missing.";
 	}
 
-	//var info = rootElement.getElementsByTagName('frustum');
-	var frustum = (rootElement.getElementsByTagName('frustum'))[0];
+	var frustum = initials[0].getElementsByTagName('frustum');
 	if(frustum == null) {
 		return "frustum tag is missing.";
 	}
 	
-	info = rootElement.getElementsByTagName('translation');
-	var translation = info[0];
+	var translation = initials[0].getElementsByTagName('translation');
 	if(translation == null) {
 		return "translation tag is missing.";
 	}
 	
-	info = rootElement.getElementsByTagName('rotation');
-	if(info == null){
+	var rotations = initials[0].getElementsByTagName('rotation');
+	if(rotations == null){
 		return "rotation tag is missing.";
 	}
-	else if(info.length != 3){
-		return "either zero or more than 3 elements for rotation.";
+	else if(rotations.length != 3){
+		return "Insuficient info for the scene initial rotation.";
 	}
+
 	var rotationX, rotationY, rotationZ, i;
 	for(i = 0; i < 3; i++)
-		if(this.reader.getString(info[i], 'axis', 1) == 'x')
-			rotationX = info[i]; 
-		else if(this.reader.getString(info[i], 'axis', 1) == 'y')
-			rotationY = info[i];
-		else if(this.reader.getString(info[i], 'axis', 1) == 'z')
-			rotationZ = info[i];
+		if(this.reader.getString(rotations[i], 'axis', 1) == 'x')
+			rotationX = rotations[i]; 
+		else if(this.reader.getString(rotations[i], 'axis', 1) == 'y')
+			rotationY = rotations[i];
+		else if(this.reader.getString(rotations[i], 'axis', 1) == 'z')
+			rotationZ = rotations[i];
 
-	info = null;
-	info = rootElement.getElementsByTagName('scale');
-	if(info == null){
+	var scale = initials[0].getElementsByTagName('scale');
+	if(scale == null){
 		return "scale tag is missing.";
 	}
-	var scale = info[0];
 
-	info = rootElement.getElementsByTagName('reference');
-	if(info == null){
+	var reference = initials[0].getElementsByTagName('reference');
+	if(reference == null){
 		return "reference tag is missing.";
 	}
 
-	var reference = info[0];
-	var initialFrustum={near:0,far:0};
-	var initialTranslation = new vec3.create();
-	var initialScale = new vec3.create();
-	var refLength;
-	initialFrustum.near= this.reader.getInteger(frustum, 'near', 1);
-	initialFrustum.far = this.reader.getInteger(frustum, 'far', 1);
+	var initialFrustum = {
+						  near: this.reader.getInteger(frustum[0], 'near', 1),
+						  far:  this.reader.getInteger(frustum[0], 'far', 1)
+						 };
 
-	initialTranslation[0]= this.reader.getFloat(translation, 'x', 1) ;
-	initialTranslation[1]= this.reader.getFloat(translation, 'y', 1) ;
-	initialTranslation[2]= this.reader.getFloat(translation, 'z', 1) ;
+	var initialTranslation = vec3.fromValues(this.reader.getFloat(translation[0], 'x', 1), 
+											 this.reader.getFloat(translation[0], 'y', 1), 
+											 this.reader.getFloat(translation[0], 'z', 1));
 
 	rotationX= this.reader.getFloat(rotationX, 'angle', 1);
 	rotationY= this.reader.getFloat(rotationY, 'angle', 1);
 	rotationZ= this.reader.getFloat(rotationZ, 'angle', 1);
 
-	initialScale[0]= this.reader.getFloat(scale, 'sx', 1);
-	initialScale[1]= this.reader.getFloat(scale, 'sy', 1);
-	initialScale[2]= this.reader.getFloat(scale, 'sz', 1);
+	var initialScale = vec3.fromValues(this.reader.getFloat(scale[0], 'sx', 1), 
+									   this.reader.getFloat(scale[0], 'sy', 1), 
+									   this.reader.getFloat(scale[0], 'sz', 1));
 
-	reference = this.reader.getFloat(reference, 'length', 1);
+	var refLength = this.reader.getFloat(reference[0], 'length', 1);
+
 
 	this.LSXinitials.setFrustum(initialFrustum.near,initialFrustum.far);
 	this.LSXinitials.translateMatrix(initialTranslation);
@@ -151,7 +148,8 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.LSXinitials.rotateMatrix('y',rotationY);
 	this.LSXinitials.rotateMatrix('z',rotationZ);
 	this.LSXinitials.scaleMatrix(initialScale);
-	this.LSXinitials.setReferenceLength(reference);
+	this.LSXinitials.setReferenceLength(refLength);
+
 	return 0;
 };
 
@@ -230,8 +228,8 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseTextures= function(rootElement) {
-	var info;
-	if((info=rootElement.getElementsByTagName('TEXTURES')) == null) {
+	var info = rootElement.getElementsByTagName('TEXTURES');
+	if(info == null) {
 		return "TEXTURES tag is missing.";
 	}
 
