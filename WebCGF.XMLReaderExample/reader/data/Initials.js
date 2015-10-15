@@ -40,6 +40,6 @@ Initials.prototype.setFrustum = function(near,far){
 	this.frustum.far = far;
 };
 
-Initials.prototype.setReferenceLength = function(reflength){
-	this.refLength = reflength;
+Initials.prototype.setReferenceLength = function(refLength){
+	this.refLength = refLength;
 };

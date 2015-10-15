@@ -155,144 +155,151 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 
 MySceneGraph.prototype.parseIllumination= function(rootElement) {
 
-	if(rootElement.getElementsByTagName('ILLUMINATION') == null) {
+	var illumination = rootElement.getElementsByTagName('ILLUMINATION');
+
+	if(illumination == null) {
 		return "ILLUMINATION tag is missing.";
 	}
 
-	var info = rootElement.getElementsByTagName('ambient');
-	var ambient = info[0];
+	var ambient = illumination[0].getElementsByTagName('ambient');
 	if(ambient == null){
 		return "ambient tag is missing.";
 	}
 
-
-	info = rootElement.getElementsByTagName('background');
-	var backgroundColor = info[0];
+	var backgroundColor = illumination[0].getElementsByTagName('background');
 	if(backgroundColor == null){
 		return "background tag is missing";
 	}
 
 	var background = [];
-	var finalAmbient = [];	
+	var globalAmbient = [];	
 
-	background[0] = this.reader.getFloat(backgroundColor, 'r', 1);
-	background[1] = this.reader.getFloat(backgroundColor, 'g', 1);
-	background[2] = this.reader.getFloat(backgroundColor, 'b', 1);
-	background[3] = this.reader.getFloat(backgroundColor, 'a', 1);
+	background[0] = this.reader.getFloat(backgroundColor[0], 'r', 1);
+	background[1] = this.reader.getFloat(backgroundColor[0], 'g', 1);
+	background[2] = this.reader.getFloat(backgroundColor[0], 'b', 1);
+	background[3] = this.reader.getFloat(backgroundColor[0], 'a', 1);
 
-	finalAmbient[0] = this.reader.getFloat(ambient, 'r', 1);;
-	finalAmbient[1] = this.reader.getFloat(ambient, 'g', 1);;
-	finalAmbient[2] = this.reader.getFloat(ambient, 'b', 1);
-	finalAmbient[3] = this.reader.getFloat(ambient, 'a', 1);;
+	globalAmbient[0] = this.reader.getFloat(ambient[0], 'r', 1);;
+	globalAmbient[1] = this.reader.getFloat(ambient[0], 'g', 1);;
+	globalAmbient[2] = this.reader.getFloat(ambient[0], 'b', 1);
+	globalAmbient[3] = this.reader.getFloat(ambient[0], 'a', 1);;
 
 	this.LSXillumination.setBackground(background);
-	this.LSXillumination.setAmbient(finalAmbient);
+	this.LSXillumination.setAmbient(globalAmbient);
 
 	return 0;
 };	
 	
 MySceneGraph.prototype.parseLights= function(rootElement) {
-	if(rootElement.getElementsByTagName('LIGHTS') == null) {
+
+	var lightsTag = rootElement.getElementsByTagName('LIGHTS');
+
+	if(lightsTag == null) {
 		return "LIGHTS tag is missing.";
 	}
 
-	var info = rootElement.getElementsByTagName('LIGHT');
-	if(info[0] == null || info[0]>8){
-		return "No LIGHT was added because there are too many lights or 0";
+	var lights = lightsTag[0].getElementsByTagName('LIGHT');
+	if(lights.length > 8) {
+		return "No LIGHT was added because there are too many lights";
+	}
+	else if(lights[0] == null) 
+	{
+		return "No LIGHT was added.";
 	}
 	
 	var i;
-	for(i=0; i < info.length; i++) {
+	for(i=0; i < lights.length; i++) {
 				
-		var id = this.reader.getString(info[i], 'id', 1);
+		var id = this.reader.getString(lights[i], 'id', 1);
 		
-		var enable = info[i].getElementsByTagName('enable')
+		var enable = lights[i].getElementsByTagName('enable');
 		var value = this.reader.getBoolean(enable[0], 'value', 1);
 		
-		var positionValues = info[i].getElementsByTagName('position');
+		var positionValues = lights[i].getElementsByTagName('position');
 		var position = [this.reader.getFloat(positionValues[0], 'x', 1),this.reader.getFloat(positionValues[0], 'y', 1),this.reader.getFloat(positionValues[0], 'z', 1),this.reader.getFloat(positionValues[0], 'w', 1)];
 		
-		var ambientValues = info[i].getElementsByTagName('ambient');
+		var ambientValues = lights[i].getElementsByTagName('ambient');
 		var ambient= [this.reader.getFloat(ambientValues[0], 'r', 1), this.reader.getFloat(ambientValues[0], 'g', 1), this.reader.getFloat(ambientValues[0], 'b', 1), this.reader.getFloat(ambientValues[0], 'a', 1)];
 				
-		var diffuseValues = info[i].getElementsByTagName('diffuse');
+		var diffuseValues = lights[i].getElementsByTagName('diffuse');
 		var diffuse = [this.reader.getFloat(diffuseValues[0], 'r', 1), this.reader.getFloat(diffuseValues[0], 'g', 1), this.reader.getFloat(diffuseValues[0], 'b', 1), this.reader.getFloat(diffuseValues[0], 'a', 1)];
 		
-		var specularValues = info[i].getElementsByTagName('specular');
+		var specularValues = lights[i].getElementsByTagName('specular');
 		var specular = [this.reader.getFloat(specularValues[0], 'r', 1), this.reader.getFloat(specularValues[0], 'g', 1), this.reader.getFloat(specularValues[0], 'b', 1), this.reader.getFloat(specularValues[0], 'a', 1)];
 
 
 		this.XMLlights[i] = new Light(this.scene,i,id,value,position,ambient,diffuse,specular);
 	}	
+
 	return 0;
 };
 
 MySceneGraph.prototype.parseTextures= function(rootElement) {
-	var info = rootElement.getElementsByTagName('TEXTURES');
-	if(info == null) {
+	
+	var texturesTag = rootElement.getElementsByTagName('TEXTURES');
+	
+	if(texturesTag == null) {
 		return "TEXTURES tag is missing.";
 	}
 
-	info = info[0].getElementsByTagName('TEXTURE');
-	if(info[0] == null) {
-		return 0;
+	var textures = texturesTag[0].getElementsByTagName('TEXTURE');
+	if(textures == null) {
+		return "No texture was added.";
 	}
 
-	var texture = [];
+	var textureInfo = [];
 	var i;
+	for(i = 0; i < textures.length; i++) {
 
-	for(i = 0; i < info.length; i++) {
-		texture['id'] = this.reader.getString(info[i], 'id', 1);
+		textureInfo['id'] = this.reader.getString(textures[i], 'id', 1);
 
-		var file = info[i].getElementsByTagName('file');
-		texture['path'] = this.reader.getString(file[0], 'path', 1);
+		var file = textures[i].getElementsByTagName('file');
+		textureInfo['path'] = this.reader.getString(file[0], 'path', 1);
 		
+		var amplif_factor = textures[i].getElementsByTagName('amplif_factor');
+		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
 
-		var amplif_factor = info[i].getElementsByTagName('amplif_factor');
-		texture['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
-
-		var newTexture;
-		newTexture = new Texture(this.scene, texture['path'], texture['id']);
-		newTexture.setAmpFactor(texture['amplif_factor'][0],texture['amplif_factor'][0])
+		var newTexture = new Texture(this.scene, textureInfo['path'], textureInfo['id']);
+		newTexture.setAmpFactor(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][0])
 
 		this.scene.textures.push(newTexture);
-
 	}
-
 
 	return 0;
 };
 
 MySceneGraph.prototype.parseMaterials= function(rootElement) {
-	var info;
-	if((info=rootElement.getElementsByTagName('MATERIALS')) == null) {
+	
+	var materialsTag = rootElement.getElementsByTagName('MATERIALS');
+
+	if(materialsTag == null) {
 	return "MATERIALS tag is missing.";
 	}
 
-	info = info[0].getElementsByTagName('MATERIAL');
-	if(info[0] == null) {
+	var materials = materialsTag[0].getElementsByTagName('MATERIAL');
+	if(materials == null) {
 		return "No MATERIAL was added.";
 	}
 
 	var material = [];
 	var i;
 
-	for(i = 0; i < info.length; i++) {
-		material['id'] = this.reader.getString(info[i], 'id', 1);
+	for(i = 0; i < materials.length; i++) {
+		material['id'] = this.reader.getString(materials[i], 'id', 1);
 
-		var shininess = info[i].getElementsByTagName('shininess');
+		var shininess = materials[i].getElementsByTagName('shininess');
 		material['shininess'] = this.reader.getFloat(shininess[0], 'value', 1);
 
-		var specular = info[i].getElementsByTagName('specular');
+		var specular = materials[i].getElementsByTagName('specular');
 		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), this.reader.getFloat(specular[0], 'g', 1), this.reader.getFloat(specular[0], 'b', 1), this.reader.getFloat(specular[0], 'a', 1)];
 	
-		var diffuse = info[i].getElementsByTagName('diffuse');
+		var diffuse = materials[i].getElementsByTagName('diffuse');
 		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), this.reader.getFloat(diffuse[0], 'g', 1), this.reader.getFloat(diffuse[0], 'b', 1), this.reader.getFloat(diffuse[0], 'a', 1)];
 	
-		var ambient = info[i].getElementsByTagName('ambient');
+		var ambient = materials[i].getElementsByTagName('ambient');
 		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), this.reader.getFloat(ambient[0], 'g', 1), this.reader.getFloat(ambient[0], 'b', 1), this.reader.getFloat(ambient[0], 'a', 1)];
 	
-		var emission = info[i].getElementsByTagName('emission');
+		var emission = materials[i].getElementsByTagName('emission');
 		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), this.reader.getFloat(emission[0], 'g', 1), this.reader.getFloat(emission[0], 'b', 1), this.reader.getFloat(emission[0], 'a', 1)];
 	
 		var newMaterial = new Material(this.scene,material['id']);
@@ -304,13 +311,13 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseLeaves= function(rootElement) {
-	var info;
-	if((info = rootElement.getElementsByTagName('LEAVES')) == null){
+	var leavesTag = rootElement.getElementsByTagName('LEAVES');
+	if(leavesTag == null){
 		return "LEAVES tag is missing.";
 	}
 
-	var leaves = info[0].getElementsByTagName('LEAF');
-	if(leaves[0] == null){
+	var leaves = leavesTag[0].getElementsByTagName('LEAF');
+	if(leaves == null){
 		return "No LEAF was added.";
 	}
 
@@ -329,94 +336,99 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseNodes= function(rootElement) {
-	var info;
-	if((info = rootElement.getElementsByTagName('NODES')) == null){
+	var nodesTag = rootElement.getElementsByTagName('NODES');
+	if(nodesTag == null){
 		return "NODES tag is missing.";
 	}
 
-	var root = info[0].getElementsByTagName('ROOT');
-	if(root[0] == null){
+	var root = nodesTag[0].getElementsByTagName('ROOT');
+	if(root == null){
 		return "ROOT tag is missing.";
 	}
 	
-	this.rootID =this.reader.getString(root[0],'id',1);
+	this.rootID = this.reader.getString(root[0], 'id', 1);
 
-
-	var nodes = info[0].getElementsByTagName('NODE');
-	if(nodes[0] == null){
+	var nodes = nodesTag[0].getElementsByTagName('NODE');
+	if(nodes == null){
 		return "No NODE was added.";
 	}
 
-
-	var i,k, node = [];
+	var i;
 	for(i = 0; i < nodes.length; i++){
-		node['id'] = this.reader.getString(nodes[i], 'id', 1);
-		
-		var all = nodes[i].getElementsByTagName('*');
-		node['materialID'] = this.reader.getString(all[0], 'id', 1);
-		node['textureID'] = this.reader.getString(all[1], 'id', 1);
-		
-		//obtem descendentes
-		if(nodes[i].getElementsByTagName('DESCENDANTS') == null){
-			return "DESCENDANTS tag is missing.";
-		}
-		var descendants = nodes[i].getElementsByTagName('DESCENDANT');
-		//falta ciclo 'for' para inserir os diferentes id's dos descendentes
-		
-		var desc = [];
-		for(k=0; k < descendants.length;k++){
-			desc.push(this.reader.getString(descendants[k], 'id', 1));
-		}
-
-
-		var numTransformations = all.length - (2 + 1  /*descendants.length*/);
-		var j, transformations = [];
-		var mat = mat4.create();
-
-		for(j = 0; j < numTransformations; j++){
-			if(all[j + 2].tagName == 'TRANSLATION')
-			{
-				var x,y,z;
-				x= this.reader.getFloat(all[j + 2], 'x', 1);
-				y= this.reader.getFloat(all[j + 2], 'y', 1);
-				z= this.reader.getFloat(all[j + 2], 'z', 1);
-
-				mat4.translate(mat,mat,[x,y,z]);
-			}
-			else if(all[j + 2].tagName == 'ROTATION')
-			{
-				var axis,angle;
-
-				if(this.reader.getString(all[j + 2], 'axis', 1) == 'x')
-					axis= new Array(1,0,0);
-				else if(this.reader.getString(all[j + 2], 'axis', 1) == 'y')
-					axis= new Array(0,1,0);
-				else if(this.reader.getString(all[j + 2], 'axis', 1) == 'z')
-						axis= new Array(0,0,1);
-				else return "Error on node id: "+node['id']+" rotation AXIS!!";
-
-				angle = this.reader.getFloat(all[j + 2],'angle',1);
-
-				mat4.rotate(mat,mat,Math.PI*angle/180,axis);
-			}
-			else if(all[j + 2].tagName == 'SCALE')
-			{
-				var array = new Array();
-				array.push(this.reader.getFloat(all[j + 2], 'sx', 1));
-				array.push(this.reader.getFloat(all[j + 2], 'sy', 1));
-				array.push(this.reader.getFloat(all[j + 2], 'sz', 1)); 
-
-				mat4.scale(mat,mat,array);
-			}
-
-		}
-
-		var newNode = new Node(node['id'], node['materialID'], node['textureID'], mat, desc);
-
-		this.XMLnodes.push(newNode);
-
+		this.readNode(nodes[i]);
 	}
 
+};
+
+MySceneGraph.prototype.readNode = function(nodeTag) {
+
+	node = [];
+
+	node['id'] = this.reader.getString(nodeTag, 'id', 1);
+	
+	var allAtributes = nodeTag.getElementsByTagName('*');
+	node['materialID'] = this.reader.getString(allAtributes[0], 'id', 1);
+	node['textureID'] = this.reader.getString(allAtributes[1], 'id', 1);
+	
+	if(nodeTag.getElementsByTagName('DESCENDANTS') == null){
+		return "DESCENDANTS tag is missing.";
+	}
+	var descendants = nodeTag.getElementsByTagName('DESCENDANT');
+	
+	var k, desc = [];
+	for(k=0; k < descendants.length;k++){
+		desc.push(this.reader.getString(descendants[k], 'id', 1));
+	}
+
+
+	var numTransformations = allAtributes.length - (2 + 1);
+	var mat = mat4.create();
+	this.readNodeTransformations(numTransformations, allAtributes, mat);
+
+	var newNode = new Node(node['id'], node['materialID'], node['textureID'], mat, desc);
+
+	this.XMLnodes.push(newNode);
+}
+
+MySceneGraph.prototype.readNodeTransformations = function(numTransformations, allAtributes, mat) {
+
+	for(j = 0; j < numTransformations; j++){
+
+		if(allAtributes[j + 2].tagName == 'TRANSLATION')
+		{
+			var x,y,z;
+			x= this.reader.getFloat(allAtributes[j + 2], 'x', 1);
+			y= this.reader.getFloat(allAtributes[j + 2], 'y', 1);
+			z= this.reader.getFloat(allAtributes[j + 2], 'z', 1);
+
+			mat4.translate(mat,mat,[x,y,z]);
+		}
+		else if(allAtributes[j + 2].tagName == 'ROTATION')
+		{
+			var axis,angle;
+
+			if(this.reader.getString(allAtributes[j + 2], 'axis', 1) == 'x')
+				axis= new Array(1,0,0);
+			else if(this.reader.getString(allAtributes[j + 2], 'axis', 1) == 'y')
+				axis= new Array(0,1,0);
+			else if(this.reader.getString(allAtributes[j + 2], 'axis', 1) == 'z')
+					axis= new Array(0,0,1);
+			else return "Error on node id: "+node['id']+" rotation AXIS!!";
+
+			angle = this.reader.getFloat(allAtributes[j + 2],'angle',1);
+
+			mat4.rotate(mat,mat,Math.PI*angle/180,axis);
+		}
+		else if(allAtributes[j + 2].tagName == 'SCALE')
+		{
+			var array = new Array();
+			array.push(this.reader.getFloat(allAtributes[j + 2], 'sx', 1));
+			array.push(this.reader.getFloat(allAtributes[j + 2], 'sy', 1));
+			array.push(this.reader.getFloat(allAtributes[j + 2], 'sz', 1)); 
+
+			mat4.scale(mat,mat,array);
+		}
+	}
 };
 
 MySceneGraph.prototype.getArgs = function(a, b, c) {
