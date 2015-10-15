@@ -11,6 +11,7 @@ XMLscene.prototype.init = function (application) {
 	this.initCameras();
 	this.initLights();
 
+	//este cancro tem que ser alterado
 	this.light0=true;
 	this.light1=true;
 	this.light2=true;
@@ -207,9 +208,9 @@ XMLscene.prototype.getNode = function (nodeId){
 XMLscene.prototype.applyMaterial = function(materialID) {
 	var i;
 	for(i = 0; i < this.materials.length; i++) {
-		if(this.materials[i]['id'] == materialID)
+		if(this.materials[i].id == materialID)
 		{
-			this.materials[i]['material'].apply();
+			this.materials[i].apply();
 			break;
 		}
 	}
