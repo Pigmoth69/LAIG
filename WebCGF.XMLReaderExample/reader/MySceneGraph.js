@@ -182,10 +182,10 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	background[2] = this.reader.getFloat(backgroundColor, 'b', 1);
 	background[3] = this.reader.getFloat(backgroundColor, 'a', 1);
 
-	finalAmbient[0] = this.reader.getInteger(ambient, 'r', 1);;
-	finalAmbient[1] = this.reader.getInteger(ambient, 'g', 1);;
-	finalAmbient[2] = this.reader.getInteger(ambient, 'b', 1);
-	finalAmbient[3] = this.reader.getInteger(ambient, 'a', 1);;
+	finalAmbient[0] = this.reader.getFloat(ambient, 'r', 1);;
+	finalAmbient[1] = this.reader.getFloat(ambient, 'g', 1);;
+	finalAmbient[2] = this.reader.getFloat(ambient, 'b', 1);
+	finalAmbient[3] = this.reader.getFloat(ambient, 'a', 1);;
 
 	this.LSXillumination.setBackground(background);
 	this.LSXillumination.setAmbient(finalAmbient);
