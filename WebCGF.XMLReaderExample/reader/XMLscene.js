@@ -222,8 +222,9 @@ XMLscene.prototype.applyTexture = function(textureID) {
 	for(i = 0; i < this.textures.length; i++) {
 		if(this.textures[i].id == textureID)
 		{
-			//this.textures[i].bind();
-			this.textures[i].apply();
+			//OK, faz-se o bind... e então quando se faz o unbind?
+			this.textures[i].bind();
+			//this.textures[i].apply();
 			//this.textures[i].bind();
 			break;
 		}
