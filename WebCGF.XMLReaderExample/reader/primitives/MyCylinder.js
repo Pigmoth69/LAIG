@@ -74,7 +74,7 @@ MyCylinder.prototype.initBuffers = function() {
 	//lateral surface
 	for (var stack = 0; stack < this.stacks + 1; stack++)
 	{
-		for (var slice = 0; slice < this.slices; slice++)
+		for (var slice = 0; slice < this.slices + 1; slice++)
 		{
 			this.vertices.push(currentRadius*Math.cos(slice * angle), currentRadius*Math.sin(slice * angle),this.height*stack/this.stacks);
 			this.normals.push(Math.cos(slice * angle), Math.sin(slice * angle),0);
@@ -90,19 +90,10 @@ MyCylinder.prototype.initBuffers = function() {
 
 	for (var stack = 0; stack < this.stacks; stack++)
 	{
-		for (var slice = 0; slice < this.slices; slice++)
+		for (var slice = 0; slice < this.slices+1; slice++)
 		{
-			
-			if (slice == this.slices - 1)
-			{
-				this.indices.push(stack * this.slices + slice + numVertex,  stack * this.slices + slice + 1 - this.slices + numVertex, (stack + 1) * this.slices + slice + 1 - this.slices + numVertex);
-				this.indices.push(stack * this.slices + slice + numVertex, stack * this.slices + slice + 1 + numVertex, (stack + 1) * this.slices + slice + numVertex);
-			}
-			else
-			{
-				this.indices.push(stack * this.slices + slice + numVertex, stack * this.slices + slice + 1 + numVertex, (stack + 1) * this.slices + slice + 1 + numVertex);
-				this.indices.push(stack * this.slices + slice + numVertex, (stack + 1) * this.slices + slice + 1 + numVertex, (stack + 1) * this.slices + slice + numVertex);
-			}
+			this.indices.push(stack * this.slices + slice + numVertex, stack * this.slices + slice + 1 + numVertex, (stack + 1) * this.slices + slice + 1 + numVertex);
+			this.indices.push(stack * this.slices + slice + numVertex, (stack + 1) * this.slices + slice + 1 + numVertex, (stack + 1) * this.slices + slice + numVertex);
 		}
 	}
 

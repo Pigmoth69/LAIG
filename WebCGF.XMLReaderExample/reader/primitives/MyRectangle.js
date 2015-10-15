@@ -5,32 +5,15 @@
  function MyRectangle(scene, args) {
  	CGFobject.call(this,scene);
  	
+ 	this.args = args;
 
- 	this.vertices = [
- 		args[0], args[1], 0,	//upper-left
- 		args[0], args[3], 0,	//lower-left
- 		args[2], args[3], 0,	//lower-right
- 		args[2], args[1], 0 	//upper-right
- 	];
+ 	this.vertices = [];
  	
- 	this.indices = [
-		0, 1, 2,
-		0, 2, 3
- 	];
+ 	this.indices = [];
  	
- 	this.normals = [
-		0, 0, 1,
-		0, 0, 1,
-		0, 0, 1,
-		0, 0, 1
- 	];
+ 	this.normals = [];
 	
-	this.texCoords = [
-      0, 0,
-      0, 1,
-      1, 1,
-      1, 0
-	];
+	this.texCoords = [];
  	
  	this.initBuffers();
  };
@@ -51,6 +34,33 @@ MyRectangle.prototype.updateTextCoords = function(ampS,ampT){
 }
  MyRectangle.prototype.initBuffers = function() {
  
+ 	this.vertices = [
+ 		this.args[0], this.args[1], 0,	//upper-left
+ 		this.args[0], this.args[3], 0,	//lower-left
+ 		this.args[2], this.args[3], 0,	//lower-right
+ 		this.args[2], this.args[1], 0 	//upper-right
+ 	];
+ 	
+ 	this.indices = [
+		0, 1, 2,
+		0, 2, 3
+ 	];
+ 	
+ 	this.normals = [
+		0, 0, 1,
+		0, 0, 1,
+		0, 0, 1,
+		0, 0, 1
+ 	];
+	
+	this.texCoords = [
+      0, 0,
+      0, 1,
+      1, 1,
+      1, 0
+	];
+
+
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
