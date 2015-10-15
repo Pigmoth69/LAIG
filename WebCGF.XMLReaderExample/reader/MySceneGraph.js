@@ -236,13 +236,10 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 		var amplif_factor = info[i].getElementsByTagName('amplif_factor');
 		texture['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
 
-		var newTexture = [];
-		newTexture['id'] = texture['id'];
-		newTexture['texture'] = new CGFappearance(this.scene);
-		newTexture['texture'].loadTexture(texture['path']);
-		newTexture['texture'].setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
+		var newTexture;
+		newTexture = new Texture(this.scene, texture['path'], texture['id']);
+		newTexture.setAmpFactor(texture['amplif_factor'][0],texture['amplif_factor'][0])
 
-		console.log(newTexture['texture']);
 		this.scene.textures.push(newTexture);
 
 	}

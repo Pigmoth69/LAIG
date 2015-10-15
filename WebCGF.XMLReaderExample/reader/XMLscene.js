@@ -220,9 +220,11 @@ XMLscene.prototype.applyTexture = function(textureID) {
 	var i;
 
 	for(i = 0; i < this.textures.length; i++) {
-		if(this.textures[i]['id'] == textureID)
+		if(this.textures[i].id == textureID)
 		{
-			this.textures[i]['texture'].apply();
+			//this.textures[i].bind();
+			this.textures[i].apply();
+			//this.textures[i].bind();
 			break;
 		}
 	}
