@@ -51,3 +51,7 @@
  	this.initGLBuffers();
 
 };
+
+MySphere.prototype.updateTextCoords = function(ampS,ampT){
+	this.updateTexCoordsGLBuffers();
+};

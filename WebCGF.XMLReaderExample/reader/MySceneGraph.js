@@ -324,13 +324,33 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 	var i;
 
 	for(i = 0; i < leaves.length; i++){
-		var leaf = [];
-		leaf['id'] = this.reader.getString(leaves[i], 'id', 1);
-		leaf['type'] = this.reader.getString(leaves[i], 'type', 1);
-		leaf['args'] = this.getArgs(leaves[i], 'args', 1);
+
+		var id = this.reader.getString(leaves[i], 'id', 1);
+		var type = this.reader.getString(leaves[i], 'type', 1);
+		var args = this.getArgs(leaves[i], 'args', 1);
 		
-		this.XMLleaves.push(leaf);
-	}
+		var object = [];
+
+		if(type == "rectangle"){
+			object['id'] = id;
+			object['object'] = new MyRectangle(this.scene, args);
+		}
+		else if(type == "sphere") {
+			object['id'] = id;
+			object['object'] = new MySphere(this.scene, args);
+		}
+		else if(type == "cylinder"){
+			object['id'] = id;
+			object['object'] = new MyCylinder(this.scene, args);
+		}
+		else if(type == "triangle"){
+			object['id'] = id;
+			object['object'] = new MyTriangle(this.scene, args);
+		}
+		else return "ERROR: unexistent leaf type.";
+		
+		this.scene.leaves.push(object);
+	} 
 
 	return 0;
 };
@@ -357,7 +377,6 @@ MySceneGraph.prototype.parseNodes= function(rootElement) {
 	for(i = 0; i < nodes.length; i++){
 		this.readNode(nodes[i]);
 	}
-
 };
 
 MySceneGraph.prototype.readNode = function(nodeTag) {
@@ -366,9 +385,9 @@ MySceneGraph.prototype.readNode = function(nodeTag) {
 
 	node['id'] = this.reader.getString(nodeTag, 'id', 1);
 	
-	var allAtributes = nodeTag.getElementsByTagName('*');
-	node['materialID'] = this.reader.getString(allAtributes[0], 'id', 1);
-	node['textureID'] = this.reader.getString(allAtributes[1], 'id', 1);
+	var nodeInfo = nodeTag.getElementsByTagName('*');
+	node['materialID'] = this.reader.getString(nodeInfo[0], 'id', 1);
+	node['textureID'] = this.reader.getString(nodeInfo[1], 'id', 1);
 	
 	if(nodeTag.getElementsByTagName('DESCENDANTS') == null){
 		return "DESCENDANTS tag is missing.";
@@ -381,50 +400,50 @@ MySceneGraph.prototype.readNode = function(nodeTag) {
 	}
 
 
-	var numTransformations = allAtributes.length - (2 + 1);
+	var numTransformations = nodeInfo.length - (2 + 1);
 	var mat = mat4.create();
-	this.readNodeTransformations(numTransformations, allAtributes, mat);
+	this.readNodeTransformations(numTransformations, nodeInfo, mat);
 
 	var newNode = new Node(node['id'], node['materialID'], node['textureID'], mat, desc);
 
 	this.XMLnodes.push(newNode);
 }
 
-MySceneGraph.prototype.readNodeTransformations = function(numTransformations, allAtributes, mat) {
+MySceneGraph.prototype.readNodeTransformations = function(numTransformations, nodeInfo, mat) {
 
 	for(j = 0; j < numTransformations; j++){
 
-		if(allAtributes[j + 2].tagName == 'TRANSLATION')
+		if(nodeInfo[j + 2].tagName == 'TRANSLATION')
 		{
 			var x,y,z;
-			x= this.reader.getFloat(allAtributes[j + 2], 'x', 1);
-			y= this.reader.getFloat(allAtributes[j + 2], 'y', 1);
-			z= this.reader.getFloat(allAtributes[j + 2], 'z', 1);
+			x= this.reader.getFloat(nodeInfo[j + 2], 'x', 1);
+			y= this.reader.getFloat(nodeInfo[j + 2], 'y', 1);
+			z= this.reader.getFloat(nodeInfo[j + 2], 'z', 1);
 
 			mat4.translate(mat,mat,[x,y,z]);
 		}
-		else if(allAtributes[j + 2].tagName == 'ROTATION')
+		else if(nodeInfo[j + 2].tagName == 'ROTATION')
 		{
 			var axis,angle;
 
-			if(this.reader.getString(allAtributes[j + 2], 'axis', 1) == 'x')
+			if(this.reader.getString(nodeInfo[j + 2], 'axis', 1) == 'x')
 				axis= new Array(1,0,0);
-			else if(this.reader.getString(allAtributes[j + 2], 'axis', 1) == 'y')
+			else if(this.reader.getString(nodeInfo[j + 2], 'axis', 1) == 'y')
 				axis= new Array(0,1,0);
-			else if(this.reader.getString(allAtributes[j + 2], 'axis', 1) == 'z')
+			else if(this.reader.getString(nodeInfo[j + 2], 'axis', 1) == 'z')
 					axis= new Array(0,0,1);
 			else return "Error on node id: "+node['id']+" rotation AXIS!!";
 
-			angle = this.reader.getFloat(allAtributes[j + 2],'angle',1);
+			angle = this.reader.getFloat(nodeInfo[j + 2],'angle',1);
 
 			mat4.rotate(mat,mat,Math.PI*angle/180,axis);
 		}
-		else if(allAtributes[j + 2].tagName == 'SCALE')
+		else if(nodeInfo[j + 2].tagName == 'SCALE')
 		{
 			var array = new Array();
-			array.push(this.reader.getFloat(allAtributes[j + 2], 'sx', 1));
-			array.push(this.reader.getFloat(allAtributes[j + 2], 'sy', 1));
-			array.push(this.reader.getFloat(allAtributes[j + 2], 'sz', 1)); 
+			array.push(this.reader.getFloat(nodeInfo[j + 2], 'sx', 1));
+			array.push(this.reader.getFloat(nodeInfo[j + 2], 'sy', 1));
+			array.push(this.reader.getFloat(nodeInfo[j + 2], 'sz', 1)); 
 
 			mat4.scale(mat,mat,array);
 		}

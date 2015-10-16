@@ -39,9 +39,7 @@ XMLscene.prototype.init = function (application) {
     
 
 	this.axis=new CGFaxis(this);
-	
 };
-
 
 XMLscene.prototype.initLights = function () {};
 
@@ -56,16 +54,12 @@ XMLscene.prototype.setDefaultAppearance = function () {
 	this.defaultAppearance.setSpecular(1, 0, 0, 1);
 	this.defaultAppearance.setEmission(1, 0, 0, 1);
 	this.defaultAppearance.setShininess(2);
-
 };
 
-
-XMLscene.prototype.onGraphLoaded = function () 
-{
+XMLscene.prototype.onGraphLoaded = function () {
 	this.loadInitials();
 	this.loadIllumination();
-	this.loadLights(); 
-	this.loadLeaves();
+	this.loadLights();
 };
 
 XMLscene.prototype.loadInitials = function () {
@@ -105,33 +99,6 @@ XMLscene.prototype.updateLights = function (){
 	}
 };
 
-XMLscene.prototype.loadLeaves = function (){
-	var i;
-	for(i = 0; i < this.graph.XMLleaves.length; i++){
-
-		var object = [];
-
-			if(this.graph.XMLleaves[i]['type'] == "rectangle"){
-				object['id'] = this.graph.XMLleaves[i]['id'];
-				object['object'] = new MyRectangle(this, this.graph.XMLleaves[i]['args']);
-			}
-			else if(this.graph.XMLleaves[i]['type'] == "sphere") {
-				object['id'] = this.graph.XMLleaves[i]['id'];
-				object['object'] = new MySphere(this, this.graph.XMLleaves[i]['args']);
-			}
-			else if(this.graph.XMLleaves[i]['type'] == "cylinder"){
-				object['id'] = this.graph.XMLleaves[i]['id'];
-				object['object'] = new MyCylinder(this, this.graph.XMLleaves[i]['args']);
-			}
-			else if(this.graph.XMLleaves[i]['type'] == "triangle"){
-				object['id'] = this.graph.XMLleaves[i]['id'];
-				object['object'] = new MyTriangle(this, this.graph.XMLleaves[i]['args']);
-			}
-			
-			this.leaves.push(object);
-		} 
-};
-
 XMLscene.prototype.reloadScene = function () {
 	this.pushMatrix();
 
@@ -160,10 +127,10 @@ XMLscene.prototype.loadNode = function (node_id) {
 	this.pushMatrix();
 	this.multMatrix(newNode.matrix);
 
-	if(newNode.material['id'] != 'none' || newNode.material['id'] != 'null')
+	if(newNode.material != 'none' || newNode.material != 'null')
 		this.applyMaterial(newNode.material);
 
-	if(newNode.texture['id'] != 'none' || newNode.texture['id'] != 'null')
+	if(newNode.texture != 'none' || newNode.texture != 'null')
 		this.applyTexture(newNode.texture);
 	
 	for(i = 0; i < newNode.getDescendents().length; i++){
@@ -183,7 +150,7 @@ XMLscene.prototype.loadNode = function (node_id) {
 
 XMLscene.prototype.getLeaf = function (nodeId){
 
-	for(i = 0; i < this.graph.XMLleaves.length;i++){
+	for(i = 0; i < this.leaves.length;i++){
 		if(this.leaves[i]['id'] == nodeId)
 			return this.leaves[i];
 	}
@@ -216,10 +183,7 @@ XMLscene.prototype.applyTexture = function(textureID) {
 	for(i = 0; i < this.textures.length; i++) {
 		if(this.textures[i].id == textureID)
 		{
-			//OK, faz-se o bind... e então quando se faz o unbind() ?
 			this.textures[i].bind();
-			//this.textures[i].apply();
-			//this.textures[i].bind();
 			break;
 		}
 	}
