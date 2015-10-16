@@ -30,7 +30,8 @@ MyTriangle.prototype.updateTextCoords = function(ampS,ampT){
 	];
 
 	this.updateTexCoordsGLBuffers();
-}
+};
+
 MyTriangle.prototype.initBuffers = function() {
 	
 	this.vertices = [

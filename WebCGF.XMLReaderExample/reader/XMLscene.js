@@ -110,11 +110,11 @@ XMLscene.prototype.reloadScene = function () {
     this.defaultAppearance.apply();
 
 	var root = this.graph.rootID;
-	this.loadNode(root);
+	this.loadNode(root, 'default', 'clear');
 	this.popMatrix();
 }; 
 
-XMLscene.prototype.loadNode = function (node_id) {
+XMLscene.prototype.loadNode = function (node_id, materialID, textureID) {
 	
 	var i,newNode;
 	
@@ -127,11 +127,20 @@ XMLscene.prototype.loadNode = function (node_id) {
 	this.pushMatrix();
 	this.multMatrix(newNode.matrix);
 
-	if(newNode.material != 'none' || newNode.material != 'null')
-		this.applyMaterial(newNode.material);
+	var newMaterialID = materialID;
+	var newTextureID = textureID;
+	
+	
+	if(newNode.material == 'clear')
+		newMaterialID = 'default';
+	else if(newNode.material != 'null')
+		newMaterialID = newNode.material;
 
-	if(newNode.texture != 'none' || newNode.texture != 'null')
-		this.applyTexture(newNode.texture);
+	if(newNode.texture == 'clear')
+		newTextureID = 'clear';
+	else if(newNode.texture != 'null')
+		newTextureID = newNode.texture;
+
 	
 	for(i = 0; i < newNode.getDescendents().length; i++){
 		
@@ -139,9 +148,9 @@ XMLscene.prototype.loadNode = function (node_id) {
 		
 		var l = this.getLeaf(desc_id);
 		if(l != null)
-			l['object'].display();
+			this.displayLeaf(l['object'], newMaterialID, newTextureID);
 		else
-			this.loadNode(desc_id);
+			this.loadNode(desc_id, newMaterialID, newTextureID);
 
 	}
 
@@ -166,8 +175,24 @@ XMLscene.prototype.getNode = function (nodeId){
 	return null
 };
 
+XMLscene.prototype.displayLeaf = function(object, materialID, textureID) {
+	this.applyMaterial(materialID);
+	var amp = this.applyTexture(textureID);
+
+	if(textureID == 'clear')
+		object.updateTextCoords(1, 1);
+	else
+		object.updateTextCoords(amp[0], amp[1]);
+	
+	object.display();
+};
+
 XMLscene.prototype.applyMaterial = function(materialID) {
 	var i;
+
+	if(materialID == 'default')
+		this.defaultAppearance.apply();
+
 	for(i = 0; i < this.materials.length; i++) {
 		if(this.materials[i].id == materialID)
 		{
@@ -183,8 +208,8 @@ XMLscene.prototype.applyTexture = function(textureID) {
 	for(i = 0; i < this.textures.length; i++) {
 		if(this.textures[i].id == textureID)
 		{
-			this.textures[i].bind();
-			break;
+			this.textures[i].apply();
+			return [this.textures[i].amplifyFactor.ampS, this.textures[i].amplifyFactor.ampT];
 		}
 	}
 };

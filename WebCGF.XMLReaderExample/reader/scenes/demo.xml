@@ -22,8 +22,8 @@
 	    <LIGHT id="L1">                              
 	        <enable value="1" />                       
 	        <position x="0" y="0" z="3" w="1" />      
-	        <ambient r="0.5" g="0.5" b="0.5" a="1" />       
-	        <diffuse r="0.9" g="0.9" b="0.9" a="1" />     
+	        <ambient r="1" g="1" b="1" a="1" />       
+	        <diffuse r="1" g="1" b="1" a="1" />     
 	        <specular r="0.9" g="0.9" b="0.9" a="1" />    
 		</LIGHT>
 	    
@@ -32,8 +32,8 @@
 
 	<TEXTURES>  
 		<TEXTURE id="telhado">
-			<file path="./textures/bola-basket.jpg" />
-			<amplif_factor s="1" t="1" /> 
+			<file path="./textures/telhado.jpg" />
+			<amplif_factor s="1" t="1.2" /> 
 		</TEXTURE>
 	</TEXTURES> 
 

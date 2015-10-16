@@ -260,7 +260,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
 
 		var newTexture = new Texture(this.scene, textureInfo['path'], textureInfo['id']);
-		newTexture.setAmpFactor(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][0])
+		newTexture.setAmpFactor(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][1])
 
 		this.scene.textures.push(newTexture);
 	}
