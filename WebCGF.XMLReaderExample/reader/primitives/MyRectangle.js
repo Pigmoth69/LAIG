@@ -56,12 +56,13 @@ MyRectangle.prototype.initBuffers = function() {
 
 MyRectangle.prototype.updateTextCoords = function(ampS,ampT){
 
-	this.textCoords=[
+	this.texCoords=[
 		0,0,
 		0,1/ampT,
 		1/ampS,1/ampT,
 		1/ampS,0
 	];
 
+	//console.log(this.texCoords);
 	this.updateTexCoordsGLBuffers();
 };

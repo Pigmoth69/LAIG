@@ -60,7 +60,5 @@ Node.prototype.setNode = function(id,material,texture,matrix,descendents){
 	this.setTexture(texture);
 	this.setMatrix(matrix);
 	this.setDescendents(descendents);
-
-
 }
 

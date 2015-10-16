@@ -121,36 +121,35 @@ XMLscene.prototype.loadNode = function (node_id, materialID, textureID) {
 	newNode = this.getNode(node_id);
 	
 	if(newNode==null){
-		console.log("The node is null!! " + node_id);
+		console.log("The node is null : " + node_id);
 		return;
 	}
+
 	this.pushMatrix();
 	this.multMatrix(newNode.matrix);
 
-	var newMaterialID = materialID;
-	var newTextureID = textureID;
-	
-	
 	if(newNode.material == 'clear')
-		newMaterialID = 'default';
+		materialID = 'default';
 	else if(newNode.material != 'null')
-		newMaterialID = newNode.material;
+		materialID = newNode.material;
 
-	if(newNode.texture == 'clear')
-		newTextureID = 'clear';
-	else if(newNode.texture != 'null')
-		newTextureID = newNode.texture;
+	if(newNode.texture != 'null')
+		textureID = newNode.texture;
+	else if (newNode.texture == 'clear')
+	{
+		this.unbindTexture(textureID);
+		textureID = 'clear';
+	}
 
-	
 	for(i = 0; i < newNode.getDescendents().length; i++){
 		
 		var desc_id = newNode.getDescendents()[i];
 		
 		var l = this.getLeaf(desc_id);
 		if(l != null)
-			this.displayLeaf(l['object'], newMaterialID, newTextureID);
+			this.displayLeaf(l['object'], materialID, textureID);
 		else
-			this.loadNode(desc_id, newMaterialID, newTextureID);
+			this.loadNode(desc_id, materialID, textureID);
 
 	}
 
@@ -177,26 +176,40 @@ XMLscene.prototype.getNode = function (nodeId){
 
 XMLscene.prototype.displayLeaf = function(object, materialID, textureID) {
 	this.applyMaterial(materialID);
-	var amp = this.applyTexture(textureID);
-
+	
 	if(textureID == 'clear')
 		object.updateTextCoords(1, 1);
-	else
+	else {
+		var amp = this.applyTexture(textureID);
 		object.updateTextCoords(amp[0], amp[1]);
-	
+	}
 	object.display();
 };
 
 XMLscene.prototype.applyMaterial = function(materialID) {
 	var i;
 
-	if(materialID == 'default')
+	if(materialID == 'default'){
 		this.defaultAppearance.apply();
+		return;
+	}
 
 	for(i = 0; i < this.materials.length; i++) {
 		if(this.materials[i].id == materialID)
 		{
 			this.materials[i].apply();
+			break;
+		}
+	}
+};
+
+XMLscene.prototype.unbindTexture = function(textureID) {
+	var i;
+
+	for(i = 0; i < this.textures.length; i++) {
+		if(this.textures[i].id == textureID)
+		{
+			this.textures[i].unbind();
 			break;
 		}
 	}
@@ -208,7 +221,7 @@ XMLscene.prototype.applyTexture = function(textureID) {
 	for(i = 0; i < this.textures.length; i++) {
 		if(this.textures[i].id == textureID)
 		{
-			this.textures[i].apply();
+			this.textures[i].bind();
 			return [this.textures[i].amplifyFactor.ampS, this.textures[i].amplifyFactor.ampT];
 		}
 	}

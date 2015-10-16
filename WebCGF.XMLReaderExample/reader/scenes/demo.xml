@@ -33,7 +33,7 @@
 	<TEXTURES>  
 		<TEXTURE id="telhado">
 			<file path="./textures/telhado.jpg" />
-			<amplif_factor s="1" t="1.2" /> 
+			<amplif_factor s="1" t="2" /> 
 		</TEXTURE>
 	</TEXTURES> 
 
