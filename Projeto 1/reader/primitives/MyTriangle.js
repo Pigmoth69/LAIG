@@ -25,8 +25,8 @@ MyTriangle.prototype.constructor = MyTriangle;
 MyTriangle.prototype.updateTextCoords = function(ampS,ampT){
 	this.texCoords=[
 		this.originalTexCoords[0]/ampS, this.originalTexCoords[1]/ampT,
-		0, 0,
-		this.originalTexCoords[4]/ampS, 0
+		this.originalTexCoords[2]/ampS, this.originalTexCoords[3]/ampT,
+		this.originalTexCoords[4]/ampS, this.originalTexCoords[5]/ampT
 	];
 
 	this.updateTexCoordsGLBuffers();
@@ -60,15 +60,13 @@ MyTriangle.prototype.initBuffers = function() {
     ];
 
    
-   	var cosB = (vec3.sqrLen(p1p3) - vec3.sqrLen(p1p2) + vec3.sqrLen(p2p3)) / (2 * vec3.length(p1p3) * vec3.length(p2p3));
-	var sinB = Math.sqrt(vec3.sqrLen(p1p3) - Math.pow(vec3.length(p1p3) * cosB, 2));
-	var sCoords = (vec3.length(p2p3) - vec3.length(p1p3) * cosB) / vec3.length(p2p3);
-	var tCoords = (vec3.length(p1p3)*sinB) / vec3.length(p2p3);
+	var tCoords = (vec3.sqrLen(p1p2) + vec3.sqrLen(p1p3) - vec3.sqrLen(p2p3))/ (2 * vec3.length(p1p2));
+	var sCoords = Math.sqrt(vec3.sqrLen(p1p3) - tCoords * tCoords);
 	
 	this.originalTexCoords = [
-		sCoords, tCoords,
 		0, 0,
-		1, 0
+		vec3.length(p1p2), 0,
+		sCoords, tCoords
 	];
 
 	this.texCoords = this.originalTexCoords;

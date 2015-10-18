@@ -63,27 +63,10 @@
 			<MATERIAL id="default" />             
 			<TEXTURE id="null" />       
 			<DESCENDANTS> 
-				<DESCENDANT id="house" />
-				<DESCENDANT id="garden" />
-				<DESCENDANT id="border" />
-				<DESCENDANT id="underground" />
-				<DESCENDANT id="tree" />
-				<DESCENDANT id="lamps" />
+				<DESCENDANT id="RECT" />
 			</DESCENDANTS>
 		</NODE>
 		
-	<!--	<NODE id="house">       
-			<MATERIAL id="null" />             
-			<TEXTURE id="null" />       
-			<DESCENDANTS> 
-				<DESCENDANT id="walls" />
-				<DESCENDANT id="door" />
-				<DESCENDANT id="windows" />
-				<DESCENDANT id="rooftop" />
-				<DESCENDANT id="gate" />
-			</DESCENDANTS>
-		</NODE>
-		-->
 
 		
 	</NODES>

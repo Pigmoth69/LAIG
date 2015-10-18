@@ -77,7 +77,7 @@
 
     <!-- Glass work -->
     <TEXTURE id="vidral">
-        <file path="images/vidral.jpg" />               
+        <file path="images/vidral.jpg" /> 
         <amplif_factor s="15" t="10" />                           
     </TEXTURE>
 
