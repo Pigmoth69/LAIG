@@ -49,11 +49,11 @@ MyInterface.prototype.init = function(application) {
 MyInterface.prototype.loadInterfaceLigths = function(){
     var group = this.gui.addFolder('Lights');
     group.open();
-    var save = this;
+    var save = this.scene;
 	for(key in this.scene.graph.lightsStateValue){
 	    var action = group.add(this.scene.graph.lightsStateValue,key);
 	    action.onChange(function(value) {
-	    	save.scene.changeLight(this.property, value);
+	    	save.changeLight(this.property, value);
 	    });
 	}
 };
