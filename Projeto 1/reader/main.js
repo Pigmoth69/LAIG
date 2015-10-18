@@ -21,12 +21,15 @@ main=function()
 {
   var app = new CGFapplication(document.body);
   var myScene = new LSXscene();
-  var myInterface = new CGFinterface(myScene);
+  var myInterface = new MyInterface(myScene);
 
   app.init();
 
-  app.setScene(myScene);
   app.setInterface(myInterface);
+  app.setScene(myScene);
+
+  myScene.setInterface(myInterface);
+  myInterface.setScene(myScene);
 
   myInterface.setActiveCamera(myScene.camera);
 
