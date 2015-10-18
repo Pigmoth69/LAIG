@@ -8,14 +8,14 @@ LSXscene.prototype.constructor = LSXscene;
 LSXscene.prototype.init = function (application) { 
     CGFscene.prototype.init.call(this, application);
 	this.initCameras();
-	this.interface=null;
+
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
-    this.enableTextures(true); 
+    this.enableTextures(true);
 
 	this.graph = new Graph();
 
@@ -26,9 +26,6 @@ LSXscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
-LSXscene.prototype.setInterface = function (interface) {
-    this.interface=interface;
-};
 LSXscene.prototype.setDefaultAppearance = function () {
    	this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -40,7 +37,6 @@ LSXscene.prototype.onGraphLoaded = function () {
 	this.loadInitials();
 	this.loadIllumination();
 	this.loadLights();
-	this.interface.loadInterfaceLigths();
 };
 
 LSXscene.prototype.loadInitials = function () {
@@ -56,8 +52,8 @@ LSXscene.prototype.loadIllumination = function() {
 
 LSXscene.prototype.loadLights = function (){
 	for(var i = 0; i < this.graph.lights.length; ++i) {
-		this.graph.lightsStateValue[this.graph.lights[i].id]=this.graph.lights[i].enabled;
 		this.lights[i] = this.graph.lights[i];
+		this.graph.lightsStateValue[i] = this.graph.lights[i].enabled;
 	}
 };
 
@@ -65,8 +61,7 @@ LSXscene.prototype.updateLights = function (){
 	for(var i = 0; i < this.graph.lights.length; i++){
 		if(this.graph.lights[i].enabled)
 			this.lights[i].enable();
-		else 
-			this.lights[i].disable();
+		else this.lights[i].disable();
 
 		this.lights[i].update();
 	}
@@ -97,7 +92,7 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 
 		if (texture != null)
 			texture.unbind();
-		
+
 		return;
 	}
 
@@ -119,12 +114,6 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 	this.popMatrix();
 };
 
-LSXscene.prototype.changeLight = function (lightid,value) {
-	for(var i = 0; i < this.lights.length;i++){
-		if(this.lights[i].id == lightid)
-			this.lights[i].enabled=value;
-	}
-}
 
 LSXscene.prototype.display = function () {
 
@@ -146,7 +135,6 @@ LSXscene.prototype.display = function () {
 		
 		this.updateLights();
 		this.displayScene();
-
 	}
 	
 	this.shader.unbind(); 
