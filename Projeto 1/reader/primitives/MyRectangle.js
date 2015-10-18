@@ -5,15 +5,12 @@
 function MyRectangle(scene, args) {
 	CGFobject.call(this,scene);
 	
-	this.args = args;
+	this.x1 = args[0];
+    this.y1 = args[1];
+    
+    this.x2 = args[2];
+    this.y2 = args[3];
 
-	this.vertices = [];
-	
-	this.indices = [];
-	
-	this.normals = [];
-
-	this.texCoords = [];
 	
 	this.initBuffers();
 };
@@ -24,10 +21,10 @@ MyRectangle.prototype.constructor = MyRectangle;
 MyRectangle.prototype.initBuffers = function() {
 
 	this.vertices = [
-	this.args[0], this.args[1], 0,	//upper-left
-	this.args[0], this.args[3], 0,	//lower-left
-	this.args[2], this.args[3], 0,	//lower-right
-	this.args[2], this.args[1], 0 	//upper-right
+ 		this.x1, this.y2, 0,
+    	this.x2, this.y2, 0,
+    	this.x2, this.y1, 0,
+    	this.x1, this.y1, 0
 	];
 
 	this.indices = [
@@ -42,26 +39,25 @@ MyRectangle.prototype.initBuffers = function() {
 	0, 0, 1
 	];
 
-	this.texCoords = [
-	0, 0,
-	0, 1,
-	1, 1,
-	1, 0
-	];
+	 this.nonScaledTexCoords = [
+    	0, this.y1-this.y2,
+    	this.x2-this.x1, this.y1-this.y2,
+    	this.x2-this.x1, 0,
+    	0, 0
+    ];
 
-
+	this.texCoords = this.nonScaledTexCoords.slice(0);
+	
 	this.primitiveType = this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
 };
 
 MyRectangle.prototype.updateTextCoords = function(ampS,ampT){
 
-	this.texCoords=[
-		0,0,
-		0,1/ampT,
-		1/ampS,1/ampT,
-		1/ampS,0
-	];
+	for (var i = 0; i < this.texCoords.length; i += 2) {
+		this.texCoords[i] = this.nonScaledTexCoords[i] / ampS;
+		this.texCoords[i + 1] = this.nonScaledTexCoords[i+1] / ampT;
+	}
 
 	this.updateTexCoordsGLBuffers();
 };

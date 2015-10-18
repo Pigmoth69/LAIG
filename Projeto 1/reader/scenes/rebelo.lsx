@@ -246,19 +246,19 @@
 			<ROTATION axis="x" angle="0" />
 			<SCALE sx="0.9" sy="0.9" sz="0.9" />
 			<DESCENDANTS>
-				<DESCENDANT id="car_side_x-" />
-				<DESCENDANT id="car_side_x+" />
-				<DESCENDANT id="car_windshield" />
-				<DESCENDANT id="car_windshield_back" />
-				<DESCENDANT id="car_top" />
-				<DESCENDANT id="car_hood_front" />
-				<DESCENDANT id="car_hood_back" />
-				<DESCENDANT id="car_front" />
-				<DESCENDANT id="car_back" />
 				<DESCENDANT id="car_wheel_F_L" />
 				<DESCENDANT id="car_wheel_F_R" />
 				<DESCENDANT id="car_wheel_B_L" />
 				<DESCENDANT id="car_wheel_B_R" />
+				<DESCENDANT id="car_back" />
+				<DESCENDANT id="car_windshield_back" />
+				<DESCENDANT id="car_hood_back" />
+				<DESCENDANT id="car_side_x+" />
+				<DESCENDANT id="car_side_x-" />
+				<DESCENDANT id="car_windshield" />
+				<DESCENDANT id="car_top" />
+				<DESCENDANT id="car_hood_front" />
+				<DESCENDANT id="car_front" />
 			</DESCENDANTS>
 		</NODE>
 		<!-- ~~~~~~ -->

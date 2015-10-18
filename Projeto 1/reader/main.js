@@ -11,33 +11,30 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'LSXscene.js','MySceneGraph.js','MyInterface.js','./data/Light.js','./data/Texture.js','./data/Node.js','./data/Material.js','./data/Initials.js', './data/Illumination.js','./data/Graph.js','./primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js','./primitives/MyTriangle.js',
+serialInclude(['../lib/CGF.js', './parser/LSXscene.js','./parser/MySceneGraph.js','./parser/MyInterface.js',
+               './parser/Light.js','./parser/Texture.js','./parser/Node.js','./parser/Material.js',
+               './parser/Initials.js', './parser/Illumination.js','./parser/Graph.js',
+               './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
+               './primitives/MyTriangle.js',
  
 main=function()
 {
-	// Standard application, scene and interface setup
-    var app = new CGFapplication(document.body);
-    var myScene = new LSXscene();
-    var myInterface = new MyInterface(myScene);
+  var app = new CGFapplication(document.body);
+  var myScene = new LSXscene();
+  var myInterface = new CGFinterface(myScene);
 
-    app.init();
+  app.init();
 
-    app.setScene(myScene);
-    app.setInterface(myInterface);
+  app.setScene(myScene);
+  app.setInterface(myInterface);
 
-    myInterface.setActiveCamera(myScene.camera);
+  myInterface.setActiveCamera(myScene.camera);
 
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.LSX 
-	// or use "demo.LSX" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-	
-	var filename=getUrlVars()['file'] || "cidade2.lsx";
+	var filename=getUrlVars()['file'] || "jardim.lsx";
 
-	// create and load graph, and associate it to scene. 
-	// Check console for loading errors
 	var myGraph = new MySceneGraph(filename, myScene);
 	
-	// start
-    app.run();
+  app.run();
 }
 
 ]);

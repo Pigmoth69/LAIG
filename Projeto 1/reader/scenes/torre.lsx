@@ -1,0 +1,354 @@
+<SCENE>
+
+	<INITIALS>
+		<frustum near="0.1" far="500"/>                      <!-- frustum planes-->
+		<translation x="0" y="0" z="0" />                 <!-- initial translate -->
+		<rotation axis="x" angle="0" />                  <!-- initial rotation 3 -->
+		<rotation axis="y" angle="0" />                  <!-- initial rotation 2 -->
+		<rotation axis="z" angle="0" />                  <!-- initial rotation 1 -->
+		<scale sx="1" sy="1" sz="1" />                  <!-- initial scaling -->
+		<reference length="5" />                          <!-- axis length; "0" means no axis-->
+	</INITIALS>
+	
+	
+	<ILLUMINATION>
+		<ambient r="1" g="1" b="1" a="1" />            <!-- global ambient -->
+		<background r=".25" g=".25" b="0.25" a=".35" />         <!-- background color -->
+	</ILLUMINATION>
+	
+	<LIGHTS>
+		<LIGHT id="luz">                              
+        <enable value ="1" />                         
+        <position x="8" y="8.5" z="10" w="1" />      
+        <ambient r="0" g="0" b="0" a="1" />        
+        <diffuse r="1" g="1" b="1" a="1" />        
+        <specular r="1" g="1" b="1" a="1" />  
+		</LIGHT>
+
+		<LIGHT id="luz-candeeiro">                              
+        <enable value ="1" />                         
+        <position x="8" y="5.52" z="3" w="1" />      
+        <ambient r="0.1" g="0.1" b="0.1" a="1" />      
+        <diffuse r="0.1" g="0.1" b="0.1" a="1" />      
+        <specular r="1" g="1" b="1" a="1" />        
+		</LIGHT>
+
+	</LIGHTS>
+	
+	<TEXTURES>	
+	
+		<TEXTURE id="pedra-torre">
+       		<file path="Textura/torre.jpg" />            <!-- path to file -->
+        	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+    	</TEXTURE>
+
+    	<TEXTURE id="relogio">
+       		<file path="Textura/relogio1.jpg" />          <!-- path to file -->
+        	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+    	</TEXTURE>
+
+    	<TEXTURE id="relva">
+       		<file path="Textura/relva.jpg" />          <!-- path to file -->
+        	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+    	</TEXTURE>
+
+	</TEXTURES>
+	
+	<MATERIALS>
+
+		<MATERIAL id="material-geral">                                  
+        	<shininess value="120" />
+       		<specular r="1" g="1" b="1" a="1" />        <!-- specular reflection -->
+        	<diffuse r="0.5" g="0.5" b="0.5" a="1" />   <!-- diffuse reflection -->
+        	<ambient r="1" g="1" b="1" a="1" />         <!-- ambient reflection -->
+        	<emission r="0" g="0" b="0" a="0" />        <!-- emission component -->
+     	</MATERIAL>
+
+		<MATERIAL id="default1">
+			<shininess value="1" />
+        	<specular r="0.0" g="0.0" b="0.0" a="0.0" />        <!-- specular reflection -->
+        	<diffuse r="0.75" g="0.75" b="0.75" a="0.75" />         <!-- diffuse reflection -->
+        	<ambient r="0.0" g="0.0" b="0.0" a="0.0" />         <!-- ambient reflection -->
+        	<emission r="0.0" g="0.0" b="0.0" a="0.0" />        <!-- emission component -->
+		</MATERIAL>
+
+		<MATERIAL id="default2">
+			<shininess value="1" />
+        	<specular r="0.5" g="0.5" b="0.5" a="0.5" />        <!-- specular reflection -->
+        	<diffuse r="0.75" g="0.75" b="0.75" a="0.75" />         <!-- diffuse reflection -->
+        	<ambient r="0.0" g="0.0" b="0.0" a="0.0" />         <!-- ambient reflection -->
+        	<emission r="0.0" g="0.0" b="0.0" a="0.0" />        <!-- emission component -->
+		</MATERIAL>
+
+		<MATERIAL id="default3">
+			<shininess value="1" />
+        	<specular r="0.5" g="0.5" b="0.5" a="0.5" />        <!-- specular reflection -->
+        	<diffuse r="0.25" g="0.25" b="0.25" a="0.25" />         <!-- diffuse reflection -->
+        	<ambient r="0.0" g="0.0" b="0.0" a="0.0" />         <!-- ambient reflection -->
+        	<emission r="0.0" g="0.0" b="0.0" a="0.0" />        <!-- emission component -->
+		</MATERIAL>
+	</MATERIALS>
+
+
+	<LEAVES>
+		<LEAF id="quadrado" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+		<LEAF id="triangulo" type="triangle" args="0 0 0  0.5 1 0  1 0 0" />
+		<LEAF id="cone" type="cylinder" args="3 0 1 1 20" />    
+    	<LEAF id="bola" type="sphere" args="1 20 20" /> 
+    	<LEAF id="cilindro" type="cylinder" args="8 0.5 0.5 1 20" />          
+		
+	
+	</LEAVES>
+
+
+	<NODES>
+		<ROOT id="cena" /> 
+		<NODE id="cena"> <!-- Root: A cena -->
+			<MATERIAL id="material-geral" /> 
+			<TEXTURE id="null" />
+			
+			<DESCENDANTS>
+				<!-- 				 -->
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-baixo">
+			<MATERIAL id="null" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="x" angle="90" />
+			<TRANSLATION x="0" y="-0.5" z="0" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-cima">
+			<MATERIAL id="null" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="x" angle="270" />
+			<TRANSLATION x="0" y="0.5" z="0" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-direita">
+			<MATERIAL id="null" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="y" angle="90" />
+			<TRANSLATION x="0.5" y="0" z="0" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-esquerda">
+			<MATERIAL id="null" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="y" angle="90" />
+			<TRANSLATION x="-0.5" y="0" z="0" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-frente">
+			<MATERIAL id="null" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="0" y="-0.5" z="0.5" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-tras">
+			<MATERIAL id="null" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="x" angle="180" />
+			<TRANSLATION x="0" y="0" z="-0.5" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo">
+			<MATERIAL id="pedra-torre" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="0" y="0" z="0" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="cubo-baixo"/>
+				<DESCENDANT id="cubo-cima"/>
+				<DESCENDANT id="cubo-esquerda"/>
+				<DESCENDANT id="cubo-direita"/>
+				<DESCENDANT id="cubo-frente"/>
+				<DESCENDANT id="cubo-tras"/>
+
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-base">
+			<MATERIAL id="default3" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="3" y="0.27" z="3" />
+			<SCALE sx="2" sy="0.5" sz="2" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="cubo"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-torre">
+			<MATERIAL id="default3" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="3" y="2.02" z="3" />
+			<SCALE sx="1" sy="3" sz="1" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="cubo"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-relogio-base">
+			<MATERIAL id="pedra-torre" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="3" y="3.62" z="3" />
+			<SCALE sx="2" sy="0.2" sz="2" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="cubo"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cubo-relogio">
+			<MATERIAL id="default3" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="3" y="4.47" z="3" />
+			<SCALE sx="1.5" sy="1.5" sz="1.5" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="cubo"/>
+			</DESCENDANTS>
+		</NODE>
+
+
+		<NODE id="cubo-relogio-topo">
+			<MATERIAL id="default3" /> 
+			<TEXTURE id="null" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="3" y="5.32" z="3" />
+			<SCALE sx="2" sy="0.2" sz="2" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="cubo"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="relogio">
+			<MATERIAL id="default2" /> 
+			<TEXTURE id="relogio" />
+			<ROTATION axis="z" angle="0" />
+			<TRANSLATION x="3" y="4.47" z="3.86" />
+			<SCALE sx="1" sy="1" sz="0.2" />
+
+			<DESCENDANTS>
+				<DESCENDANT id="quadrado"/>
+			</DESCENDANTS>
+		</NODE>
+
+		 <NODE id="ponteiro-M"> 
+			<MATERIAL id="default3" /> 
+			<TEXTURE id="null" />
+			<TRANSLATION x="3" y="4.47" z="3.87" /> 
+			<ROTATION axis="z" angle="0" />
+			<SCALE sx="0.2" sy="0.75" sz="1" /> 
+
+			<DESCENDANTS> 
+				<DESCENDANT id="triangulo"/> 
+			</DESCENDANTS> 
+		 </NODE> 
+
+		 <NODE id="ponteiro-H"> 
+			<MATERIAL id="default3" /> 
+			<TEXTURE id="null" />
+			<TRANSLATION x="3" y="4.47" z="3.87" /> 
+			<ROTATION axis="z" angle="30" />
+			<SCALE sx="0.2" sy="0.45" sz="1" /> 
+
+			<DESCENDANTS> 
+				<DESCENDANT id="triangulo"/> 
+			</DESCENDANTS> 
+		 </NODE> 
+
+	<NODE id="bola">
+        <MATERIAL id="default1" />
+        <TEXTURE id="null" />
+        <TRANSLATION x="8" y="5.52" z="3" />
+        <DESCENDANTS>
+            <DESCENDANT id="bola" />
+        </DESCENDANTS>
+    </NODE>
+	
+	<NODE id="cilindro-poste">
+        <MATERIAL id="default3" />
+        <TEXTURE id="null" />
+        <TRANSLATION x="8" y="2.52" z="3" />
+		<ROTATION axis="x" angle="270" />
+		<SCALE sx="1" sy="1" sz="5" />
+        <DESCENDANTS>
+            <DESCENDANT id="cilindro" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="cone-poste-topo">
+        <MATERIAL id="default3" />
+        <TEXTURE id="null" />
+        <TRANSLATION x="8" y="5.02" z="3" />
+		<ROTATION axis="x" angle="270" />
+		<SCALE sx="2" sy="2" sz="0.5" />
+        <DESCENDANTS>
+            <DESCENDANT id="cone" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="cone-poste-baixo">
+        <MATERIAL id="default3" />
+        <TEXTURE id="null" />
+        <TRANSLATION x="8" y="0.02" z="3" />
+		<ROTATION axis="x" angle="90" />
+		<SCALE sx="2" sy="2" sz="0.5" />
+        <DESCENDANTS>
+            <DESCENDANT id="cone" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="chao">
+        <MATERIAL id="null" />
+        <TEXTURE id="relva" />
+        <TRANSLATION x="5" y="0.01" z="5" />
+		<ROTATION axis="x" angle="270" />
+		<SCALE sx="10" sy="10" sz="1" /> 
+        <DESCENDANTS>
+            <DESCENDANT id="cone" />
+        </DESCENDANTS>
+    </NODE>
+		
+
+
+
+	</NODES>
+	
+	
+</SCENE>
