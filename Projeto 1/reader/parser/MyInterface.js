@@ -20,6 +20,7 @@ MyInterface.prototype.init = function(application) {
 };
 
 MyInterface.prototype.loadInterfaceLigths = function(){
+	this.gui.addFolder('Lights');
     this.gui.open();
 
     var scene = this.scene;

@@ -8,6 +8,7 @@ LSXscene.prototype.constructor = LSXscene;
 LSXscene.prototype.init = function (application) { 
     CGFscene.prototype.init.call(this, application);
 	this.initCameras();
+	this.interface=null;
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -21,6 +22,9 @@ LSXscene.prototype.init = function (application) {
 
 };
 
+LSXscene.prototype.setInterface = function (interface) {
+    this.interface=interface;
+};
 
 LSXscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
@@ -37,6 +41,7 @@ LSXscene.prototype.onGraphLoaded = function () {
 	this.loadInitials();
 	this.loadIllumination();
 	this.loadLights();
+	this.interface.loadInterfaceLigths();
 };
 
 LSXscene.prototype.loadInitials = function () {
@@ -51,9 +56,10 @@ LSXscene.prototype.loadIllumination = function() {
 };
 
 LSXscene.prototype.loadLights = function (){
+
 	for(var i = 0; i < this.graph.lights.length; ++i) {
-		this.lights[i] = this.graph.lights[i];
-		this.graph.lightsStateValue[i] = this.graph.lights[i].enabled;
+		this.graph.lightsStateValue[this.graph.lights[i].id]=this.graph.lights[i].enabled;
+		this.lights[i] = this.graph.lights[i];;
 	}
 };
 
@@ -138,4 +144,12 @@ LSXscene.prototype.display = function () {
 	}
 	
 	this.shader.unbind(); 
+};
+
+
+LSXscene.prototype.changeLight = function (lightid,value) {
+	for(var i = 0; i < this.lights.length;i++){
+		if(this.lights[i].id == lightid)
+			this.lights[i].enabled=value;
+	}
 };
