@@ -78,7 +78,7 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 		else
 			this.setDefaultAppearance();
 
-		var texture;
+		var texture = null;
 
 		if (textureID != "clear")
 		{
@@ -86,11 +86,12 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 			this.graph.leaves[node].updateTextCoords(texture.amplifyFactor.ampS, texture.amplifyFactor.ampT);
 			texture.bind();
 		}
-					
+
 		this.graph.leaves[node].display();
 
-		if (texture)
+		if (texture != null)
 			texture.unbind();
+		
 		return;
 	}
 

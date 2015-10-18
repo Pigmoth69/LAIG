@@ -1,7 +1,7 @@
 function Initials() {
 
-    this.frustum = {near: 0,
-                    far: 0};
+    this.frustum = {near: null,
+                    far: null};
     this.transMatrix = mat4.create();
     
     this.refLength = 0;

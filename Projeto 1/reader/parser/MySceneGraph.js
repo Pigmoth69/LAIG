@@ -112,12 +112,20 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 
 
 	var initialFrustum = {
-						  near: this.reader.getInteger(frustum[0], 'near', 1),
-						  far:  this.reader.getInteger(frustum[0], 'far', 1)
+						  near: this.reader.getFloat(frustum[0], 'near', 1),
+						  far:  this.reader.getFloat(frustum[0], 'far', 1)
 						 };
 
-	 if(this.isBadInteger(initialFrustum.near,initialFrustum.far)){
+	if(this.isBadInteger(initialFrustum.near,initialFrustum.far)){
 		 throw "Initial frustum is wrong! They are not numbers. Your values: near="+initialFrustum.near+" far="+ initialFrustum.far;
+	}
+
+	if(initialFrustum.near == 0){
+		 throw "Frustum near value can't be 0.";
+	}
+
+	if(initialFrustum.near > initialFrustum.far){
+		 throw "Frustum near value is higher than frustum far value! near ="+initialFrustum.near+" far="+ initialFrustum.far;
 	}
 
 	var initialTranslation = vec3.fromValues(this.reader.getFloat(translation[0], 'x', 1), 
@@ -489,20 +497,17 @@ MySceneGraph.prototype.readNodeTransformations = function(numTransformations, no
 		}
 		else if(elem.tagName == 'ROTATION')
 		{
-			var axis,angle;
-
-			if(this.reader.getString(elem, 'axis', 1) == 'x')
-				axis= new Array(1,0,0);
-			else if(this.reader.getString(elem, 'axis', 1) == 'y')
-				axis= new Array(0,1,0);
-			else if(this.reader.getString(elem, 'axis', 1) == 'z')
-					axis= new Array(0,0,1);
-			else return "Error on node id: "+node['id']+" rotation AXIS!!";
+			var angle;
 
 			angle = this.reader.getFloat(elem,'angle',1);
-			if(this.isBadInteger(angle))
-				throw "Node "+nodeTag+"angle is wrong!"
-			mat4.rotate(mat,mat,Math.PI*angle/180,axis);
+
+			if(this.reader.getString(elem, 'axis', 1) == 'x')
+				mat4.rotateX(mat, mat, angle *Math.PI/180);
+			else if(this.reader.getString(elem, 'axis', 1) == 'y')
+				mat4.rotateY(mat, mat, angle*Math.PI/180);
+			else if(this.reader.getString(elem, 'axis', 1) == 'z')
+				mat4.rotateZ(mat, mat, angle*Math.PI/180);
+			else return "Error on node id: "+node['id']+" rotation AXIS!!";
 		}
 		else if(elem.tagName == 'SCALE')
 		{
