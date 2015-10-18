@@ -12,48 +12,25 @@ MyInterface.prototype = Object.create(CGFinterface.prototype);
 MyInterface.prototype.constructor = MyInterface;
 
 MyInterface.prototype.init = function(application) {
-	// call CGFinterface init
+
 	CGFinterface.prototype.init.call(this, application);
-	
-	// init GUI. For more information on the methods, check:
-	//  http://workshop.chromeexperiments.com/examples/gui
-	
-	 this.gui = new dat.GUI();
 
-	// add a button:
-	// the first parameter is the object that is being controlled (in this case the scene)
-	// the identifier 'doSomething' must be a function declared as part of that object (i.e. a member of the scene class)
-	// e.g. LightingScene.prototype.doSomething = function () { console.log("Doing something..."); }; 
-
-	
-	// add a group of controls (and open/expand by defult)
-	
-//	var group=this.gui.addFolder("Luzes");
-
-	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
-	// e.g. this.option1=true; this.option2=false;
-/*	for(var i = 0; i < this.scene.lights.length;i++){
-		group.add(this.scene, 'light'+i);
-	}
-	*/	
-
-	// add a slider
-	// must be a numeric variable of the scene, initialized in scene.init e.g.
-	// this.speed=3;
-	// min and max values can be specified as parameters
-	
-	//this.gui.add(this.scene, 'speed', -5, 5);
+	this.gui = new dat.GUI();
 
 };
 
 MyInterface.prototype.loadInterfaceLigths = function(){
-    var group = this.gui.addFolder('Lights');
-    group.open();
-    var save = this.scene;
-	for(key in this.scene.graph.lightsStateValue){
-	    var action = group.add(this.scene.graph.lightsStateValue,key);
-	    action.onChange(function(value) {
-	    	save.changeLight(this.property, value);
+    this.gui.open();
+
+    var scene = this.scene;
+
+	for(checker in this.scene.graph.lightsStateValue)
+	{
+	    var listener = this.gui.add(this.scene.graph.lightsStateValue, checker);
+	    
+	    listener.onChange(function(bool) 
+	    {
+	    	scene.changeLight(this.property, bool);
 	    });
 	}
 };
