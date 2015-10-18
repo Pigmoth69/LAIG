@@ -1,7 +1,7 @@
 <SCENE>
 
 <INITIALS>
-    <frustum near="1" far="500"/>                   <!-- frustum planes-->
+    <frustum near="0" far="500"/>                   <!-- frustum planes-->
     <translation x="1.5" y="3" z="5" />   			<!-- initial translate -->
 	<rotation axis="y" angle="45" /> 				<!-- initial rotation 3 -->
     <rotation axis="x" angle="-5" />                <!-- initial rotation 2 -->
@@ -18,7 +18,7 @@
 
 <LIGHTS>
     <LIGHT id="luz1">                                    <!-- light identifier -->
-        <enable value ="1" />                         <!-- enable/disable -->
+        <enable value="1" />                         <!-- enable/disable -->
         <position x="-3.9" y="10" z="-3.9" w="1" />       <!-- light position -->
         <ambient r="0" g="0" b="0" a="1" />        <!-- ambient component -->
         <diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->

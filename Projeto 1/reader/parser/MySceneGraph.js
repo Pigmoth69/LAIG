@@ -82,13 +82,23 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	}
 
 	var rotationX, rotationY, rotationZ, i;
+	var num_x,num_y,num_z;
+
 	for(i = 0; i < 3; i++)
-		if(this.reader.getString(rotations[i], 'axis', 1) == 'x')
+		if(this.reader.getString(rotations[i], 'axis', 1) == 'x'){
+			num_x = true;
 			rotationX = rotations[i]; 
-		else if(this.reader.getString(rotations[i], 'axis', 1) == 'y')
+		}
+		else if(this.reader.getString(rotations[i], 'axis', 1) == 'y'){
+			num_y = true;
 			rotationY = rotations[i];
-		else if(this.reader.getString(rotations[i], 'axis', 1) == 'z')
+		}
+		else if(this.reader.getString(rotations[i], 'axis', 1) == 'z'){
+			num_z = true;
 			rotationZ = rotations[i];
+		}
+	if(num_x!=true ||num_y!=true|| num_z!=true)
+		throw "Invalid coordenates of INITIALS rotation!";
 
 	var scale = initials[0].getElementsByTagName('scale');
 	if(scale == null){
@@ -100,24 +110,41 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 		return "reference tag is missing.";
 	}
 
+
 	var initialFrustum = {
 						  near: this.reader.getInteger(frustum[0], 'near', 1),
 						  far:  this.reader.getInteger(frustum[0], 'far', 1)
 						 };
 
+	 if(this.isBadInteger(initialFrustum.near,initialFrustum.far)){
+		 throw "Initial frustum is wrong! They are not numbers. Your values: near="+initialFrustum.near+" far="+ initialFrustum.far;
+	}
+
 	var initialTranslation = vec3.fromValues(this.reader.getFloat(translation[0], 'x', 1), 
 											 this.reader.getFloat(translation[0], 'y', 1), 
 											 this.reader.getFloat(translation[0], 'z', 1));
 
+	if(this.isBadInteger(initialTranslation[0],initialTranslation[1],initialTranslation[2]))
+		throw "Initial translation is wrong! Something went wrong. Your values: x="+initialTranslation[0]+" y="+ initialTranslation[1]+ " z="+initialTranslation[2];
+	
 	rotationX= this.reader.getFloat(rotationX, 'angle', 1);
 	rotationY= this.reader.getFloat(rotationY, 'angle', 1);
 	rotationZ= this.reader.getFloat(rotationZ, 'angle', 1);
+
+	if(this.isBadInteger(rotationX,rotationY,rotationZ))
+		throw "Initial rotation is wrong! Something went wrong. Your values: Rotation in axis X: "+ rotationX+" Rotation in axis Y: "+ rotationY+ " Rotation in axis Z: "+ rotationZ;
 
 	var initialScale = vec3.fromValues(this.reader.getFloat(scale[0], 'sx', 1), 
 									   this.reader.getFloat(scale[0], 'sy', 1), 
 									   this.reader.getFloat(scale[0], 'sz', 1));
 
+	if(this.isBadInteger(initialScale[0],initialScale[0],initialScale[0]))
+		throw "Initial scale is wrong! Something went wrong. Your values: Scale in axis X: "+ initialScale[0]+" Scale in axis Y: "+ initialScale[1]+" Scale in axis Z: "+ initialScale[2];
+
 	var refLength = this.reader.getFloat(reference[0], 'length', 1);
+
+	if(this.isBadInteger(refLength) || refLength <0)
+		throw ("Initial Reference Length is wrong! Something went wrong. Your values: " +" reference length: "+ refLength);
 
 
 	this.scene.graph.initials.setFrustum(initialFrustum.near,initialFrustum.far);
@@ -157,10 +184,16 @@ MySceneGraph.prototype.parseIllumination= function(rootElement) {
 	background[2] = this.reader.getFloat(backgroundColor[0], 'b', 1);
 	background[3] = this.reader.getFloat(backgroundColor[0], 'a', 1);
 
+	if(this.isBadRGBA(background[0],background[1],background[2],background[3]))
+		throw "Illumination background is wrong! Your values are: "+"r= "+background[0]+ " g="+background[1]+" b="+background[2]+" a="+background[3];
+
 	globalAmbient[0] = this.reader.getFloat(ambient[0], 'r', 1);;
 	globalAmbient[1] = this.reader.getFloat(ambient[0], 'g', 1);;
 	globalAmbient[2] = this.reader.getFloat(ambient[0], 'b', 1);
 	globalAmbient[3] = this.reader.getFloat(ambient[0], 'a', 1);;
+
+	if(this.isBadRGBA(globalAmbient[0],globalAmbient[1],globalAmbient[2],globalAmbient[3]))
+		throw "Illumination ambient is wrong! Your values are: "+"r= "+globalAmbient[0]+ " g="+globalAmbient[1]+" b="+globalAmbient[2]+" a="+globalAmbient[3];
 
 	this.scene.graph.illumination.background = background;
 	this.scene.graph.illumination.ambient = globalAmbient;
@@ -187,23 +220,43 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 	
 	var i, aux;
 	for(i=0; i < lights.length; i++) {
-				
+
 		var id = this.reader.getString(lights[i], 'id', 1);
-		
+		if(id == null)
+			throw "LIGHT \""+ i+"\" does no have the id tag!";
+
 		aux = lights[i].getElementsByTagName('enable');
 		var value = this.reader.getBoolean(aux[0], 'value', 1);
+
+		if(this.isBadBoolean(value)){
+			throw "The light \""+ id+"\" value is wrong or it is not well written! It should be a boolean value of 0 or 1 and the sintax for exampl <enable value=\"1\" />";
+		}
+
 		
 		aux = lights[i].getElementsByTagName('position');
 		var position = [this.reader.getFloat(aux[0], 'x', 1),this.reader.getFloat(aux[0], 'y', 1),this.reader.getFloat(aux[0], 'z', 1),this.reader.getFloat(aux[0], 'w', 1)];
 		
+		if(this.isBadInteger(position[0],position[1],position[2]))
+			throw "Light \""+ id+"\" position is wrong or the tag name is missing! It shoud be <position r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
 		aux = lights[i].getElementsByTagName('ambient');
 		var ambient= [this.reader.getFloat(aux[0], 'r', 1), this.reader.getFloat(aux[0], 'g', 1), this.reader.getFloat(aux[0], 'b', 1), this.reader.getFloat(aux[0], 'a', 1)];
+				
+		if(this.isBadRGBA(ambient[0],ambient[1],ambient[2],ambient[3]))
+			throw "Light \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be It shoud be <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 				
 		aux = lights[i].getElementsByTagName('diffuse');
 		var diffuse = [this.reader.getFloat(aux[0], 'r', 1), this.reader.getFloat(aux[0], 'g', 1), this.reader.getFloat(aux[0], 'b', 1), this.reader.getFloat(aux[0], 'a', 1)];
 		
+		if(this.isBadRGBA(diffuse[0],diffuse[1],diffuse[2],diffuse[3]))
+			throw "Light \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example: It shoud be <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
 		aux = lights[i].getElementsByTagName('specular');
 		var specular = [this.reader.getFloat(aux[0], 'r', 1), this.reader.getFloat(aux[0], 'g', 1), this.reader.getFloat(aux[0], 'b', 1), this.reader.getFloat(aux[0], 'a', 1)];
+
+		if(this.isBadRGBA(specular[0],specular[1],specular[2],specular[3]))
+			throw "Light \""+ id+"\" specular is wrong or the tag name is missing! It shoud be <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+		
 
 		var light = new Light(this.scene, i, id, value);
 		light.setPosition(position[0],position[1],position[2],position[3]);
@@ -237,12 +290,16 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 
 		var id = this.reader.getString(textures[i], 'id', 1);
 
+		if(id == null)
+			throw "Texture \""+ i+"\" does no have the id tag!";
+
 		var file = textures[i].getElementsByTagName('file');
 		textureInfo['path'] = this.reader.getString(file[0], 'path', 1);
 		
 		var amplif_factor = textures[i].getElementsByTagName('amplif_factor');
 		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
-
+		if(this.isBadInteger(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][1]))
+			 throw "Texture \""+ id+"\" amplif_factor is wrong or the tag name is missing! It shoud be for example: <amplif_factor s=\"0.5\" t=\"0.5\" />";
 		var newTexture = new Texture(this.scene, textureInfo['path'], id, textureInfo['amplif_factor']);
 		this.scene.graph.textures[id] = newTexture;
 	}
@@ -268,22 +325,42 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 
 	for(i = 0; i < materials.length; i++) {
 		var id = this.reader.getString(materials[i], 'id', 1);
+		if(id == null)
+			throw "Material \""+ i+"\" does no have the id tag!";
+
 
 		var shininess = materials[i].getElementsByTagName('shininess');
 		material['shininess'] = this.reader.getFloat(shininess[0], 'value', 1);
 		
+		if(this.isBadInteger(material['shininess']))
+			throw "Material \""+ id+"\" shininess is wrong or the tag name is missing! It shoud be for example: <shininess value=\"ff\" />";
+
 		var specular = materials[i].getElementsByTagName('specular');
 		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), this.reader.getFloat(specular[0], 'g', 1), this.reader.getFloat(specular[0], 'b', 1), this.reader.getFloat(specular[0], 'a', 1)];
-	
+		
+		if(this.isBadRGBA(material['specular'][0],material['specular'][1],material['specular'][2],material['specular'][3]))
+			throw "Material \""+ id+"\" specular is wrong or the tag name is missing! It shoud be for example:  <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
 		var diffuse = materials[i].getElementsByTagName('diffuse');
 		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), this.reader.getFloat(diffuse[0], 'g', 1), this.reader.getFloat(diffuse[0], 'b', 1), this.reader.getFloat(diffuse[0], 'a', 1)];
+
+		if(this.isBadRGBA(material['diffuse'][0],material['diffuse'][1],material['diffuse'][2],material['diffuse'][3]))
+			throw "Material \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example:  <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
 
 		var ambient = materials[i].getElementsByTagName('ambient');
 		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), this.reader.getFloat(ambient[0], 'g', 1), this.reader.getFloat(ambient[0], 'b', 1), this.reader.getFloat(ambient[0], 'a', 1)];
 	
+		if(this.isBadRGBA(material['ambient'][0],material['ambient'][1],material['ambient'][2],material['ambient'][3]))
+			throw "Material \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be for example:  <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+
 		var emission = materials[i].getElementsByTagName('emission');
 		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), this.reader.getFloat(emission[0], 'g', 1), this.reader.getFloat(emission[0], 'b', 1), this.reader.getFloat(emission[0], 'a', 1)];
-	
+		
+		if(this.isBadRGBA(material['emission'][0],material['emission'][1],material['emission'][2],material['emission'][3]))
+			throw "Material \""+ id+"\" emission is wrong or the tag name is missing! It shoud be for example:  <emission r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
 		var newMaterial = new Material(this.scene,id);
 		newMaterial.setAppearance(material['shininess'],material['specular'],material['diffuse'],material['ambient'],material['emission']);
 		this.scene.graph.materials[id] = newMaterial;
@@ -309,7 +386,11 @@ MySceneGraph.prototype.parseLeaves= function(rootElement) {
 	for(i = 0; i < leaves.length; i++){
 
 		var id = this.reader.getString(leaves[i], 'id', 1);
+		if(id == null)
+			throw "Leave \""+ i+"\" does no have the id tag!";
+
 		var type = this.reader.getString(leaves[i], 'type', 1);
+		
 		var args = this.getArgs(leaves[i], 'args', 1);
 
 		if(type == "rectangle"){
@@ -402,7 +483,8 @@ MySceneGraph.prototype.readNodeTransformations = function(numTransformations, no
 			x= this.reader.getFloat(elem, 'x', 1);
 			y= this.reader.getFloat(elem, 'y', 1);
 			z= this.reader.getFloat(elem, 'z', 1);
-
+			if(this.isBadInteger(x,y,z))
+				throw "Node "+ nodeTag+" transformation is wrong!";
 			mat4.translate(mat,mat,[x,y,z]);
 		}
 		else if(elem.tagName == 'ROTATION')
@@ -418,7 +500,8 @@ MySceneGraph.prototype.readNodeTransformations = function(numTransformations, no
 			else return "Error on node id: "+node['id']+" rotation AXIS!!";
 
 			angle = this.reader.getFloat(elem,'angle',1);
-
+			if(this.isBadInteger(angle))
+				throw "Node "+nodeTag+"angle is wrong!"
 			mat4.rotate(mat,mat,Math.PI*angle/180,axis);
 		}
 		else if(elem.tagName == 'SCALE')
@@ -459,6 +542,42 @@ MySceneGraph.prototype.getArgs = function(a, b, c) {
     }
     return f;
 };
+
+
+
+MySceneGraph.prototype.isBadInteger=function () {
+
+	for(var i = 0; i < arguments.length;i++){
+		if(isNaN(arguments[i]) || arguments[i]==null)
+			return true;
+	}
+
+	return false;
+};
+
+MySceneGraph.prototype.isBadBoolean=function (bool) {
+
+	if(bool ==0 || bool ==1)
+		return false
+	return true;
+};
+
+
+MySceneGraph.prototype.isBadRGBA=function (r,g,b,a) {
+	if(r<0 || r>1 || isNaN(r)){
+		return true;
+	}if(g<0 || g>1 || isNaN(g)){
+		return true;
+	}
+	if(b<0 || b>1 || isNaN(b)){
+		return true;
+	}
+	if(a<0 || a>1 || isNaN(a)){
+		return true;
+	}
+	return false;
+}; 
+
 
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("LSX Loading Error: "+message);	

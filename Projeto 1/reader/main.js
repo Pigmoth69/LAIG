@@ -30,7 +30,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "jardim.lsx";
+	var filename=getUrlVars()['file'] || "veiga.lsx";
 
 	var myGraph = new MySceneGraph(filename, myScene);
 	

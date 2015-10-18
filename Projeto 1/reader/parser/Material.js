@@ -8,14 +8,9 @@ Material.prototype.constructor = Material;
 
 Material.prototype.setAppearance = function(shininess,specular,diffuse,ambient,emission){
 	this.setShininess(shininess);
-	console.log(shininess);
 	this.setSpecular(specular[0],specular[1],specular[2],specular[3]);
-	console.log(specular);
 	this.setDiffuse(diffuse[0],diffuse[1], diffuse[2],diffuse[3]);
-	console.log(diffuse);
 	this.setAmbient(ambient[0],ambient[1],ambient[2],ambient[3]);
-	console.log(ambient);
 	this.setEmission(emission[0], emission[1], emission[2],emission[3]);
-	console.log(emission);
 	this.setTextureWrap('REPEAT', 'REPEAT');
 };
