@@ -273,9 +273,9 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 		light.setSpecular(specular[0],specular[1],specular[2],specular[3]);
 		light.setVisible(true);
 
+		this.scene.graph.addLightValue(i+1,value);
 		this.scene.graph.lights.push(light);
 	}	
-
 	return 0;
 };
 

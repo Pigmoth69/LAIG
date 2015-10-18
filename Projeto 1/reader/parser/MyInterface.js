@@ -4,7 +4,7 @@
  */
  
  
-function MyInterface() {
+ function MyInterface() {
 	//call CGFinterface constructor 
 	CGFinterface.call(this);
 };
@@ -16,14 +16,14 @@ MyInterface.prototype.constructor = MyInterface;
  * init
  * @param {CGFapplication} application
  */
-MyInterface.prototype.init = function(application) {
+ MyInterface.prototype.init = function(application) {
 	// call CGFinterface init
 	CGFinterface.prototype.init.call(this, application);
 	
 	// init GUI. For more information on the methods, check:
 	//  http://workshop.chromeexperiments.com/examples/gui
 	
-	//this.gui = new dat.GUI();
+	 
 
 	// add a button:
 	// the first parameter is the object that is being controlled (in this case the scene)
@@ -40,8 +40,8 @@ MyInterface.prototype.init = function(application) {
 /*	for(var i = 0; i < this.scene.lights.length;i++){
 		group.add(this.scene, 'light'+i);
 	}
-*/	
-	 	 	
+	*/	
+
 	// add a slider
 	// must be a numeric variable of the scene, initialized in scene.init e.g.
 	// this.speed=3;
@@ -52,3 +52,13 @@ MyInterface.prototype.init = function(application) {
 	return true;
 };
 
+MyInterface.prototype.addControlGroup = function(name,values,numValues) {
+	this.gui = new dat.GUI();
+
+	var group=this.gui.addFolder(name);
+	for(var i = 0; i < numValues;i++){
+		var num = i+1;
+		group.add(values,'Light'+num);
+	}
+	
+};

@@ -8,7 +8,7 @@ LSXscene.prototype.constructor = LSXscene;
 LSXscene.prototype.init = function (application) { 
     CGFscene.prototype.init.call(this, application);
 	this.initCameras();
-
+	this.app = application;
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
     this.gl.clearDepth(100.0);
@@ -37,6 +37,7 @@ LSXscene.prototype.onGraphLoaded = function () {
 	this.loadInitials();
 	this.loadIllumination();
 	this.loadLights();
+	this.reloadInterface();
 };
 
 LSXscene.prototype.loadInitials = function () {
@@ -57,10 +58,12 @@ LSXscene.prototype.loadLights = function (){
 };
 
 LSXscene.prototype.updateLights = function (){
+	this.reloadLightValues();
 	for(var i = 0; i < this.graph.lights.length; i++){
 		if(this.graph.lights[i].enabled)
 			this.lights[i].enable();
-		else this.lights[i].disable();
+		else 
+			this.lights[i].disable();
 
 		this.lights[i].update();
 	}
@@ -112,6 +115,36 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 
 	this.popMatrix();
 };
+LSXscene.prototype.reloadInterface = function () {
+	var new_interface = new MyInterface(this);
+	new_interface.addControlGroup("Lights",this.graph.lightsValues,this.graph.lights.length);
+	this.app.setInterface(new_interface);
+}
+LSXscene.prototype.reloadLightValues = function () {
+	
+	for(var i = 0; i < this.graph.lights.length;i++){
+		if(i==0){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light1;
+		}else if(i==1){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light2;
+		}else if(i==2){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light3;
+		}else if(i==3){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light4;
+		}else if(i==4){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light5;
+		}else if(i==5){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light6;
+		}else if(i==6){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light7;
+		}else if(i==7){
+			this.graph.lights[i].enabled = this.graph.lightsValues.Light8;
+		}
+		this.graph.lights[i].enabled
+	}
+	
+
+}
 
 
 LSXscene.prototype.display = function () {
