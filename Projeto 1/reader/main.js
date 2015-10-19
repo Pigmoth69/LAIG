@@ -33,7 +33,7 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "jardim.lsx";
+	var filename=getUrlVars()['file'] || "casa.lsx";
 
 	var myGraph = new LSXreader(filename, myScene);
 	

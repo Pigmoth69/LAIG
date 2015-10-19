@@ -88,7 +88,7 @@ MyCylinder.prototype.initBuffers = function() {
 	}
 
 
-	for (var stack = 0; stack < this.stacks+1; stack++)
+	for (var stack = 0; stack < this.stacks; stack++)
 	{
 		for (var slice = 0; slice < this.slices; slice++)
 		{
