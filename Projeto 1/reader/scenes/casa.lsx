@@ -114,6 +114,13 @@
 			<ambient r="0" g="0" b="0" a="1" />  
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
+		<MATERIAL id="relva">                                  
+			<shininess value="2" />
+			<specular r="0.1" g="0.1" b="0.1" a="1" /> 
+			<diffuse r="0" g="0.5" b="0" a="1" />    
+			<ambient r="0" g="0.3" b="0" a="1" />  
+			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
 	</MATERIALS>
 
 
@@ -139,6 +146,7 @@
 				<DESCENDANT id="underground" />
 				<DESCENDANT id="tree" />
 				<DESCENDANT id="lamps" />
+				<DESCENDANT id="gate" />
 			</DESCENDANTS>
 		</NODE>
 		
@@ -150,7 +158,6 @@
 				<DESCENDANT id="door" />
 				<DESCENDANT id="windows" />
 				<DESCENDANT id="rooftop" />
-				<DESCENDANT id="gate" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -514,12 +521,61 @@
 		<NODE id="leaves">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="leaves" />
-			<TRANSLATION x="-3" y="2" z="-3" />       
+			<TRANSLATION x="-3" y="2" z="-3" />     
+			<SCALE sx="0.75" sy="0.75" sz="0.75" />  
+			<DESCENDANTS> 
+				<DESCENDANT id="leaf1" />
+				<DESCENDANT id="leaf2" />
+				<DESCENDANT id="leaf3" />
+				<DESCENDANT id="leaf4" />
+				<DESCENDANT id="leaf5" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="leaf1">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="leaves" />
+			<TRANSLATION x="0.5" y="0" z="0.5" />       
 			<DESCENDANTS> 
 				<DESCENDANT id="SPH" />
 			</DESCENDANTS>
 		</NODE>
 
+		<NODE id="leaf2">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="leaves" />
+			<TRANSLATION x="0.5" y="0" z="-0.5" />       
+			<DESCENDANTS> 
+				<DESCENDANT id="SPH" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="leaf3">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="leaves" />
+			<TRANSLATION x="-0.5" y="0" z="0.5" />         
+			<DESCENDANTS> 
+				<DESCENDANT id="SPH" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="leaf4">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="leaves" />
+			<TRANSLATION x="-0.5" y="0" z="-0.5" />     
+			<DESCENDANTS> 
+				<DESCENDANT id="SPH" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="leaf5">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="leaves" />
+			<TRANSLATION x="0" y="0.5" z="0" />       
+			<DESCENDANTS> 
+				<DESCENDANT id="SPH" />
+			</DESCENDANTS>
+		</NODE>
 
 		<NODE id="lamps">       
 			<MATERIAL id="null" />             
