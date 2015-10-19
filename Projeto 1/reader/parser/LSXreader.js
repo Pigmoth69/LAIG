@@ -9,7 +9,8 @@ function LSXreader(filename, scene) {
 	
 	this.reader.open('scenes/'+filename, this);  
 };
-
+/**	@brief Faz o parsing de todos os elementos do ficheiro LSX e verifica se tudo foi lido com sucesso
+  */
 LSXreader.prototype.onXMLReady=function() {
 	console.log("LSX Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
@@ -25,7 +26,9 @@ LSXreader.prototype.onXMLReady=function() {
 	
 	this.scene.onGraphLoaded();
 };
-
+/**	@brief Faz o parsing de todos os elementos do ficheiro LSX apartir de um root element
+  *	@param rootElement elemento por onde se vai iniciar a leitura dos elementos
+  */
 LSXreader.prototype.parseElements= function(rootElement) {
 
 	var elems = rootElement.getElementsByTagName('SCENE');
@@ -54,7 +57,9 @@ LSXreader.prototype.parseElements= function(rootElement) {
 	if((elems = this.parseNodes(rootElement)) != 0)
 		return elems;
 };
-
+/**	@brief Faz o parsing das inicials do ficheiro LSX
+  *	@param rootElement elemento por onde se inicia o parse das Initials 
+  */
 LSXreader.prototype.parseInitials= function(rootElement) {
 
 	var initials = rootElement.getElementsByTagName('INITIALS');
@@ -165,7 +170,9 @@ LSXreader.prototype.parseInitials= function(rootElement) {
 
 	return 0;
 };
-
+/**	@brief Faz o parsing da Illumination do ficheiro LSX
+  *	@param rootElement elemento por onde se inicia o parse das variáveis de Illumination 
+  */
 LSXreader.prototype.parseIllumination= function(rootElement) {
 
 	var illumination = rootElement.getElementsByTagName('ILLUMINATION');
@@ -208,7 +215,9 @@ LSXreader.prototype.parseIllumination= function(rootElement) {
 
 	return 0;
 };	
-	
+/**	@brief Faz o parsing da Lights do ficheiro LSX
+  *	@param rootElement elemento a partir do qual se inicia o parse das lights
+  */	
 LSXreader.prototype.parseLights= function(rootElement) {
 
 	var lightsTag = rootElement.getElementsByTagName('LIGHTS');
@@ -277,7 +286,9 @@ LSXreader.prototype.parseLights= function(rootElement) {
 	}	
 	return 0;
 };
-
+/**	@brief Faz o parsing da textures do ficheiro LSX
+  *	@param rootElement elemento a partir do qual se inicia o parse das textures
+  */	
 LSXreader.prototype.parseTextures= function(rootElement) {
 	
 	var texturesTag = rootElement.getElementsByTagName('TEXTURES');
@@ -313,7 +324,9 @@ LSXreader.prototype.parseTextures= function(rootElement) {
 
 	return 0;
 };
-
+/**	@brief Faz o parsing dos Materials do ficheiro LSX
+  *	@param rootElement elemento a partir do qual se inicia o parse dos Materiais
+  */	
 LSXreader.prototype.parseMaterials= function(rootElement) {
 	
 	var materialsTag = rootElement.getElementsByTagName('MATERIALS');
@@ -375,7 +388,9 @@ LSXreader.prototype.parseMaterials= function(rootElement) {
 
 	return 0;
 };
-
+/**	@brief Faz o parsing da Leaves do ficheiro LSX
+  *	@param rootElement elemento a partir do qual se inicia o parse das leaves
+  */	
 LSXreader.prototype.parseLeaves= function(rootElement) {
 	
 	var leavesTag = rootElement.getElementsByTagName('LEAVES');
@@ -418,7 +433,9 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
 
 	return 0;
 };
-
+/**	@brief Faz o parsing dos Nodes do ficheiro LSX
+  *	@param rootElement elemento a partir do qual se inicia o parse dos Nodes
+  */	
 LSXreader.prototype.parseNodes= function(rootElement) {
 	var nodesTag = rootElement.getElementsByTagName('NODES');
 	if(nodesTag == null){
@@ -442,7 +459,9 @@ LSXreader.prototype.parseNodes= function(rootElement) {
 		this.readNode(nodes[i]);
 	}
 };
-
+/**	@brief Função auxiliar da função parseNodes(rootElement) que faz o read de todos os valores de um determinado node
+  *	@param nodeTag tag do node ao qual se pretende ler todos os seus valores
+  */	
 LSXreader.prototype.readNode = function(nodeTag) {
 
 	var id = this.reader.getString(nodeTag, 'id', 1);
@@ -475,8 +494,11 @@ LSXreader.prototype.readNode = function(nodeTag) {
 
 	this.scene.graph.nodes[id] = newNode;
 };
-
-LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeTag, mat) {
+/**	@brief Função auxiliar da função readNode(nodeTag) que faz o read de todas as transformação associadas ao nodeTag
+  *	@param numTransformations numero de transformações associadas ao node
+  *	@param nodeTag tag do node ao qual se pretende ler as transformações
+  */
+LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeTag) {
 
 	var mat = mat4.create();
 
@@ -521,20 +543,26 @@ LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeT
 
 	return mat;
 };
-
-LSXreader.prototype.getArgs = function(a, b, c) {
-    if (c == undefined) c = true;
-    if (a == null) {
+/**	@brief Função auxiliar que lê argumentos de primitivas
+  *	@param tagLine linha onde o tag se encontra
+  *	@param tag tag do argumento
+  *	@param value bolean se se pretende mostrar o warning ou não
+  * @return retorna um array com os valores dos argumentos
+  */
+LSXreader.prototype.getArgs = function(tagLine, tag, value) {
+    if (value == undefined)
+     	value = true;
+    if (tagLine == null) {
         console.error("element is null.");
         return null;
     }
-    if (b == null) {
+    if (tag == null) {
         console.error("args attribute name is null.");
         return null;
     }
-    var d = a.getAttribute(b);
+    var d = tagLine.getAttribute(tag);
     if (d == null) {
-        if (c) console.error(" is null for attribute " + b + ".");
+        if (value) console.error(" is null for attribute " + tag + ".");
         return null;
     }
     var e = d.split(' ');
@@ -548,7 +576,10 @@ LSXreader.prototype.getArgs = function(a, b, c) {
 };
 
 
-
+/**	@brief Função que faz a verificação de valores inteiros.
+  * @param recebe um conjunto de argumentos cariáveis
+  * @return retorna true se é um mau valor inteiro e false se não
+  */
 LSXreader.prototype.isBadInteger=function () {
 
 	for(var i = 0; i < arguments.length;i++){
@@ -558,7 +589,10 @@ LSXreader.prototype.isBadInteger=function () {
 
 	return false;
 };
-
+/**	@brief Função que verifica se um valor é boleano
+  * @param bool recebe um conjunto de argumentos variáveis
+  * @return retorna true se é um mau valor boolean e false se não
+  */
 LSXreader.prototype.isBadBoolean=function (bool) {
 
 	if(bool ==0 || bool ==1)
@@ -566,7 +600,13 @@ LSXreader.prototype.isBadBoolean=function (bool) {
 	return true;
 };
 
-
+/**	@brief Função que verifica se um conjunto de valores é código RGB
+  * @param r valor r
+  * @param g valor g
+  * @param b valor b
+  * @param a valor a
+  * @return retorna true se é um mau valor RGB e false se não
+  */ 
 LSXreader.prototype.isBadRGBA=function (r,g,b,a) {
 	if(r<0 || r>1 || isNaN(r)){
 		return true;
@@ -582,7 +622,9 @@ LSXreader.prototype.isBadRGBA=function (r,g,b,a) {
 	return false;
 }; 
 
-
+/**	@brief Função que envia o erro do parser
+  * @param message message of error
+  */ 
 LSXreader.prototype.onXMLError=function (message) {
 	console.error("LSX Loading Error: "+message);	
 	this.loadedOk=false;
