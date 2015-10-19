@@ -1,8 +1,8 @@
 
 function Light(scene,index,id,enable) {
     CGFlight.call(this,scene, index);
-    this.id = id;
     this.enabled = enable;
+    this.id = id
 }
 
 Light.prototype = Object.create(CGFlight.prototype);

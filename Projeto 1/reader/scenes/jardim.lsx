@@ -22,7 +22,7 @@
 <!-- Lights -->
 <LIGHTS>	
 	<LIGHT id="light0">                                    
-        <enable value ="0" />                   	       
+        <enable value ="1" />                   	       
         <position  x="0" y="10" z="0" w="1" />       	   
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />        	 
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />        
@@ -59,31 +59,31 @@
 <TEXTURES>
 	<!-- Tree trunk -->
     <TEXTURE id="trunk">
-        <file path="images/trunk-image.jpg" />               
+        <file path="textures_jardim/trunk-image.jpg" />               
         <amplif_factor s="2" t="2" />                           
     </TEXTURE>
 
      <!-- Tree leaves -->
     <TEXTURE id="folhas">
-        <file path="images/leaves.jpg" />                
+        <file path="textures_jardim/leaves.jpg" />                
         <amplif_factor s="3" t="4" />                           
     </TEXTURE>
 
     <!-- Rocks -->
     <TEXTURE id="rocks">
-        <file path="images/rocks.jpg" />                
+        <file path="textures_jardim/rocks.jpg" />                
         <amplif_factor s="1" t="1" />                           
     </TEXTURE>
 
     <!-- Glass work -->
     <TEXTURE id="vidral">
-        <file path="images/vidral.jpg" /> 
+        <file path="textures_jardim/vidral.jpg" />               
         <amplif_factor s="15" t="10" />                           
     </TEXTURE>
 
     <!-- Street bench -->
     <TEXTURE id="banco">
-        <file path="images/bank.jpg" />                
+        <file path="textures_jardim/bank.jpg" />                
         <amplif_factor s="1" t="1" />                           
     </TEXTURE>
     
@@ -153,7 +153,7 @@
     <LEAF id="rectangle1" type="rectangle" args="0 4 5 0" />
     <LEAF id="cylinder1" type="cylinder" args="4 1 1 20 20" /> 
     <LEAF id="sphere1" type="sphere" args="2 20 20" />
-    <LEAF id="triangle1" type="triangle" args="2 0 12  12 0 2  0 0 0" />
+    <LEAF id="triangle1" type="triangle" args="2 0 12 12 0 2 0 0 0" />
 </LEAVES>
 
 

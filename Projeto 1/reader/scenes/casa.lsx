@@ -21,7 +21,7 @@
 	<LIGHTS>
 		<LIGHT id="L1">                              
 			<enable value="1" />                       
-			<position x="10" y="5" z="10" w="3" />      
+			<position x="10" y="3.5" z="10" w="3" />      
 			<ambient r="1" g="1" b="1" a="1" />       
 			<diffuse r="1" g="1" b="1" a="1" />     
 			<specular r="1" g="1" b="1" a="1" />    
@@ -54,39 +54,39 @@
 
 	<TEXTURES>  
 		<TEXTURE id="grass">
-			<file path="./textures/grass.jpg" />
+			<file path="./textures_casa/grass.jpg" />
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="telhado">
-			<file path="./textures/telhado.jpg" />
-			<amplif_factor s="1" t="2" /> 
+			<file path="./textures_casa/telhado.jpg" />
+			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="stonewall">
-			<file path="./textures/stonewall.jpg" />
+			<file path="./textures_casa/stonewall.jpg" />
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="door">
-			<file path="./textures/door.jpg" />
+			<file path="./textures_casa/door.jpg" />
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="window">
-			<file path="./textures/window.png" /> 
+			<file path="./textures_casa/window.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="wall">
-			<file path="./textures/wall.jpg" /> 
-			<amplif_factor s="0.5" t="1" /> 
+			<file path="./textures_casa/wall.jpg" /> 
+			<amplif_factor s="1" t="2" /> 
 		</TEXTURE>
 		<TEXTURE id="leaves">
-			<file path="./textures/leaves.jpg" /> 
+			<file path="./textures_casa/leaves.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="trunk">
-			<file path="./textures/trunk.jpg" /> 
+			<file path="./textures_casa/trunk.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="gate">
-			<file path="./textures/gate.jpg" /> 
+			<file path="./textures_casa/gate.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 	</TEXTURES> 
@@ -121,7 +121,7 @@
 		<LEAF id="RECT" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
 		<LEAF id="CYL" type="cylinder" args="1 1 1 1 60" />
 		<LEAF id="SPH" type="sphere" args="1 20 50" />
-		<LEAF id="TRI" type="triangle" args=" 0 1 0  -0.5 0 1  0.5 0 1" />
+		<LEAF id="TRI" type="triangle" args="0 1 0  -0.5 0 1  0.5 0 1" />
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
 	</LEAVES>
 

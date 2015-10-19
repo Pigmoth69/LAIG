@@ -11,7 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', './parser/LSXscene.js','./parser/MySceneGraph.js','./parser/MyInterface.js',
+serialInclude(['../lib/CGF.js', './parser/LSXscene.js','./parser/LSXreader.js','./parser/Interface.js',
                './parser/Light.js','./parser/Texture.js','./parser/Node.js','./parser/Material.js',
                './parser/Initials.js', './parser/Illumination.js','./parser/Graph.js',
                './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
@@ -21,7 +21,7 @@ main=function()
 {
   var app = new CGFapplication(document.body);
   var myScene = new LSXscene();
-  var myInterface = new MyInterface(myScene);
+  var myInterface = new Interface(myScene);
 
   app.init();
 
@@ -33,9 +33,9 @@ main=function()
 
   myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "jardim.lsx";
+	var filename=getUrlVars()['file'] || "casa.lsx";
 
-	var myGraph = new MySceneGraph(filename, myScene);
+	var myGraph = new LSXreader(filename, myScene);
 	
   app.run();
 }
