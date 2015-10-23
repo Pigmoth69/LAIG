@@ -59,13 +59,21 @@ MyTriangle.prototype.initBuffers = function() {
 		Normal[0], Normal[1], Normal[2],
     ];
 
-   
-	var tCoords = (vec3.sqrLen(p1p2) + vec3.sqrLen(p1p3) - vec3.sqrLen(p2p3))/ (2 * vec3.length(p1p2));
-	var sCoords = Math.sqrt(vec3.sqrLen(p1p3) - tCoords * tCoords);
+	
+	var c = vec3.length(p2p3);
+	var b = vec3.length(p1p2); 
+	var a = vec3.length(p1p3);
+	
+	console.log(c + "  " + b + "   " + a);
+	
+	var sCoords = c - a * (a*a - b*b + c*c)/(2*a*c);
+	var tCoords = Math.sqrt(b*b - sCoords*sCoords);
+	
+	console.log(sCoords + "    " + tCoords);
 	
 	this.originalTexCoords = [
 		0, 0,
-		vec3.length(p1p2), 0,
+		c , 0,
 		sCoords, tCoords
 	];
 

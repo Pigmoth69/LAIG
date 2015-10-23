@@ -9,6 +9,8 @@ function LSXreader(filename, scene) {
 	
 	this.reader.open('scenes/'+filename, this);  
 };
+
+
 /**	@brief Faz o parsing de todos os elementos do ficheiro LSX e verifica se tudo foi lido com sucesso
   */
 LSXreader.prototype.onXMLReady=function() {
@@ -26,6 +28,8 @@ LSXreader.prototype.onXMLReady=function() {
 	
 	this.scene.onGraphLoaded();
 };
+
+
 /**	@brief Faz o parsing de todos os elementos do ficheiro LSX apartir de um root element
   *	@param rootElement elemento por onde se vai iniciar a leitura dos elementos
   */
@@ -57,6 +61,8 @@ LSXreader.prototype.parseElements= function(rootElement) {
 	if((elems = this.parseNodes(rootElement)) != 0)
 		return elems;
 };
+
+
 /**	@brief Faz o parsing das inicials do ficheiro LSX
   *	@param rootElement elemento por onde se inicia o parse das Initials 
   */
@@ -170,6 +176,8 @@ LSXreader.prototype.parseInitials= function(rootElement) {
 
 	return 0;
 };
+
+
 /**	@brief Faz o parsing da Illumination do ficheiro LSX
   *	@param rootElement elemento por onde se inicia o parse das variáveis de Illumination 
   */
@@ -215,6 +223,8 @@ LSXreader.prototype.parseIllumination= function(rootElement) {
 
 	return 0;
 };	
+
+
 /**	@brief Faz o parsing da Lights do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse das lights
   */	
@@ -251,25 +261,37 @@ LSXreader.prototype.parseLights= function(rootElement) {
 
 		
 		aux = lights[i].getElementsByTagName('position');
-		var position = [this.reader.getFloat(aux[0], 'x', 1),this.reader.getFloat(aux[0], 'y', 1),this.reader.getFloat(aux[0], 'z', 1),this.reader.getFloat(aux[0], 'w', 1)];
+		var position = [this.reader.getFloat(aux[0], 'x', 1),
+						this.reader.getFloat(aux[0], 'y', 1),
+						this.reader.getFloat(aux[0], 'z', 1),
+						this.reader.getFloat(aux[0], 'w', 1)];
 		
 		if(this.isBadInteger(position[0],position[1],position[2]))
 			throw "Light \""+ id+"\" position is wrong or the tag name is missing! It shoud be <position r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 
 		aux = lights[i].getElementsByTagName('ambient');
-		var ambient= [this.reader.getFloat(aux[0], 'r', 1), this.reader.getFloat(aux[0], 'g', 1), this.reader.getFloat(aux[0], 'b', 1), this.reader.getFloat(aux[0], 'a', 1)];
+		var ambient= [this.reader.getFloat(aux[0], 'r', 1), 
+					  this.reader.getFloat(aux[0], 'g', 1), 
+					  this.reader.getFloat(aux[0], 'b', 1), 
+					  this.reader.getFloat(aux[0], 'a', 1)];
 				
 		if(this.isBadRGBA(ambient[0],ambient[1],ambient[2],ambient[3]))
 			throw "Light \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be It shoud be <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 				
 		aux = lights[i].getElementsByTagName('diffuse');
-		var diffuse = [this.reader.getFloat(aux[0], 'r', 1), this.reader.getFloat(aux[0], 'g', 1), this.reader.getFloat(aux[0], 'b', 1), this.reader.getFloat(aux[0], 'a', 1)];
+		var diffuse = [this.reader.getFloat(aux[0], 'r', 1), 
+					   this.reader.getFloat(aux[0], 'g', 1), 
+					   this.reader.getFloat(aux[0], 'b', 1), 
+					   this.reader.getFloat(aux[0], 'a', 1)];
 		
 		if(this.isBadRGBA(diffuse[0],diffuse[1],diffuse[2],diffuse[3]))
 			throw "Light \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example: It shoud be <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 
 		aux = lights[i].getElementsByTagName('specular');
-		var specular = [this.reader.getFloat(aux[0], 'r', 1), this.reader.getFloat(aux[0], 'g', 1), this.reader.getFloat(aux[0], 'b', 1), this.reader.getFloat(aux[0], 'a', 1)];
+		var specular = [this.reader.getFloat(aux[0], 'r', 1), 
+						this.reader.getFloat(aux[0], 'g', 1), 
+						this.reader.getFloat(aux[0], 'b', 1), 
+						this.reader.getFloat(aux[0], 'a', 1)];
 
 		if(this.isBadRGBA(specular[0],specular[1],specular[2],specular[3]))
 			throw "Light \""+ id+"\" specular is wrong or the tag name is missing! It shoud be <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
@@ -286,6 +308,8 @@ LSXreader.prototype.parseLights= function(rootElement) {
 	}	
 	return 0;
 };
+
+
 /**	@brief Faz o parsing da textures do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse das textures
   */	
@@ -315,15 +339,19 @@ LSXreader.prototype.parseTextures= function(rootElement) {
 		textureInfo['path'] = this.reader.getString(file[0], 'path', 1);
 		
 		var amplif_factor = textures[i].getElementsByTagName('amplif_factor');
-		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), this.reader.getFloat(amplif_factor[0], 't', 1)];
+		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), 
+										this.reader.getFloat(amplif_factor[0], 't', 1)];
 		if(this.isBadInteger(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][1]))
 			 throw "Texture \""+ id+"\" amplif_factor is wrong or the tag name is missing! It shoud be for example: <amplif_factor s=\"0.5\" t=\"0.5\" />";
+		
 		var newTexture = new Texture(this.scene, textureInfo['path'], id, textureInfo['amplif_factor']);
 		this.scene.graph.textures[id] = newTexture;
 	}
 
 	return 0;
 };
+
+
 /**	@brief Faz o parsing dos Materials do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse dos Materiais
   */	
@@ -356,27 +384,39 @@ LSXreader.prototype.parseMaterials= function(rootElement) {
 			throw "Material \""+ id+"\" shininess is wrong or the tag name is missing! It shoud be for example: <shininess value=\"ff\" />";
 
 		var specular = materials[i].getElementsByTagName('specular');
-		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), this.reader.getFloat(specular[0], 'g', 1), this.reader.getFloat(specular[0], 'b', 1), this.reader.getFloat(specular[0], 'a', 1)];
+		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), 
+								this.reader.getFloat(specular[0], 'g', 1), 
+								this.reader.getFloat(specular[0], 'b', 1), 
+								this.reader.getFloat(specular[0], 'a', 1)];
 		
 		if(this.isBadRGBA(material['specular'][0],material['specular'][1],material['specular'][2],material['specular'][3]))
 			throw "Material \""+ id+"\" specular is wrong or the tag name is missing! It shoud be for example:  <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 
 		var diffuse = materials[i].getElementsByTagName('diffuse');
-		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), this.reader.getFloat(diffuse[0], 'g', 1), this.reader.getFloat(diffuse[0], 'b', 1), this.reader.getFloat(diffuse[0], 'a', 1)];
+		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), 
+							   this.reader.getFloat(diffuse[0], 'g', 1), 
+							   this.reader.getFloat(diffuse[0], 'b', 1), 
+							   this.reader.getFloat(diffuse[0], 'a', 1)];
 
 		if(this.isBadRGBA(material['diffuse'][0],material['diffuse'][1],material['diffuse'][2],material['diffuse'][3]))
 			throw "Material \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example:  <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 
 
 		var ambient = materials[i].getElementsByTagName('ambient');
-		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), this.reader.getFloat(ambient[0], 'g', 1), this.reader.getFloat(ambient[0], 'b', 1), this.reader.getFloat(ambient[0], 'a', 1)];
+		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), 
+							   this.reader.getFloat(ambient[0], 'g', 1), 
+							   this.reader.getFloat(ambient[0], 'b', 1), 
+							   this.reader.getFloat(ambient[0], 'a', 1)];
 	
 		if(this.isBadRGBA(material['ambient'][0],material['ambient'][1],material['ambient'][2],material['ambient'][3]))
 			throw "Material \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be for example:  <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
 
 
 		var emission = materials[i].getElementsByTagName('emission');
-		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), this.reader.getFloat(emission[0], 'g', 1), this.reader.getFloat(emission[0], 'b', 1), this.reader.getFloat(emission[0], 'a', 1)];
+		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), 
+								this.reader.getFloat(emission[0], 'g', 1), 
+								this.reader.getFloat(emission[0], 'b', 1), 
+								this.reader.getFloat(emission[0], 'a', 1)];
 		
 		if(this.isBadRGBA(material['emission'][0],material['emission'][1],material['emission'][2],material['emission'][3]))
 			throw "Material \""+ id+"\" emission is wrong or the tag name is missing! It shoud be for example:  <emission r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
@@ -388,6 +428,8 @@ LSXreader.prototype.parseMaterials= function(rootElement) {
 
 	return 0;
 };
+
+
 /**	@brief Faz o parsing da Leaves do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse das leaves
   */	
@@ -433,6 +475,8 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
 
 	return 0;
 };
+
+
 /**	@brief Faz o parsing dos Nodes do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse dos Nodes
   */	
@@ -456,23 +500,39 @@ LSXreader.prototype.parseNodes= function(rootElement) {
 
 	var i;
 	for(i = 0; i < nodes.length; i++){
-		this.readNode(nodes[i]);
+		var result = this.readNode(nodes[i]);
+
+		if(result != 0)
+			return result;
 	}
 };
+
+
 /**	@brief Função auxiliar da função parseNodes(rootElement) que faz o read de todos os valores de um determinado node
   *	@param nodeTag tag do node ao qual se pretende ler todos os seus valores
   */	
 LSXreader.prototype.readNode = function(nodeTag) {
 
 	var id = this.reader.getString(nodeTag, 'id', 1);
+	if(this.scene.graph.leaves[id]!=null)
+		throw "A leaf with the id: "+id+" already exists! It should be different!";
 	var materialID, textureID;
 	
 	if(nodeTag.children[0].tagName == 'MATERIAL')
+	{
 		materialID = this.reader.getString(nodeTag.children[0], 'id', 1);
+
+		if(!(materialID in this.scene.graph.materials) && (materialID != 'null'))
+			return "The material " + materialID + " doesn't exist!"; 
+	}	
 	else return "MATERIAL tag is missing on NODE specifications.";
 
 	if(nodeTag.children[1].tagName == 'TEXTURE')
+	{
 		textureID = this.reader.getString(nodeTag.children[1], 'id', 1);
+		if(!(textureID in this.scene.graph.textures) && (textureID != 'null' && textureID != 'clear'))
+			return "The texture " + textureID + " doesn't exist!"; 
+	}
 	else return "TEXTURE tag is missing on NODE specifications.";
 
 	
@@ -493,7 +553,11 @@ LSXreader.prototype.readNode = function(nodeTag) {
 	var newNode = new Node(id, materialID, textureID, mat, desc);
 
 	this.scene.graph.nodes[id] = newNode;
+
+	return 0;
 };
+
+
 /**	@brief Função auxiliar da função readNode(nodeTag) que faz o read de todas as transformação associadas ao nodeTag
   *	@param numTransformations numero de transformações associadas ao node
   *	@param nodeTag tag do node ao qual se pretende ler as transformações
@@ -543,6 +607,8 @@ LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeT
 
 	return mat;
 };
+
+
 /**	@brief Função auxiliar que lê argumentos de primitivas
   *	@param tagLine linha onde o tag se encontra
   *	@param tag tag do argumento
@@ -589,6 +655,8 @@ LSXreader.prototype.isBadInteger=function () {
 
 	return false;
 };
+
+
 /**	@brief Função que verifica se um valor é boleano
   * @param bool recebe um conjunto de argumentos variáveis
   * @return retorna true se é um mau valor boolean e false se não
@@ -599,6 +667,7 @@ LSXreader.prototype.isBadBoolean=function (bool) {
 		return false
 	return true;
 };
+
 
 /**	@brief Função que verifica se um conjunto de valores é código RGB
   * @param r valor r
@@ -621,6 +690,7 @@ LSXreader.prototype.isBadRGBA=function (r,g,b,a) {
 	}
 	return false;
 }; 
+
 
 /**	@brief Função que envia o erro do parser
   * @param message message of error
