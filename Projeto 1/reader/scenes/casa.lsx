@@ -237,7 +237,7 @@
 
 		<NODE id="walls">       
 			<MATERIAL id="null" />             
-			<TEXTURE id="door" />       
+			<TEXTURE id="stonewall" />       
 			<DESCENDANTS> 
 				<DESCENDANT id="leftWall" />
 				<DESCENDANT id="backWall" />
