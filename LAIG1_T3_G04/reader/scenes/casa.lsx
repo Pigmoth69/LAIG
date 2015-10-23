@@ -246,7 +246,7 @@
 
 		<NODE id="walls">       
 			<MATERIAL id="null" />             
-			<TEXTURE id="door" />       
+			<TEXTURE id="stonewall" />       
 			<DESCENDANTS> 
 				<DESCENDANT id="leftWall" />
 				<DESCENDANT id="backWall" />
@@ -348,7 +348,6 @@
 		<NODE id="rooftop">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="telhado" />
-			<TRANSLATION x="0" y="1" z="0" />
 			<TRANSLATION x="2.5" y="4" z="2.5" />
 			<DESCENDANTS> 
 				<DESCENDANT id="frontRoof" />

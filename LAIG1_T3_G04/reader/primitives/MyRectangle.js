@@ -40,10 +40,11 @@ MyRectangle.prototype.initBuffers = function() {
 	];
 
 	 this.originalTexCoords = [
-    	0, this.y1-this.y2,
-    	this.x2-this.x1, this.y1-this.y2,
-    	this.x2-this.x1, 0,
+    	0, (this.y1 - this.y2)/(this.x2 - this.x1),
+    	1, (this.y1 - this.y2)/(this.x2 - this.x1),
+    	1, 0,
     	0, 0
+
     ];
 
 	this.texCoords = this.originalTexCoords.slice(0);

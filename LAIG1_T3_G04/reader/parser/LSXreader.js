@@ -437,7 +437,7 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 
 	var animationsTag = rootElement.getElementsByTagName('animations');
 
-	if(animationsTag == null){
+	if(animationsTag.length == 0){
 		return "animations tag is missing";
 	}
 
