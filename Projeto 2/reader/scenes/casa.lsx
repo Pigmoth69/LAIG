@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<!-- cada no animado deve levar a tag <ANIMATIONREF ID="ss"/> por cada animação pretendida -->
+
+
 <SCENE>
 
 	<INITIALS>
 		<frustum near="1" far="500"/>                    
-		<translation x="-5" y="-3" z="-5" />            
-		<rotation axis="x" angle="0" />   
+		<translation x="-8" y="-8" z="-5" />            
+		<rotation axis="x" angle="-10" />   
 		<rotation axis="y" angle="0" />            
-		<rotation axis="z" angle="0" />             
-		<scale sx="1" sy="1" sz="1" />                
+		<rotation axis="z" angle="15" />             
+		<scale sx="0.75" sy="0.75" sz="0.75" />                
 		<reference length="0" />                  
 	</INITIALS>
 
@@ -67,7 +69,7 @@
 		</TEXTURE>
 		<TEXTURE id="telhado">
 			<file path="./textures_casa/telhado.jpg" />
-			<amplif_factor s="1" t="1" /> 
+			<amplif_factor s="1" t="1.5" /> 
 		</TEXTURE>
 		<TEXTURE id="stonewall">
 			<file path="./textures_casa/stonewall.jpg" />
@@ -199,6 +201,7 @@
 				<DESCENDANT id="lamps" />
 				<DESCENDANT id="gate" />
 				<DESCENDANT id="well" />
+				<DESCENDANT id="animated_object" />
 			</DESCENDANTS>
 		</NODE>
 		
@@ -808,6 +811,15 @@
 			<SCALE sx="0.25" sy="0.25" sz="0.5"/>     
 			<DESCENDANTS> 
 				<DESCENDANT id="CYL" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="animated_object">       
+			<MATERIAL id="metal" />             
+			<TEXTURE id="null" />
+			<TRANSLATION x="7" y="0" z="-5"/>
+			<DESCENDANTS> 
+				<DESCENDANT id="cube" />
 			</DESCENDANTS>
 		</NODE>
 

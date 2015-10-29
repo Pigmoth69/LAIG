@@ -18,6 +18,8 @@ LSXscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
     this.enableTextures(true);
 
+    this.setUpdatePeriod(100);
+
 	this.graph = new Graph();
 
 };
@@ -203,4 +205,10 @@ LSXscene.prototype.display = function () {
 	}
 	
 	this.shader.unbind(); 
+};
+
+
+LSXscene.prototype.update = function(currTime) {
+
+
 };

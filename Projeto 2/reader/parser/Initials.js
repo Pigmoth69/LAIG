@@ -18,7 +18,7 @@ Initials.prototype.rotateMatrix = function(axis,angle){
 		case 'y':
 		mat4.rotate(this.transMatrix, this.transMatrix, angle*Math.PI/180, [0,1,0]);
 		break;
-		case 'x':
+		case 'z':
 		mat4.rotate(this.transMatrix, this.transMatrix, angle*Math.PI/180, [0,0,1]);
 		break;
 		default:
