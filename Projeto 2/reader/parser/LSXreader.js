@@ -461,7 +461,8 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 			return "Unknown animation type: " + type;
 		}
 
-		var span = this.reader.getFloat(animationsTag.children[i], 'span', 1);
+		//already stores the value in milliseconds
+		var span = (this.reader.getFloat(animationsTag.children[i], 'span', 1)) * 1000;
 
 		var animation = new Animation(id, span);
 
@@ -480,7 +481,7 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 
 				var control = vec3.fromValues(xx, yy, zz);
 				controlpoints.push(control);
-			}
+			}			
 
 			this.scene.graph.animations[id] = new LinearAnimation(animation, controlpoints);
 		}
@@ -622,8 +623,11 @@ LSXreader.prototype.readNode = function(nodeTag) {
 
 	var numTransformations = nodeTag.children.length - 3;
 	var mat = this.readNodeTransformations(numTransformations, nodeTag);
+	var animations = this.readNodeAnimations(id, nodeTag);
+	if(animations == -1)
+		return -1;
 
-	var newNode = new Node(id, materialID, textureID, mat, desc);
+	var newNode = new Node(id, materialID, textureID, mat, desc, animations);
 
 	this.scene.graph.nodes[id] = newNode;
 
@@ -681,6 +685,25 @@ LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeT
 	return mat;
 };
 
+/**	@brief Função auxiliar da função readNode(nodeTag) que faz o read de todas as animacoes associadas ao nodeTag
+  *	@param nodeTag tag do node ao qual se pretende ler as transformações
+  */
+LSXreader.prototype.readNodeAnimations = function(nodeID, nodeTag) {
+	var animations = [];
+
+	//gathers all ANIMATIONREF tags inside an array
+	var animationRefs = nodeTag.getElementsByTagName('ANIMATIONREF');
+
+	for(var i = 0; i < animationRefs.length; i++){
+		var animationID = this.reader.getString(animationRefs[i], 'id', 1);
+
+		if(this.scene.graph.animations[animationID] != null)
+			animations.push(animationID);
+		else throw "Animation undefined at " + nodeID + ": " + animationID;
+	}
+
+	return animations;
+}
 
 /**	@brief Função auxiliar que lê argumentos de primitivas
   *	@param tagLine linha onde o tag se encontra

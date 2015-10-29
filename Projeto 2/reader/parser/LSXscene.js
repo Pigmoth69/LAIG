@@ -1,3 +1,5 @@
+var MILLISECONDS_TO_UPDATE = 50;
+
 function LSXscene(application) {
     CGFscene.call(this);
 }
@@ -18,9 +20,10 @@ LSXscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
     this.enableTextures(true);
 
-    this.setUpdatePeriod(100);
+    this.setUpdatePeriod(MILLISECONDS_TO_UPDATE);
 
 	this.graph = new Graph();
+	this.milliseconds = 0;
 
 };
 
@@ -125,6 +128,9 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 	if (texture == "null")
 		texture = textureID;
 
+	if(this.graph.nodes[node].animations.length != 0)
+		this.graph.nodes[node].applyAnimations(this);
+
 	var descendants = this.graph.nodes[node].descendants;  // recolha dos descendentes do node em questao
 	for (var i = 0; i < descendants.length; ++i) {
 		this.drawNode(descendants[i], material, texture);
@@ -208,7 +214,6 @@ LSXscene.prototype.display = function () {
 };
 
 
-LSXscene.prototype.update = function(currTime) {
-
-
+LSXscene.prototype.update = function() {
+	this.milliseconds++;
 };

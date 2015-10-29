@@ -170,8 +170,8 @@
 
 	<animations>
 		<animation id="primeira" span="5" type="linear">
-			 <controlpoint xx="0" yy="0" zz="0" />
-			 <controlpoint xx="1" yy="1" zz="1" />
+			 <controlpoint xx="7" yy="0" zz="-3" />
+			 <controlpoint xx="7" yy="3" zz="-3" />
 		</animation>
 
 		 <animation id="segunda" span="10" type="circular" center="0 0 0" radius="5" startang="45" rotang="180" />
@@ -818,6 +818,7 @@
 			<MATERIAL id="metal" />             
 			<TEXTURE id="null" />
 			<TRANSLATION x="7" y="0" z="-5"/>
+			<ANIMATIONREF id="primeira" />
 			<DESCENDANTS> 
 				<DESCENDANT id="cube" />
 			</DESCENDANTS>
