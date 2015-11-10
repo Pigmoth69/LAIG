@@ -1,7 +1,7 @@
 function LinearAnimation(id, span, controlpoints) {
 	this.id = id;
 	this.span = span;
-	this.controlpoints = controlpoints;
+	this.controlpoints = [];
 	this.totalDistance = 0;
 
 	for(var j = 0; j < controlpoints.length - 1; j++){
@@ -18,6 +18,10 @@ function LinearAnimation(id, span, controlpoints) {
 LinearAnimation.prototype = Object.create(Object.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
-LinearAnimation.prototype.updateNodeMatrix = function(matrix){
+LinearAnimation.prototype.updateNodeMatrix = function(matrix, milliseconds){
+	var newMatrix = mat4.create();
+
+	if(milliseconds == 0)
+
 	
 };
