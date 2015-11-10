@@ -216,4 +216,9 @@ LSXscene.prototype.display = function () {
 
 LSXscene.prototype.update = function() {
 	this.milliseconds++;
+
+	for(node in this.graph.nodes){
+		if(this.graph.nodes[node].animations.length > 0)
+			this.graph.nodes[node].applyAnimations(scene);
+	}
 };

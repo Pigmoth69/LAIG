@@ -6,14 +6,17 @@ function Node(id, material, texture, matrix, descendants, animations) {
 	this.matrix = matrix; // matriz de transformação do nó
 	this.descendants = descendants;
 	this.animations = animations;
-}
+};
 
 Node.prototype.constructor = Node;
 Node.prototype = Object.create(Object.prototype);
 
 Node.prototype.applyAnimations = function (scene) {
+	var stackingSpan = 0;
 	for(var i = 0; i < this.animations.length; i++){
-		//if(scene.graph.animations[this.animations[i]] instanceof LinearAnimation)
-			//console.log(scene.graph.animations[this.animations[i]].totalDistance);
+		if(scene.milliseconds < this.animations[i].span + stackingSpan){
+			this.matrix = this.animations[i].updateNodeMatrix(this.matrix, scene.milliseconds - stackingSpan);
+			
+		}
 	}
-}
+};

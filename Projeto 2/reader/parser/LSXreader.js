@@ -464,8 +464,6 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 		//already stores the value in milliseconds
 		var span = (this.reader.getFloat(animationsTag.children[i], 'span', 1)) * 1000;
 
-		var animation = new Animation(id, span);
-
 		if(type == 'linear'){
 			var controls = animationsTag.children[i].getElementsByTagName('controlpoint');
 
@@ -474,16 +472,15 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 			}
 
 			var controlpoints = [];
-			for(var j = 0 ; j < controls.size; j++){
+			for(var j = 0 ; j < controls.length; j++){
 				var xx = this.reader.getFloat(controls[j], 'xx', 1);
 				var yy = this.reader.getFloat(controls[j], 'yy', 1);
 				var zz = this.reader.getFloat(controls[j], 'zz', 1);
-
 				var control = vec3.fromValues(xx, yy, zz);
 				controlpoints.push(control);
 			}			
 
-			this.scene.graph.animations[id] = new LinearAnimation(animation, controlpoints);
+			this.scene.graph.animations[id] = new LinearAnimation(id, span, controlpoints);
 		}
 		else{
 			var temp = this.getArgs(animationsTag.children[i], 'center', 1);
@@ -498,7 +495,7 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 		
 			var rotang = this.reader.getFloat(animationsTag.children[i], 'rotang', 1);
 
-			this.scene.graph.animations[id] = new CircularAnimation(animation, center, radius, startang, rotang);
+			this.scene.graph.animations[id] = new CircularAnimation(id, span, center, radius, startang, rotang);
 		}
 	}
 

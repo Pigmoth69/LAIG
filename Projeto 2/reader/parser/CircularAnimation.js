@@ -1,5 +1,6 @@
-function CircularAnimation(animation, center, radius, startang, rotang) {
-	this.animation = animation;
+function CircularAnimation(id, span, center, radius, startang, rotang) {
+	this.id = id;
+	this.span = span;
 	this.center = center;
 	this.radius = radius;
 	this.startang = startang;

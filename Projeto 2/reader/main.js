@@ -12,7 +12,7 @@ function getUrlVars() {
 }	 
 
 serialInclude(['../lib/CGF.js', './parser/LSXscene.js','./parser/LSXreader.js','./parser/Interface.js',
-               './parser/Animation.js', './parser/LinearAnimation.js', './parser/CircularAnimation.js',
+               './parser/LinearAnimation.js', './parser/CircularAnimation.js',
                './parser/Light.js','./parser/Texture.js','./parser/Node.js','./parser/Material.js',
                './parser/Initials.js', './parser/Illumination.js','./parser/Graph.js',
                './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
