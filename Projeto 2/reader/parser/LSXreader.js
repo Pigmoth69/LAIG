@@ -470,6 +470,9 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 			if(controls == null){
 				return "Any controlpoints were added to animation: " + id;
 			}
+			else if(controls < 2){
+				return "Insuficient number of controlpoints for animation " + id;
+			}
 
 			var controlpoints = [];
 			for(var j = 0 ; j < controls.length; j++){
@@ -479,6 +482,7 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 				var control = vec3.fromValues(xx, yy, zz);
 				controlpoints.push(control);
 			}			
+
 
 			this.scene.graph.animations[id] = new LinearAnimation(id, span, controlpoints);
 		}

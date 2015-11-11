@@ -14,9 +14,15 @@ Node.prototype = Object.create(Object.prototype);
 Node.prototype.applyAnimations = function (scene) {
 	var stackingSpan = 0;
 	for(var i = 0; i < this.animations.length; i++){
-		if(scene.milliseconds < this.animations[i].span + stackingSpan){
-			this.matrix = this.animations[i].updateNodeMatrix(this.matrix, scene.milliseconds - stackingSpan);
-			
+		console.log('oi ' +  scene.milliseconds + '   ' + scene.graph.animations[this.animations[i]].span);
+		if(scene.milliseconds < scene.graph.animations[this.animations[i]].span + stackingSpan){
+			var newMatrix = scene.graph.animations[this.animations[i]].updateNodeMatrix(this.matrix, scene.milliseconds - stackingSpan);
+			if(newMatrix != null){
+				this.matrix = newMatrix;
+				break;
+			}
 		}
+		else if(scene.milliseconds == this.animations[i].span + stackingSpan)
+			stackinSpan += this.animations[i].span;
 	}
 };
