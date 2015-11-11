@@ -72,15 +72,21 @@ LinearAnimation.prototype.updateNodeMatrix = function(matrix, milliseconds){
 	for(var j = 1; j < this.controlpoints.length; j++){
 		if(currDistance <= this.controlpoints[j].distance)
 		{
-			var fractionDistance = (currDistance - this.controlpoints[j-1].distance) / (this.controlpoints[j].distance - this.controlpoints[j-1].distance);
-			var position = vec3.create();
-			vec3.scale(position, this.controlpoints[j-1].point3D, fractionDistance);
 
-			mat4.translate(newMatrix, newMatrix, position);
-			
 			var currRotation = this.controlpoints[j].rotationStep * (currDistance - this.controlpoints[j-1].distance);
 
-			mat4.rotate(newMatrix, newMatrix, currRotation, this.controlpoints[j].rotationAxis);
+			
+			
+			var distanceFactor = (currDistance - this.controlpoints[j-1].distance)/(this.controlpoints[j].distance - this.controlpoints[j-1].distance);
+			var vector = vec3.create();
+			vec3.sub(vector, this.controlpoints[j].point3D, this.controlpoints[j-1].point3D);
+			vec3.normalize(vector, vector);
+			vec3.scale(vector, vector, distanceFactor);
+			var position = vec3.create();
+			vec3.multiply(position, this.controlpoints[j-1].point3D, vector);
+
+			mat4.translate(newMatrix, newMatrix, position);
+mat4.rotate(newMatrix, newMatrix, currRotation, this.controlpoints[j].rotationAxis);
 
 			return newMatrix;
 		}
