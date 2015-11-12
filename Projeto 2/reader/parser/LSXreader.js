@@ -532,20 +532,29 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
 
 		var type = this.reader.getString(leaves[i], 'type', 1);
 		
-		var args = this.getArgs(leaves[i], 'args', 1);
+		
 
 		if(type == "rectangle"){
+			var args = this.getArgs(leaves[i], 'args', 1);
 			this.scene.graph.leaves[id] = new MyRectangle(this.scene, args);
 		}
 		else if(type == "sphere") {
+			var args = this.getArgs(leaves[i], 'args', 1);
 			this.scene.graph.leaves[id] = new MySphere(this.scene, args);
 		}
 		else if(type == "cylinder"){
+			var args = this.getArgs(leaves[i], 'args', 1);
 			this.scene.graph.leaves[id] = new MyCylinder(this.scene, args);
 		}
 		else if(type == "triangle"){
+			var args = this.getArgs(leaves[i], 'args', 1);
 			this.scene.graph.leaves[id] = new MyTriangle(this.scene, args);
 		}
+		else if(type == "plane"){
+			var args = this.getArgs(leaves[i], 'parts', 1);
+			this.scene.graph.leaves[id] = new MyPlane(this.scene, args);
+		}
+
 		else return "ERROR: unexistent leaf type: " + type;
 		
 	} 

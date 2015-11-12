@@ -175,7 +175,8 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 LSXscene.prototype.updateLightsState = function (lightid,value) {
 	for(var i = 0; i < this.graph.lights.length;i++){
 		if(this.lights[i] == lightid)
-			this.lights[i].enabled=value;
+			if(value)
+				this.lights[i].enabled=value;
 	}
 };
 
