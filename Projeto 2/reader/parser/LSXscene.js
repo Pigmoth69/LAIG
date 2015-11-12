@@ -96,7 +96,7 @@ LSXscene.prototype.loadLights = function (){
   */
 LSXscene.prototype.updateLights = function (){
 	for(var i = 0; i < this.graph.lights.length; i++){
-		if(this.lights[i].enabled)
+		if(this.graph.lightsStateValue[this.graph.lights[i]._id])
 			this.lights[i].enable();
 		else this.lights[i].disable();
 
