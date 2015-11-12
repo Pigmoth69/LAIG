@@ -16,7 +16,7 @@ MyPlane.prototype.constructor = MyPlane;
 
 
 MyPlane.prototype.makeSurface = function(){
-	var degree = this.divisions;
+	var degree = this.divisions; 
 	var knots = [];
 	var controlVertexes = [];
 	var uVertex = [], vVertex = [];
