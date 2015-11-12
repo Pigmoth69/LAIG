@@ -85,8 +85,9 @@ LSXscene.prototype.loadIllumination = function() {
 LSXscene.prototype.loadLights = function (){
 
 	for(var i = 0; i < this.graph.lights.length; ++i) {
-		this.graph.lightsStateValue[this.graph.lights[i].id]=this.graph.lights[i].enabled;
-		this.lights[i] = this.graph.lights[i];;
+		this.graph.lightsStateValue[this.graph.lights[i]._id]=this.graph.lights[i].enabled;
+		this.lights[i] = this.graph.lights[i];
+		
 	}
 };
 
@@ -173,7 +174,7 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
   */
 LSXscene.prototype.updateLightsState = function (lightid,value) {
 	for(var i = 0; i < this.graph.lights.length;i++){
-		if(this.lights[i].id == lightid)
+		if(this.lights[i] == lightid)
 			this.lights[i].enabled=value;
 	}
 };
@@ -183,7 +184,6 @@ LSXscene.prototype.updateLightsState = function (lightid,value) {
   */
 LSXscene.prototype.display = function () {
 
-    this.shader.bind();
 
 	//limpa o conteudo do buffer
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -209,16 +209,17 @@ LSXscene.prototype.display = function () {
 		//inicializa a leitura e desenho do grafo obtido no ficheiro .lsx
 		this.drawNode(this.graph.rootID, 'null', 'clear');
 	}
-	
-	this.shader.unbind(); 
 };
 
 
 LSXscene.prototype.update = function() {
 	this.milliseconds += MILLISECONDS_TO_UPDATE;
 
-	for(node in this.graph.nodes){
-		if(this.graph.nodes[node].animations.length > 0)
+	for(var i = 0; i < this.graph.animatedNodes.length; i++)
+	{
+		if(this.graph.nodes[this.graph.animatedNodes[i]])
+		{
 			this.graph.nodes[node].applyAnimations(this);
+		}
 	}
 };

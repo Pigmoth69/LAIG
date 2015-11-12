@@ -495,9 +495,9 @@ LSXreader.prototype.parseAnimations= function(rootElement) {
 
 			var radius = this.reader.getFloat(animationsTag.children[i], 'radius', 1);
 
-			var startang = this.reader.getFloat(animationsTag.children[i], 'startang', 1);
+			var startang = this.reader.getFloat(animationsTag.children[i], 'startang', 1) * Math.PI / 180;
 		
-			var rotang = this.reader.getFloat(animationsTag.children[i], 'rotang', 1);
+			var rotang = this.reader.getFloat(animationsTag.children[i], 'rotang', 1) * Math.PI / 180;
 
 			this.scene.graph.animations[id] = new CircularAnimation(id, span, center, radius, startang, rotang);
 		}
@@ -629,6 +629,9 @@ LSXreader.prototype.readNode = function(nodeTag) {
 		return -1;
 
 	var newNode = new Node(id, materialID, textureID, mat, desc, animations);
+
+	if(newNode.animations > 0)
+		this.scene.graph.animations.push(id);
 
 	this.scene.graph.nodes[id] = newNode;
 

@@ -9,6 +9,7 @@ function Graph() {
 	this.nodes = [];
 	this.lightsStateValue = [];
 	this.animations = [];
+	this.animatedNodes = [];
 };
 
 

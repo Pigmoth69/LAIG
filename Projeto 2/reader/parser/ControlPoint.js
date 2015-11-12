@@ -4,7 +4,6 @@ function ControlPoint(point3D, orientation) {
 	this.orientation = orientation;
 	this.check = false;
 	this.distance = 0;
-	this.rotationStep = 0;
 	this.rotationAxis = vec3.create();
 };
 

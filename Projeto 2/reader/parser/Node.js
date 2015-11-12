@@ -3,7 +3,8 @@ function Node(id, material, texture, matrix, descendants, animations) {
 	this.id = id;
 	this.material = material;
 	this.texture = texture;
-	this.matrix = matrix; // matriz de transformação do nó
+	this.matrix = matrix; // matriz de transformação do node que se aplicam no display da cena
+	this.originalMatrix = matrix; // matrix original do node
 	this.descendants = descendants;
 	this.animations = animations;
 };
@@ -13,16 +14,12 @@ Node.prototype = Object.create(Object.prototype);
 
 Node.prototype.applyAnimations = function (scene) {
 	var stackingSpan = 0;
-	for(var i = 0; i < this.animations.length; i++){
-		console.log('oi ' +  scene.milliseconds + '   ' + scene.graph.animations[this.animations[i]].span);
-		if(scene.milliseconds < scene.graph.animations[this.animations[i]].span + stackingSpan){
-			var newMatrix = scene.graph.animations[this.animations[i]].updateNodeMatrix(this.matrix, scene.milliseconds - stackingSpan);
-			if(newMatrix != null){
-				this.matrix = newMatrix;
-				break;
-			}
+
+	for(var i = 0; i < this.animations.length; i++)
+		if(scene.milliseconds <= scene.graph.animations[this.animations[i]].span + stackingSpan)
+		{
+			this.matrix = scene.graph.animations[this.animations[i]].updateNodeMatrix(this.originalMatrix, scene.milliseconds - stackingSpan);
+			break;
 		}
-		else if(scene.milliseconds == this.animations[i].span + stackingSpan)
-			stackinSpan += this.animations[i].span;
-	}
+		else stackingSpan += scene.graph.animations[this.animations[i]].span;
 };
