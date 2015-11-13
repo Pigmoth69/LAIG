@@ -19,8 +19,9 @@ MyPlane.prototype.makeSurface = function(){
 	var degree = 1;
 	var knots = [0,0,1,1];
 	var controlVertexes = [];
-	controlVertexes.push([[0.5,0,-0.5,1],[0.5,0,0.5,1]]);
 	controlVertexes.push([[-0.5,0,-0.5,1],[-0.5,0,0.5,1]]);
+	controlVertexes.push([[0.5,0,-0.5,1],[0.5,0,0.5,1]]);
+	controlVertexes.reverse();
 	
 	return new CGFnurbsSurface(degree, degree, knots, knots, controlVertexes);
 };

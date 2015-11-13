@@ -186,11 +186,32 @@
 		<LEAF id="TRI" type="triangle" args="0 1 0  -0.5 0 1  0.5 0 1" />
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
 		<LEAF id="PLANE" type="plane" parts="5" />
-		<LEAF id="PATCH" type="patch" order="1" partsU=" 20" partsV="20">
-			<controlpoint x="-2" y="0" z="-2" />
-			<controlpoint x="-2" y="0" z="2" />
-			<controlpoint x="2" y="0" z="-2" />
-			<controlpoint x="2" y="0" z="2" />	
+		<LEAF id="PATCH" type="patch" order="4" partsU=" 20" partsV="20">
+			<controlpoint x="-2" y="-2" z="0" />
+			<controlpoint x="-2" y="-1" z="0" />
+			<controlpoint x="-2" y="0" z="0" />
+			<controlpoint x="-2" y="1" z="0" />
+			<controlpoint x="-2" y="2" z="0" />
+			<controlpoint x="-1" y="-2" z="0" />
+			<controlpoint x="-1" y="-1" z="1" />
+			<controlpoint x="-1" y="0" z="0" />
+			<controlpoint x="-1" y="1" z="1" />
+			<controlpoint x="-1" y="2" z="0" />
+			<controlpoint x="0" y="-2" z="0" />
+			<controlpoint x="0" y="-1" z="0" />
+			<controlpoint x="0" y="0" z="-1" />
+			<controlpoint x="0" y="1" z="0" />
+			<controlpoint x="0" y="2" z="0" />
+			<controlpoint x="1" y="-2" z="0" />
+			<controlpoint x="1" y="-1" z="1" />
+			<controlpoint x="1" y="0" z="0" />
+			<controlpoint x="1" y="1" z="1" />
+			<controlpoint x="1" y="2" z="0" />
+			<controlpoint x="2" y="-2" z="0" />
+			<controlpoint x="2" y="-1" z="0" />
+			<controlpoint x="2" y="0" z="0" />
+			<controlpoint x="2" y="1" z="0" />
+			<controlpoint x="2" y="2" z="0" />
 		</LEAF>	
 
 	</LEAVES>

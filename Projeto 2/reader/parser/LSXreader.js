@@ -612,7 +612,7 @@ return 0;
   			controlpoints.push(tempcontrolpoints);
   			tempcontrolpoints=[];
   		}
-  		//tem de ser reverse para ficar em Y+
+  		//tem de ser reverse para ficar em Y+  return controlpoints.reverse();
 		return controlpoints.reverse();
 }
 
