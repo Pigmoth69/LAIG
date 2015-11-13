@@ -9,7 +9,7 @@
 		<rotation axis="x" angle="-10" />   
 		<rotation axis="y" angle="0" />            
 		<rotation axis="z" angle="15" />             
-		<scale sx="0.75" sy="0.75" sz="0.75" />                
+		<scale sx="1.5" sy="1.5" sz="1.5" />                
 		<reference length="5" />                  
 	</INITIALS>
 
@@ -185,33 +185,52 @@
 		<LEAF id="SPH" type="sphere" args="1 20 50" />
 		<LEAF id="TRI" type="triangle" args="0 1 0  -0.5 0 1  0.5 0 1" />
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
-		<LEAF id="PLANE" type="plane" parts="5" />
-		<LEAF id="PATCH" type="patch" order="4" partsU=" 20" partsV="20">
+		<LEAF id="PLANE" type="plane" args="10 10" />
+		<!--Exemplo0-->
+		<LEAF id="EXEMPLO0" type="patch" args="1 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
 			<controlpoint x="-2" y="-2" z="0" />
-			<controlpoint x="-2" y="-1" z="0" />
-			<controlpoint x="-2" y="0" z="0" />
-			<controlpoint x="-2" y="1" z="0" />
 			<controlpoint x="-2" y="2" z="0" />
-			<controlpoint x="-1" y="-2" z="0" />
-			<controlpoint x="-1" y="-1" z="1" />
-			<controlpoint x="-1" y="0" z="0" />
-			<controlpoint x="-1" y="1" z="1" />
-			<controlpoint x="-1" y="2" z="0" />
-			<controlpoint x="0" y="-2" z="0" />
-			<controlpoint x="0" y="-1" z="0" />
-			<controlpoint x="0" y="0" z="-1" />
-			<controlpoint x="0" y="1" z="0" />
-			<controlpoint x="0" y="2" z="0" />
-			<controlpoint x="1" y="-2" z="0" />
-			<controlpoint x="1" y="-1" z="1" />
-			<controlpoint x="1" y="0" z="0" />
-			<controlpoint x="1" y="1" z="1" />
-			<controlpoint x="1" y="2" z="0" />
 			<controlpoint x="2" y="-2" z="0" />
-			<controlpoint x="2" y="-1" z="0" />
-			<controlpoint x="2" y="0" z="0" />
-			<controlpoint x="2" y="1" z="0" />
 			<controlpoint x="2" y="2" z="0" />
+		</LEAF>
+		<!--Exemplo1-->
+		<LEAF id="EXEMPLO1" type="patch" args="2 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+			<controlpoint x="-1.5" y="-1.5" z="0" />
+			<controlpoint x="-1.5" y="1.5" z="0" />
+			<controlpoint x="0" y="-1.5" z="3" />
+			<controlpoint x="0" y="1.5" z="3" />
+			<controlpoint x="1.5" y="-1.5" z="0" />
+			<controlpoint x="1.5" y="1.5" z="0" />
+		</LEAF>
+		<!--EXEMPLO2-->
+		<LEAF id="EXEMPLO2" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+			<controlpoint x="-1.5" y="-1.5" z="0" />
+			<controlpoint x="-2" y="-2" z="2" />
+			<controlpoint x="-2" y="2" z="2" />
+			<controlpoint x="-1.5" y="1.5" z="0" />
+			<controlpoint x="0" y="0" z="3" />
+			<controlpoint x="0" y="-2" z="3" />
+			<controlpoint x="0" y="2" z="3" />
+			<controlpoint x="0" y="0" z="3" />
+			<controlpoint x="1.5" y="-1.5" z="0" />
+			<controlpoint x="2" y="-2" z="2" />
+			<controlpoint x="2" y="2" z="2" />
+			<controlpoint x="1.5" y="1.5" z="0" />
+		</LEAF>	
+		<!--EXEMPLO3-->
+		<LEAF id="EXEMPLO3" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+			<controlpoint x="-2" y="-2" z="1" />
+			<controlpoint x="-2" y="-1" z="-2" />
+			<controlpoint x="-2" y="1" z="5" />
+			<controlpoint x="-2" y="2" z="-1" />
+			<controlpoint x="0" y="-2" z="0" />
+			<controlpoint x="0" y="-1" z="-1" />
+			<controlpoint x="0" y="1" z="1.5" />
+			<controlpoint x="0" y="2" z="0" />
+			<controlpoint x="2" y="-2" z="-1" />
+			<controlpoint x="2" y="-1" z="2" />
+			<controlpoint x="2" y="1" z="-5" />
+			<controlpoint x="2" y="2" z="1" />
 		</LEAF>	
 
 	</LEAVES>
@@ -233,7 +252,7 @@
 			<MATERIAL id="null" />             
 			<TEXTURE id="window" />       
 			<DESCENDANTS> 
-				<DESCENDANT id="PATCH" /> 
+				<DESCENDANT id="EXEMPLO3" /> 
 			</DESCENDANTS>
 		</NODE>
 		

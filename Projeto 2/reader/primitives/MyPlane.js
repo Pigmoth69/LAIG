@@ -2,14 +2,13 @@
  * MyPlane
  * @constructor
  */
-function MyPlane(scene,divisions) {
+function MyPlane(scene,partsU,partsV) {
 	CGFobject.call(this,scene);
-	this.divisions = divisions || 5;
 	var surface = this.makeSurface();
 	getSurfacePoint = function(u, v) {
 		return surface.getPoint(u, v);
 	};
-	this.plane = new CGFnurbsObject(scene,getSurfacePoint,this.divisions,this.divisions);
+	this.plane = new CGFnurbsObject(scene,getSurfacePoint,partsU,partsV);
 };
 MyPlane.prototype = Object.create(CGFobject.prototype);
 MyPlane.prototype.constructor = MyPlane;

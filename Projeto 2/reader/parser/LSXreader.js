@@ -551,31 +551,26 @@ LSXreader.prototype.onXMLReady=function() {
   			this.scene.graph.leaves[id] = new MyTriangle(this.scene, args);
   		}
   		else if(type == "plane"){
-  			var args = this.getArgs(leaves[i], 'parts', 1);
-  			if(args[0] <=0 || this.isBadInteger(args[0]))
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			if(args[0] <=0 ||args[1]<=0 || this.isBadInteger(args[0])||this.isBadInteger(args[1]))
   				return "The plane LEAf has no parts!";
-  			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0]);
+  			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0],args[1]);
   		}
   		else if(type == "patch"){
-  			var order = this.getArgs(leaves[i], 'order', 1);
-  			if(this.isBadInteger(order[0]) /*|| order !=1 || order !=2 || order != 3*/)
-  				return "The leaf "+id+" has wrong order!";
-
-  			var partsU = this.getArgs(leaves[i], 'partsU', 1);
-  			if(this.isBadInteger(partsU[0]) || partsU[0]<=0)
-  				return "The leaf "+id+" has non valid partsU integer!";
-
-  			var partsV = this.getArgs(leaves[i], 'partsV', 1);
-  			if(this.isBadInteger(partsV[0])|| partsV[0] <=0)
-  				return "The leaf "+id+" has non valid partsV integer!";
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			if(args[0]<=0 || this.isBadInteger(args[0])||
+  				args[1]<=0 || this.isBadInteger(args[1])||
+  				 args[2]<=0 || this.isBadInteger(args[2])||
+  				  args[3]<=0 || this.isBadInteger(args[3]))
+  				return "Band Path arguments!";
 
   			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
 
-  			if(controlpoints.length != Math.pow((order[0]+1),2))
+  			if(controlpoints.length != (args[0]+1)*(args[1]+1))
   				return "The leaf"+id+" has wrong number of controll points!";
 
-  			var finalControlPoints = this.parseControlPoints(order[0],controlpoints);
-			this.scene.graph.leaves[id] = new MyPatch(this.scene, order[0],partsU[0],partsV[0],finalControlPoints);
+  			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
+			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
 	}else
 	return "ERROR: unexistent leaf type: " + type;
 
@@ -586,7 +581,7 @@ return 0;
 /**	@brief Faz o parsing dos control points do patch do ficheiro LSX
   *	@param controlpointsElement elemento a partir do qual se inicia o parse dos control points
   */
-  LSXreader.prototype.parseControlPoints= function(order,controlpointsElement) {
+  LSXreader.prototype.parseControlPoints= function(orderU,orderV,controlpointsElement) {
 
 
 
@@ -594,6 +589,7 @@ return 0;
   	var tempcontrolpoints=[];
   	var points = [];
   	var pos = 0;
+
   	//ficam aqui todos os pontos dos controll points
   	for(var U = 0; U < controlpointsElement.length;U++){
   			var x =this.getArgs(controlpointsElement[U],'x',1);
@@ -604,8 +600,8 @@ return 0;
 
   		//todos os pontos ficam como devem estar
   		var pos = 0;
-  		for(var U = 0; U < order+1; U++){
-  			for(var V =0; V < order+1; V++){
+  		for(var U = 0; U < orderU+1; U++){
+  			for(var V =0; V < orderV+1; V++){
   				tempcontrolpoints.push(points[pos]);
   				pos++;
   			}
@@ -613,7 +609,7 @@ return 0;
   			tempcontrolpoints=[];
   		}
   		//tem de ser reverse para ficar em Y+  return controlpoints.reverse();
-		return controlpoints.reverse();
+		return controlpoints;
 }
 
 /**	@brief Faz o parsing dos Nodes do ficheiro LSX
