@@ -10,7 +10,7 @@
 		<rotation axis="y" angle="0" />            
 		<rotation axis="z" angle="15" />             
 		<scale sx="0.75" sy="0.75" sz="0.75" />                
-		<reference length="0" />                  
+		<reference length="5" />                  
 	</INITIALS>
 
 
@@ -186,6 +186,13 @@
 		<LEAF id="TRI" type="triangle" args="0 1 0  -0.5 0 1  0.5 0 1" />
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
 		<LEAF id="PLANE" type="plane" parts="5" />
+		<LEAF id="PATCH" type="patch" order="1" partsU=" 20" partsV="20">
+			<controlpoint x="-2" y="0" z="-2" />
+			<controlpoint x="-2" y="0" z="2" />
+			<controlpoint x="2" y="0" z="-2" />
+			<controlpoint x="2" y="0" z="2" />	
+		</LEAF>	
+
 	</LEAVES>
 
 
@@ -205,7 +212,7 @@
 			<MATERIAL id="null" />             
 			<TEXTURE id="window" />       
 			<DESCENDANTS> 
-				<DESCENDANT id="PLANE" />
+				<DESCENDANT id="PATCH" /> 
 			</DESCENDANTS>
 		</NODE>
 		

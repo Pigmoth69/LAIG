@@ -2,9 +2,9 @@
  * MyPlane
  * @constructor
  */
-function MyPlane(scene,args) {
+function MyPlane(scene,divisions) {
 	CGFobject.call(this,scene);
-	this.divisions = args[0] || 5;
+	this.divisions = divisions || 5;
 	var surface = this.makeSurface();
 	getSurfacePoint = function(u, v) {
 		return surface.getPoint(u, v);
@@ -16,38 +16,13 @@ MyPlane.prototype.constructor = MyPlane;
 
 
 MyPlane.prototype.makeSurface = function(){
-	var degree = this.divisions; 
-	var knots = [];
+	var degree = 1;
+	var knots = [0,0,1,1];
 	var controlVertexes = [];
-	var uVertex = [], vVertex = [];
-	var increment = 1 / this.divisions;
-
-	///push knots 1
-	for(var i = 0 ; i < this.divisions + 1;i++)
-		knots.push(0);
-	//push knots 2
-	for(var i = 0 ; i < this.divisions + 1;i++)
-		knots.push(1);
-
-	//controll controlvertexes
+	controlVertexes.push([[0.5,0,-0.5,1],[0.5,0,0.5,1]]);
+	controlVertexes.push([[-0.5,0,-0.5,1],[-0.5,0,0.5,1]]);
 	
-	var x=-0.5,z = 0.5;
-	for(var uDivs = 0; uDivs < this.divisions + 1;uDivs++){
-		uVertex = [];
-		for(var vDivs = 0; vDivs < this.divisions + 1; vDivs++){
-			vVertex = [];
-			vVertex.push(x,0,z,1);
-			uVertex.push(vVertex);
-			z-=increment;
-		}
-		controlVertexes.push(uVertex);	
-		z= 0.5;
-		x+=increment;
-	}
-
-	//create surface
 	return new CGFnurbsSurface(degree, degree, knots, knots, controlVertexes);
-
 };
 
 MyPlane.prototype.display = function(){
