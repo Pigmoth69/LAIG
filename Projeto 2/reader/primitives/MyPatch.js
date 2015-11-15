@@ -7,6 +7,7 @@ function MyPatch(scene,orderU,orderV,partsU,partsV,controllpoints) {
 	this.orderU = orderU;
 	this.orderV = orderV;
 	this.controllpoints = controllpoints;
+	console.log(controllpoints);
 
 	var surface = this.makeSurface();
 	getSurfacePoint = function(u, v) {

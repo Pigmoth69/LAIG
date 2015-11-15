@@ -1,4 +1,4 @@
-var MILLISECONDS_TO_UPDATE = 50;
+var MILLISECONDS_TO_UPDATE = 10;
 
 function LSXscene(application) {
     CGFscene.call(this);
@@ -22,6 +22,11 @@ LSXscene.prototype.init = function (application) {
 
     this.setUpdatePeriod(MILLISECONDS_TO_UPDATE);
 
+    this.terrainShader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+    this.terrainShader.setUniformsValues({heightmap: 1});
+	this.terrainShader.setUniformsValues({normScale: 50.0});
+
+    this.defaultAppearance = new CGFappearance(this);
 	this.graph = new Graph();
 	this.milliseconds = 0;
 
@@ -46,10 +51,10 @@ LSXscene.prototype.initCameras = function () {
 /**	@brief Atribui valores de aparência predefinidos a scene
   */
 LSXscene.prototype.setDefaultAppearance = function () {
-   	this.setAmbient(0.2, 0.4, 0.8, 1.0);
-    this.setDiffuse(0.2, 0.4, 0.8, 1.0);
-    this.setSpecular(0.2, 0.4, 0.8, 1.0);
-    this.setShininess(10.0);
+   	this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
+    this.defaultAppearance.setDiffuse(0.2, 0.4, 0.8, 1.0);
+    this.defaultAppearance.setSpecular(0.2, 0.4, 0.8, 1.0);
+    this.defaultAppearance.setShininess(10.0);
 };
 
 
@@ -147,24 +152,41 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
   * @param textureID ID da textura a ser aplicada.
   */
 LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
+
 	if (materialID != "null") //se o material nao for null, significa que este se encontra na lista de materiais obtidos
 		this.graph.materials[materialID].apply();
 	else
-		this.setDefaultAppearance();
+		this.defaultAppearance.apply();
+
+	if(this.graph.leaves[leaf] instanceof MyTerrain)
+	{
+		this.graph.textures[this.graph.leaves[leaf].texture].bind();
+
+		this.setActiveShader(this.terrainShader);
+		this.graph.textures[this.graph.leaves[leaf].heightmap].bind(1);
+		this.graph.leaves[leaf].display();
+		this.setActiveShader(this.defaultShader);
+		return;
+	}
+
+
+
 
 	var texture = null;
-
 	if (textureID != "clear")  //Se a textura for clear, nenhuma textura sera aplicada na Scene
 	{
 		texture = this.graph.textures[textureID];
 		this.graph.leaves[leaf].updateTextCoords(texture.amplifyFactor.ampS, texture.amplifyFactor.ampT);
-		texture.bind();
+		texture.bind(0); 
 	}
+
+
 
 	this.graph.leaves[leaf].display();
 
-	if (texture != null)
-		texture.unbind();
+	if(texture != null)
+		texture.unbind(0);
+
 };
 
 

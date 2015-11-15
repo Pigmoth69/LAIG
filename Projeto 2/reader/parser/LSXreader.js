@@ -553,8 +553,9 @@ LSXreader.prototype.onXMLReady=function() {
   		else if(type == "plane"){
   			var args = this.getArgs(leaves[i], 'args', 1);
   			if(args[0] <=0 ||args[1]<=0 || this.isBadInteger(args[0])||this.isBadInteger(args[1]))
-  				return "The plane LEAf has no parts!";
-  			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0],args[1]);
+  				return "The LEAF " + id + " has no parts!";
+
+  			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0], args[1]);
   		}
   		else if(type == "patch"){
   			var args = this.getArgs(leaves[i], 'args', 1);
@@ -562,54 +563,67 @@ LSXreader.prototype.onXMLReady=function() {
   				args[1]<=0 || this.isBadInteger(args[1])||
   				 args[2]<=0 || this.isBadInteger(args[2])||
   				  args[3]<=0 || this.isBadInteger(args[3]))
-  				return "Band Path arguments!";
+  				return "Invalid Patch arguments!";
 
   			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
 
   			if(controlpoints.length != (args[0]+1)*(args[1]+1))
-  				return "The leaf"+id+" has wrong number of controll points!";
+  				return "The LEAF "+id+" has wrong number of controlpoints!";
 
   			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
+
 			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
-	}else
-	return "ERROR: unexistent leaf type: " + type;
+  	}
+     else if(type == "terrain"){
+      var texture = this.reader.getString(leaves[i], 'texture', 1);
+      if(this.scene.graph.textures[texture] == null){
+        return "Invalid texture " + texture + " for terrain " + id + ".";
+      }
+      var heightmap = this.reader.getString(leaves[i], 'heightmap', 1);
+      if(this.scene.graph.textures[heightmap] == null){
+        return "Invalid heightmap " + heightmap + " for terrain " + id + ".";
+      }
+
+      this.scene.graph.leaves[id] = new MyTerrain(this.scene, texture, heightmap);
+    }
+      else return "ERROR: unexistent leaf type: " + type;
 
 } 
 
 return 0; 
 };
+
+
 /**	@brief Faz o parsing dos control points do patch do ficheiro LSX
   *	@param controlpointsElement elemento a partir do qual se inicia o parse dos control points
   */
-  LSXreader.prototype.parseControlPoints= function(orderU,orderV,controlpointsElement) {
+LSXreader.prototype.parseControlPoints= function(orderU,orderV,controlpointsElement) {
 
+	var controlpoints = [];
+	var tempcontrolpoints=[];
+	var points = [];
+	var pos = 0;
 
+	//ficam aqui todos os pontos dos controll points
+	for(var U = 0; U < controlpointsElement.length;U++){
+			var x =this.getArgs(controlpointsElement[U],'x',1);
+			var y = this.getArgs(controlpointsElement[U],'y',1);
+			var z = this.getArgs(controlpointsElement[U],'z',1);
+			points.push([x[0],y[0],z[0],1]);
+		}
 
-  	var controlpoints = [];
-  	var tempcontrolpoints=[];
-  	var points = [];
-  	var pos = 0;
-
-  	//ficam aqui todos os pontos dos controll points
-  	for(var U = 0; U < controlpointsElement.length;U++){
-  			var x =this.getArgs(controlpointsElement[U],'x',1);
-  			var y = this.getArgs(controlpointsElement[U],'y',1);
-  			var z = this.getArgs(controlpointsElement[U],'z',1);
-  			points.push([x[0],y[0],z[0],1]);
-  		}
-
-  		//todos os pontos ficam como devem estar
-  		var pos = 0;
-  		for(var U = 0; U < orderU+1; U++){
-  			for(var V =0; V < orderV+1; V++){
-  				tempcontrolpoints.push(points[pos]);
-  				pos++;
-  			}
-  			controlpoints.push(tempcontrolpoints);
-  			tempcontrolpoints=[];
-  		}
-  		//tem de ser reverse para ficar em Y+  return controlpoints.reverse();
-		return controlpoints;
+		//todos os pontos ficam como devem estar
+		var pos = 0;
+		for(var U = 0; U < orderU+1; U++){
+			for(var V =0; V < orderV+1; V++){
+				tempcontrolpoints.push(points[pos]);
+				pos++;
+			}
+			controlpoints.push(tempcontrolpoints);
+			tempcontrolpoints=[];
+		}
+		//tem de ser reverse para ficar em Y+  return controlpoints.reverse();
+	return controlpoints;
 }
 
 /**	@brief Faz o parsing dos Nodes do ficheiro LSX
@@ -701,51 +715,51 @@ return 0;
   *	@param numTransformations numero de transformações associadas ao node
   *	@param nodeTag tag do node ao qual se pretende ler as transformações
   */
-  LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeTag) {
+LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeTag) {
 
-  	var mat = mat4.create();
+	var mat = mat4.create();
 
-  	for(j = 0; j < numTransformations; j++){
+	for(j = 0; j < numTransformations; j++){
 
-  		var elem = nodeTag.children[j+2];
+		var elem = nodeTag.children[j+2];
 
-  		if(elem.tagName == 'TRANSLATION')
-  		{
-  			var x,y,z;
-  			x= this.reader.getFloat(elem, 'x', 1);
-  			y= this.reader.getFloat(elem, 'y', 1);
-  			z= this.reader.getFloat(elem, 'z', 1);
-  			if(this.isBadInteger(x,y,z))
-  				throw "Node "+ nodeTag+" transformation is wrong!";
-  			mat4.translate(mat,mat,[x,y,z]);
-  		}
-  		else if(elem.tagName == 'ROTATION')
-  		{
-  			var angle;
+		if(elem.tagName == 'TRANSLATION')
+		{
+			var x,y,z;
+			x= this.reader.getFloat(elem, 'x', 1);
+			y= this.reader.getFloat(elem, 'y', 1);
+			z= this.reader.getFloat(elem, 'z', 1);
+			if(this.isBadInteger(x,y,z))
+				throw "Node "+ nodeTag+" transformation is wrong!";
+			mat4.translate(mat,mat,[x,y,z]);
+		}
+		else if(elem.tagName == 'ROTATION')
+		{
+			var angle;
 
-  			angle = this.reader.getFloat(elem,'angle',1);
+			angle = this.reader.getFloat(elem,'angle',1);
 
-  			if(this.reader.getString(elem, 'axis', 1) == 'x')
-  				mat4.rotateX(mat, mat, angle *Math.PI/180);
-  			else if(this.reader.getString(elem, 'axis', 1) == 'y')
-  				mat4.rotateY(mat, mat, angle*Math.PI/180);
-  			else if(this.reader.getString(elem, 'axis', 1) == 'z')
-  				mat4.rotateZ(mat, mat, angle*Math.PI/180);
-  			else return "Error on node id: "+node['id']+" rotation AXIS!!";
-  		}
-  		else if(elem.tagName == 'SCALE')
-  		{
-  			var array = new Array();
-  			array.push(this.reader.getFloat(elem, 'sx', 1));
-  			array.push(this.reader.getFloat(elem, 'sy', 1));
-  			array.push(this.reader.getFloat(elem, 'sz', 1)); 
+			if(this.reader.getString(elem, 'axis', 1) == 'x')
+				mat4.rotateX(mat, mat, angle *Math.PI/180);
+			else if(this.reader.getString(elem, 'axis', 1) == 'y')
+				mat4.rotateY(mat, mat, angle*Math.PI/180);
+			else if(this.reader.getString(elem, 'axis', 1) == 'z')
+				mat4.rotateZ(mat, mat, angle*Math.PI/180);
+			else return "Error on node id: "+node['id']+" rotation AXIS!!";
+		}
+		else if(elem.tagName == 'SCALE')
+		{
+			var array = new Array();
+			array.push(this.reader.getFloat(elem, 'sx', 1));
+			array.push(this.reader.getFloat(elem, 'sy', 1));
+			array.push(this.reader.getFloat(elem, 'sz', 1)); 
 
-  			mat4.scale(mat,mat,array);
-  		}
-  	}
+			mat4.scale(mat,mat,array);
+		}
+	}
 
-  	return mat;
-  };
+	return mat;
+};
 
 /**	@brief Função auxiliar da função readNode(nodeTag) que faz o read de todas as animacoes associadas ao nodeTag
   *	@param nodeTag tag do node ao qual se pretende ler as transformações
@@ -773,31 +787,31 @@ return 0;
   *	@param value bolean se se pretende mostrar o warning ou não
   * @return retorna um array com os valores dos argumentos
   */
-  LSXreader.prototype.getArgs = function(tagLine, tag, value) {
-  	if (value == undefined)
-  		value = true;
-  	if (tagLine == null) {
-  		console.error("element is null.");
-  		return null;
-  	}
-  	if (tag == null) {
-  		console.error("args attribute name is null.");
-  		return null;
-  	}
-  	var d = tagLine.getAttribute(tag);
-  	if (d == null) {
-  		if (value) console.error(" is null for attribute " + tag + ".");
-  		return null;
-  	}
-  	var e = d.split(' ');
-  	var f = new Array();
-  	for (var g = 0; g < e.length; g++) {
-  		if(e[g] != "")
-  			f.push(parseFloat(e[g]));
+LSXreader.prototype.getArgs = function(tagLine, tag, value) {
+	if (value == undefined)
+		value = true;
+	if (tagLine == null) {
+		console.error("element is null.");
+		return null;
+	}
+	if (tag == null) {
+		console.error("args attribute name is null.");
+		return null;
+	}
+	var d = tagLine.getAttribute(tag);
+	if (d == null) {
+		if (value) console.error(" is null for attribute " + tag + ".");
+		return null;
+	}
+	var e = d.split(' ');
+	var f = new Array();
+	for (var g = 0; g < e.length; g++) {
+		if(e[g] != "")
+			f.push(parseFloat(e[g]));
 
-  	}
-  	return f;
-  };
+	}
+	return f;
+};
 
 
 /**	@brief Função que faz a verificação de valores inteiros.

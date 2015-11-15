@@ -5,12 +5,12 @@
 
 	<INITIALS>
 		<frustum near="1" far="500"/>                    
-		<translation x="-8" y="-8" z="-5" />            
-		<rotation axis="x" angle="-10" />   
+		<translation x="-5" y="-3" z="-5" />            
+		<rotation axis="x" angle="0" />   
 		<rotation axis="y" angle="0" />            
-		<rotation axis="z" angle="15" />             
-		<scale sx="1.5" sy="1.5" sz="1.5" />                
-		<reference length="5" />                  
+		<rotation axis="z" angle="0" />             
+		<scale sx="1" sy="1" sz="1" />                
+		<reference length="0" />                  
 	</INITIALS>
 
 
@@ -107,6 +107,14 @@
 			<file path="./textures_casa/gate.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
+		<TEXTURE id="terrain">
+			<file path="./textures_casa/terrain.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="heightmap">
+			<file path="./textures_casa/heightmap.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 	</TEXTURES> 
 
 
@@ -187,14 +195,14 @@
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
 		<LEAF id="PLANE" type="plane" args="10 10" />
 		<!--Exemplo0-->
-		<LEAF id="EXEMPLO0" type="patch" args="1 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+		<LEAF id="PATCH1" type="patch" args="1 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
 			<controlpoint x="-2" y="-2" z="0" />
 			<controlpoint x="-2" y="2" z="0" />
 			<controlpoint x="2" y="-2" z="0" />
 			<controlpoint x="2" y="2" z="0" />
 		</LEAF>
 		<!--Exemplo1-->
-		<LEAF id="EXEMPLO1" type="patch" args="2 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+		<LEAF id="PATCH2" type="patch" args="2 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
 			<controlpoint x="-1.5" y="-1.5" z="0" />
 			<controlpoint x="-1.5" y="1.5" z="0" />
 			<controlpoint x="0" y="-1.5" z="3" />
@@ -203,7 +211,7 @@
 			<controlpoint x="1.5" y="1.5" z="0" />
 		</LEAF>
 		<!--EXEMPLO2-->
-		<LEAF id="EXEMPLO2" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+		<LEAF id="PATCH3" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
 			<controlpoint x="-1.5" y="-1.5" z="0" />
 			<controlpoint x="-2" y="-2" z="2" />
 			<controlpoint x="-2" y="2" z="2" />
@@ -218,7 +226,7 @@
 			<controlpoint x="1.5" y="1.5" z="0" />
 		</LEAF>	
 		<!--EXEMPLO3-->
-		<LEAF id="EXEMPLO3" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+		<LEAF id="PATCH4" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
 			<controlpoint x="-2" y="-2" z="1" />
 			<controlpoint x="-2" y="-1" z="-2" />
 			<controlpoint x="-2" y="1" z="5" />
@@ -232,6 +240,7 @@
 			<controlpoint x="2" y="1" z="-5" />
 			<controlpoint x="2" y="2" z="1" />
 		</LEAF>	
+		<LEAF id="MOUNTAIN" type="terrain" texture="terrain" heightmap="heightmap"/>
 
 	</LEAVES>
 
@@ -243,19 +252,50 @@
 			<MATERIAL id="default" />             
 			<TEXTURE id="null" />       
 			<DESCENDANTS> 
-				<DESCENDANT id="p" />
-				
+				<DESCENDANT id="house" />
+				<DESCENDANT id="garden" />
+				<DESCENDANT id="border" />
+				<DESCENDANT id="underground" />
+				<DESCENDANT id="tree" />
+				<DESCENDANT id="lamps" />
+				<DESCENDANT id="gate" />
+				<DESCENDANT id="well" />
+				<DESCENDANT id="extra" />
+				<DESCENDANT id="extra2" />
+				<DESCENDANT id="shader" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="p">       
+		<NODE id="shader">       
 			<MATERIAL id="null" />             
-			<TEXTURE id="window" />       
+			<TEXTURE id="null" />   
+			<SCALE sx="10" sy="1" sz="10"/>
 			<DESCENDANTS> 
-				<DESCENDANT id="EXEMPLO3" /> 
+				<DESCENDANT id="MOUNTAIN" />
 			</DESCENDANTS>
 		</NODE>
-		
+
+		<NODE id="extra">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="null" />   
+			<ANIMATIONREF id="primeira"/>   
+			<ANIMATIONREF id="segunda"/> 
+			<DESCENDANTS> 
+				<DESCENDANT id="PATCH3" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="extra2">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="null" />  
+			<ANIMATIONREF id="primeira"/>   
+			<ANIMATIONREF id="segunda"/> 
+			<TRANSLATION x="-5" y="3" z="5" />   
+			<DESCENDANTS> 
+				<DESCENDANT id="PLANE" />
+			</DESCENDANTS>
+		</NODE>
+
 		<NODE id="house">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" />       
@@ -872,9 +912,11 @@
 			<ANIMATIONREF id="primeira">
 			<ANIMATIONREF id="segunda">
 			<DESCENDANTS> 
-				<DESCENDANT id="CONE" />
+				<DESCENDANT id="EXEMPLO3" />
 			</DESCENDANTS>
 		</NODE>
+
+
 
 
 	</NODES>
