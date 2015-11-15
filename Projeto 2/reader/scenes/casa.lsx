@@ -4,26 +4,26 @@
 <SCENE>
 
 	<INITIALS>
-		<frustum near="1" far="500"/>                    
-		<translation x="-10" y="10" z="10" />            
-		<rotation axis="x" angle="0" />   
+		<frustum near="0.1" far="700"/>                    
+		<translation x="-15" y="-20" z="-15" />            
+		<rotation axis="x" angle="-20" />   
 		<rotation axis="y" angle="0" />            
-		<rotation axis="z" angle="0" />             
+		<rotation axis="z" angle="20" />             
 		<scale sx="1" sy="1" sz="1" />                
-		<reference length="3" />                  
+		<reference length="0" />                  
 	</INITIALS>
 
 
 	<ILLUMINATION>
 		<ambient r="1" g="1" b="1" a="1" />          
-		<background r="0" g="0" b="0" a="1" />       
+		<background r="0.5412" g="1" b="0.9" a="1" />       
 	</ILLUMINATION>
 	
 
 	<LIGHTS>
 		<LIGHT id="L1">                              
 			<enable value="1" />                       
-			<position x="10" y="3.5" z="10" w="3" />      
+			<position x="5" y="1.70" z="5" w="3" />      
 			<ambient r="0.5" g="0.5" b="0.5" a="1" />       
 			<diffuse r="0.5" g="0.5" b="0.5" a="1" />     
 			<specular r="0.5" g="0.5" b="0.5" a="1" />    
@@ -31,21 +31,21 @@
 
 		<LIGHT id="L2">                              
 			<enable value="1" />                       
-			<position x="-10" y="3.5" z="-10" w="3" />       
+			<position x="-5" y="1.70" z="-5" w="3" />       
 			<ambient r="0.5" g="0.5" b="0.5" a="1" />       
 			<diffuse r="0.5" g="0.5" b="0.5" a="1" />     
 			<specular r="0.5" g="0.5" b="0.5" a="1" />    
 		</LIGHT>
 		<LIGHT id="L3">                              
 			<enable value="1" />                       
-			<position x="-10" y="3.5" z="10" w="3" />      
+			<position x="-5" y="1.70" z="5" w="3" />      
 			<ambient r="0.5" g="0.5" b="0.5" a="1" />       
 			<diffuse r="0.5" g="0.5" b="0.5" a="1" />     
 			<specular r="0.5" g="0.5" b="0.5" a="1" />    
 		</LIGHT>
 		<LIGHT id="L4">                              
 			<enable value="1" />                       
-			<position x="10" y="3.5" z="-10" w="3" />      
+			<position x="5" y="1.70" z="-5" w="3" />      
 			<ambient r="0.5" g="0.5" b="0.5" a="1" />       
 			<diffuse r="0.5" g="0.5" b="0.5" a="1" />     
 			<specular r="0.5" g="0.5" b="0.5" a="1" />    
@@ -186,17 +186,24 @@
 			<ambient r="0" g="0.3" b="0" a="1" />  
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
+
+		<MATERIAL id="sun">                                  
+			<shininess value="120" />
+			<specular r="0.96" g="0.94" b="0.14" a="1" /> 
+			<diffuse r="0.96" g="0.94" b="0.14" a="1" />    
+			<ambient r="0.96" g="0.94" b="0.14" a="1" />    
+			<emission r="0.96" g="0.94" b="0.14" a="1" /> 
+		</MATERIAL>
 	</MATERIALS>
 
 	<animations>
-		<animation id="primeira" span="5" type="linear">
+		<animation id="descolagem" span="5" type="linear">
 			<controlpoint xx="0" yy="0" zz="0"/>
-			<controlpoint xx="2" yy="2" zz="-2"/>
-			<controlpoint xx="4" yy="1" zz="0"/>
-			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="1" yy="9" zz="1"/>
+			<controlpoint xx="85" yy="9" zz="85"/>
 		</animation>
 
-		 <animation id="segunda" span="15" type="circular" center="0 9 0" radius="10" startang="0" rotang="10000" />
+		 <animation id="orbitar" span="150" type="circular" center="0 9 0" radius="5.5" startang="-90" rotang="10000" />
 	</animations>
 
 	<LEAVES>
@@ -206,53 +213,6 @@
 		<LEAF id="TRI" type="triangle" args="0 1 0  -0.5 0 1  0.5 0 1" />
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
 		<LEAF id="PLANE" type="plane" args="10 10" />
-		<!--Exemplo0-->
-		<LEAF id="PATCH1" type="patch" args="1 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
-			<controlpoint x="-2" y="-2" z="0" />
-			<controlpoint x="-2" y="2" z="0" />
-			<controlpoint x="2" y="-2" z="0" />
-			<controlpoint x="2" y="2" z="0" />
-		</LEAF>
-		<!--Exemplo1-->
-		<LEAF id="PATCH2" type="patch" args="2 1 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
-			<controlpoint x="-1.5" y="-1.5" z="0" />
-			<controlpoint x="-1.5" y="1.5" z="0" />
-			<controlpoint x="0" y="-1.5" z="3" />
-			<controlpoint x="0" y="1.5" z="3" />
-			<controlpoint x="1.5" y="-1.5" z="0" />
-			<controlpoint x="1.5" y="1.5" z="0" />
-		</LEAF>
-		<!--EXEMPLO2-->
-		<LEAF id="PATCH3" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
-			<controlpoint x="-1.5" y="-1.5" z="0" />
-			<controlpoint x="-2" y="-2" z="2" />
-			<controlpoint x="-2" y="2" z="2" />
-			<controlpoint x="-1.5" y="1.5" z="0" />
-			<controlpoint x="0" y="0" z="3" />
-			<controlpoint x="0" y="-2" z="3" />
-			<controlpoint x="0" y="2" z="3" />
-			<controlpoint x="0" y="0" z="3" />
-			<controlpoint x="1.5" y="-1.5" z="0" />
-			<controlpoint x="2" y="-2" z="2" />
-			<controlpoint x="2" y="2" z="2" />
-			<controlpoint x="1.5" y="1.5" z="0" />
-		</LEAF>	
-		<!--EXEMPLO3-->
-		<LEAF id="PATCH4" type="patch" args="2 3 20 20"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
-			<controlpoint x="-2" y="-2" z="1" />
-			<controlpoint x="-2" y="-1" z="-2" />
-			<controlpoint x="-2" y="1" z="5" />
-			<controlpoint x="-2" y="2" z="-1" />
-			<controlpoint x="0" y="-2" z="0" />
-			<controlpoint x="0" y="-1" z="-1" />
-			<controlpoint x="0" y="1" z="1.5" />
-			<controlpoint x="0" y="2" z="0" />
-			<controlpoint x="2" y="-2" z="-1" />
-			<controlpoint x="2" y="-1" z="2" />
-			<controlpoint x="2" y="1" z="-5" />
-			<controlpoint x="2" y="2" z="1" />
-		</LEAF>	
-
 		<LEAF id="wing1" type="patch" args="3 3 200 200"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
 			<controlpoint x="0" y="0" z="0" />
 			<controlpoint x="1" y="0" z="1" />
@@ -275,14 +235,9 @@
 			<controlpoint x="0" y="0" z="3" />
 		</LEAF>
 
-		<LEAF id="VEHICLE" type="vehicle" />
+		<LEAF id="VEHICLE" type="vehicle" engine="engine" spaceship="spaceship" flame="flame"/>
 
-
-
-
-
-
-		<LEAF id="MOUNTAIN" type="terrain" texture="terrain" heightmap="heightmap"/>
+		<LEAF id="MOUNTAIN" type="terrain" texture="terrain" heightmap="heightmap" normScale="200"/>
 
 	</LEAVES>
 
@@ -295,28 +250,35 @@
 			<TEXTURE id="null" />       
 			<DESCENDANTS> 
 				<DESCENDANT id="completehouse" />
-				<!--<DESCENDANT id="extra" />
-				<DESCENDANT id="extra2" />-->
-				<!--<DESCENDANT id="anim" />-->
+				<DESCENDANT id="anim" />
 				<DESCENDANT id="shader" />
+				<DESCENDANT id="sun" />
 			</DESCENDANTS>
 		</NODE>
 		
+		<NODE id="sun">       
+			<MATERIAL id="sun" />             
+			<TEXTURE id="null" />   
+			<TRANSLATION x="-300" y="0" z="-300" />  
+			<SCALE sx="50" sy="50" sz="50"/> 
+			<DESCENDANTS> 
+				<DESCENDANT id="SPH" />
+			</DESCENDANTS>
+		</NODE>
+
 		<NODE id="completehouse">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" />   
-			<TRANSLATION x="37" y="9" z="-37" />  
-			<SCALE sx="0.3" sy="0.3" sz="0.3"/> 
+			<TRANSLATION x="0" y="0" z="0" />  
+			<SCALE sx="0.5" sy="0.5" sz="0.5"/> 
 			<DESCENDANTS> 
 				<DESCENDANT id="house" />
 				<DESCENDANT id="garden" />
 				<DESCENDANT id="border" />
-				<!--<DESCENDANT id="underground" />-->
 				<DESCENDANT id="tree" />
 				<DESCENDANT id="lamps" />
 				<DESCENDANT id="gate" />
 				<DESCENDANT id="well" />
-				<DESCENDANT id="anim" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -324,7 +286,9 @@
 		<NODE id="anim">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" />  
-			<ANIMATIONREF id="segunda"/>  
+			<TRANSLATION x="-85" y="0" z="-85" />
+			<ANIMATIONREF id="descolagem"/>
+			<ANIMATIONREF id="orbitar"/>  
 			<DESCENDANTS> 
 				<DESCENDANT id="VEHICLE" />
 			</DESCENDANTS>
@@ -333,31 +297,12 @@
 
 		<NODE id="shader">       
 			<MATERIAL id="null" />             
-			<TEXTURE id="null" />   
-			<SCALE sx="100" sy="8" sz="100"/>
+			<TEXTURE id="null" /> 
+			<TRANSLATION x="-115" y="-9" z="-115" />
+			<ROTATION axis="y" angle="-90" />
+			<SCALE sx="300" sy="8" sz="300"/>
 			<DESCENDANTS> 
 				<DESCENDANT id="MOUNTAIN" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="extra">       
-			<MATERIAL id="null" />             
-			<TEXTURE id="null" />   
-			<ANIMATIONREF id="primeira"/>   
-			<ANIMATIONREF id="segunda"/> 
-			<DESCENDANTS> 
-				<DESCENDANT id="PATCH3" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="extra2">       
-			<MATERIAL id="null" />             
-			<TEXTURE id="null" />  
-			<ANIMATIONREF id="primeira"/>   
-			<ANIMATIONREF id="segunda"/> 
-			<TRANSLATION x="-5" y="3" z="5" />   
-			<DESCENDANTS> 
-				<DESCENDANT id="PLANE" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -707,17 +652,6 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="underground">       
-			<MATERIAL id="null" />             
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="-0.001" z="0" />
-			<ROTATION axis="x" angle="90" />
-			<SCALE sx="50" sy="50" sz="1" />
-			<DESCENDANTS> 
-				<DESCENDANT id="RECT" />
-			</DESCENDANTS>
-		</NODE>
-
 		<NODE id="tree">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" /> 
@@ -970,16 +904,6 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="animated_object">       
-			<MATERIAL id="metal" />             
-			<TEXTURE id="null" />
-			<TRANSLATION x="7" y="0" z="-5"/>
-			<ANIMATIONREF id="primeira">
-			<ANIMATIONREF id="segunda">
-			<DESCENDANTS> 
-				<DESCENDANT id="EXEMPLO3" />
-			</DESCENDANTS>
-		</NODE>
 
 
 

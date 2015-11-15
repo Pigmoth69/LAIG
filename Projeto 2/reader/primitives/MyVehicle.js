@@ -2,9 +2,12 @@
  * MyVehicle
  * @constructor
  */
-function MyVehicle(scene) {
+function MyVehicle(scene, engineTexture, spaceshipTexture, flameTexture) {
 	CGFobject.call(this,scene);
 	this.scene = scene;
+	this.engineTexture = engineTexture;
+	this.spaceshipTexture = spaceshipTexture;
+	this.flameTexture = flameTexture;
 	this.makeVehicle();
 };
 
@@ -66,35 +69,28 @@ MyVehicle.prototype.makeVehicle = function() {
 	this.engine = new MyCylinder(this.scene,[2,1,1,1,60]);
 	this.flame = new MyCylinder(this.scene,[0,1,0,1,60]);
 	this.back = new MyPatch(this.scene,3,3,128,128,backControlPoints);
-	this.cockpit = new MyPatch(this.scene,3,3,128,128,backControlPoints);
 
 
 };
 
 MyVehicle.prototype.display = function(){
-this.displayCockpit();
 this.displayShipBody();	
 this.displayEngines();
 }
 
 MyVehicle.prototype.displayShipBody = function(){
-this.scene.graph.textures['spaceship'].bind();
+this.scene.graph.textures[this.spaceshipTexture].bind();
 	this.scene.pushMatrix();
 	this.scene.scale(3,3,3);
 	this.top.display();
 	this.back.display();
 	this.scene.popMatrix();
-	this.scene.graph.textures['spaceship'].unbind();
-	
-
+	this.scene.graph.textures[this.spaceshipTexture].unbind();
 };
 
-MyVehicle.prototype.displayCockpit = function(){
-
-}
 
 MyVehicle.prototype.displayEngines =function(){
-	this.scene.graph.textures['engine'].bind();
+	this.scene.graph.textures[this.engineTexture].bind();
 	//engine1
 	this.scene.pushMatrix();
 	this.scene.translate(1,0.75,0.5);
@@ -107,9 +103,9 @@ MyVehicle.prototype.displayEngines =function(){
 	this.scene.scale(0.5,0.5,0.75);
 	this.engine.display();
 	this.scene.popMatrix();
-	this.scene.graph.textures['engine'].unbind();
+	this.scene.graph.textures[this.engineTexture].unbind();
 
-	this.scene.graph.textures['flame'].bind();
+	this.scene.graph.textures[this.flameTexture].bind();
 	//flame1
 	this.scene.pushMatrix();
 	this.scene.translate(1,0.75,0.49);
@@ -122,13 +118,10 @@ MyVehicle.prototype.displayEngines =function(){
 	this.scene.scale(0.45,0.45,1);
 	this.flame.display();
 	this.scene.popMatrix();
-	this.scene.graph.textures['flame'].unbind();
+	this.scene.graph.textures[this.flameTexture].unbind();
 	
 };
 
-MyVehicle.prototype.loadVehicleTextures = function(){
-	//to-do
-}
 
 
 MyVehicle.prototype.updateTextCoords = function(ampS,ampT){

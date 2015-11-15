@@ -512,89 +512,99 @@ LSXreader.prototype.onXMLReady=function() {
   */	
   LSXreader.prototype.parseLeaves= function(rootElement) {
 
-  	var leavesTag = rootElement.getElementsByTagName('LEAVES');
-  	if(leavesTag == null){
-  		return "LEAVES tag is missing.";
-  	}
+    	var leavesTag = rootElement.getElementsByTagName('LEAVES');
+    	if(leavesTag == null){
+    		return "LEAVES tag is missing.";
+    	}
 
-  	var leaves = leavesTag[0].getElementsByTagName('LEAF');
-  	if(leaves == null){
-  		return "No LEAF was added.";
-  	}
+    	var leaves = leavesTag[0].getElementsByTagName('LEAF');
+    	if(leaves == null){
+    		return "No LEAF was added.";
+    	}
 
-  	var i;
+    	var i;
 
-  	for(i = 0; i < leaves.length; i++){
+    	for(i = 0; i < leaves.length; i++){
 
-  		var id = this.reader.getString(leaves[i], 'id', 1);
-  		if(id == null)
-  			throw "Leave \""+ i+"\" does no have the id tag!";
+    		var id = this.reader.getString(leaves[i], 'id', 1);
+    		if(id == null)
+    			throw "Leave \""+ i+"\" does no have the id tag!";
 
-  		var type = this.reader.getString(leaves[i], 'type', 1);
+    		var type = this.reader.getString(leaves[i], 'type', 1);
 
 
 
-  		if(type == "rectangle"){
-  			var args = this.getArgs(leaves[i], 'args', 1);
-  			this.scene.graph.leaves[id] = new MyRectangle(this.scene, args);
-  		}
-  		else if(type == "sphere") {
-  			var args = this.getArgs(leaves[i], 'args', 1);
-  			this.scene.graph.leaves[id] = new MySphere(this.scene, args);
-  		}
-  		else if(type == "cylinder"){
-  			var args = this.getArgs(leaves[i], 'args', 1);
-  			this.scene.graph.leaves[id] = new MyCylinder(this.scene, args);
-  		}
-  		else if(type == "triangle"){
-  			var args = this.getArgs(leaves[i], 'args', 1);
-  			this.scene.graph.leaves[id] = new MyTriangle(this.scene, args);
-  		}
-  		else if(type == "plane"){
-  			var args = this.getArgs(leaves[i], 'args', 1);
-  			if(args[0] <=0 ||args[1]<=0 || this.isBadInteger(args[0])||this.isBadInteger(args[1]))
-  				return "The LEAF " + id + " has no parts!";
+    		if(type == "rectangle"){
+    			var args = this.getArgs(leaves[i], 'args', 1);
+    			this.scene.graph.leaves[id] = new MyRectangle(this.scene, args);
+    		}
+    		else if(type == "sphere") {
+    			var args = this.getArgs(leaves[i], 'args', 1);
+    			this.scene.graph.leaves[id] = new MySphere(this.scene, args);
+    		}
+    		else if(type == "cylinder"){
+    			var args = this.getArgs(leaves[i], 'args', 1);
+    			this.scene.graph.leaves[id] = new MyCylinder(this.scene, args);
+    		}
+    		else if(type == "triangle"){
+    			var args = this.getArgs(leaves[i], 'args', 1);
+    			this.scene.graph.leaves[id] = new MyTriangle(this.scene, args);
+    		}
+    		else if(type == "plane"){
+    			var args = this.getArgs(leaves[i], 'args', 1);
+    			if(args[0] <=0 ||args[1]<=0 || this.isBadInteger(args[0])||this.isBadInteger(args[1]))
+    				return "The LEAF " + id + " has no parts!";
 
-  			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0], args[1]);
-  		}
-  		else if(type == "patch"){
-  			var args = this.getArgs(leaves[i], 'args', 1);
-  			if(args[0]<=0 || this.isBadInteger(args[0])||
-  				args[1]<=0 || this.isBadInteger(args[1])||
-  				 args[2]<=0 || this.isBadInteger(args[2])||
-  				  args[3]<=0 || this.isBadInteger(args[3]))
-  				return "Invalid Patch arguments!";
+    			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0], args[1]);
+    		}
+    		else if(type == "patch"){
+    			var args = this.getArgs(leaves[i], 'args', 1);
+    			if(args[0]<=0 || this.isBadInteger(args[0])||
+    				args[1]<=0 || this.isBadInteger(args[1])||
+    				 args[2]<=0 || this.isBadInteger(args[2])||
+    				  args[3]<=0 || this.isBadInteger(args[3]))
+    				return "Invalid Patch arguments!";
 
-  			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
+    			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
 
-  			if(controlpoints.length != (args[0]+1)*(args[1]+1))
-  				return "The LEAF "+id+" has wrong number of controlpoints!";
+    			if(controlpoints.length != (args[0]+1)*(args[1]+1))
+    				return "The LEAF "+id+" has wrong number of controlpoints!";
 
-  			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
-			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
-  	}
-     else if(type == "terrain"){
-      var texture = this.reader.getString(leaves[i], 'texture', 1);
-      if(this.scene.graph.textures[texture] == null){
-        return "Invalid texture " + texture + " for terrain " + id + ".";
+    			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
+  			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
+    	}
+       else if(type == "terrain"){
+        var texture = this.reader.getString(leaves[i], 'texture', 1);
+        if(this.scene.graph.textures[texture] == null){
+          return "Invalid texture " + texture + " for terrain " + id + ".";
+        }
+        var heightmap = this.reader.getString(leaves[i], 'heightmap', 1);
+        if(this.scene.graph.textures[heightmap] == null){
+          return "Invalid heightmap " + heightmap + " for terrain " + id + ".";
+        }
+        var normScale = this.reader.getFloat(leaves[i], 'normScale', 1);
+        this.scene.graph.leaves[id] = new MyTerrain(this.scene, texture, heightmap, normScale);
       }
-      var heightmap = this.reader.getString(leaves[i], 'heightmap', 1);
-      if(this.scene.graph.textures[heightmap] == null){
-        return "Invalid heightmap " + heightmap + " for terrain " + id + ".";
+      else if(type == "vehicle"){
+        var engineTexture = this.reader.getString(leaves[i], 'engine', 1);
+        if(this.scene.graph.textures[engineTexture] == null)
+          return "Invalid engine texture for vehicle";
+        var spaceshipTexture = this.reader.getString(leaves[i], 'spaceship', 1);
+        if(this.scene.graph.textures[spaceshipTexture] == null)
+          return "Invalid spaceship texture for vehicle";
+        var flameTexture = this.reader.getString(leaves[i], 'flame', 1);
+        if(this.scene.graph.textures[flameTexture] == null)
+          return "Invalid flame texture for vehicle";
+        this.scene.graph.leaves[id] = new MyVehicle(this.scene, engineTexture, spaceshipTexture, flameTexture);
       }
-      this.scene.graph.leaves[id] = new MyTerrain(this.scene, texture, heightmap);
-    }
-    else if(type == "vehicle"){
-      this.scene.graph.leaves[id] = new MyVehicle(this.scene);
-    }
-    else {
-      return "ERROR: unexistent leaf type: " + type;
-    }
-        
+      else {
+        return "ERROR: unexistent leaf type: " + type;
+      }
+          
 
-} 
+  } 
 
-return 0; 
+  return 0; 
 };
 
 
@@ -633,86 +643,86 @@ LSXreader.prototype.parseControlPoints= function(orderU,orderV,controlpointsElem
 /**	@brief Faz o parsing dos Nodes do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse dos Nodes
   */	
-  LSXreader.prototype.parseNodes= function(rootElement) {
-  	var nodesTag = rootElement.getElementsByTagName('NODES');
-  	if(nodesTag == null){
-  		return "NODES tag is missing.";
-  	}
+LSXreader.prototype.parseNodes= function(rootElement) {
+	var nodesTag = rootElement.getElementsByTagName('NODES');
+	if(nodesTag == null){
+		return "NODES tag is missing.";
+	}
 
-  	var root = nodesTag[0].getElementsByTagName('ROOT');
-  	if(root == null){
-  		return "ROOT tag is missing.";
-  	}
+	var root = nodesTag[0].getElementsByTagName('ROOT');
+	if(root == null){
+		return "ROOT tag is missing.";
+	}
 
-  	this.scene.graph.rootID = this.reader.getString(root[0], 'id', 1);
+	this.scene.graph.rootID = this.reader.getString(root[0], 'id', 1);
 
-  	var nodes = nodesTag[0].getElementsByTagName('NODE');
-  	if(nodes == null){
-  		return "No NODE was added.";
-  	}
+	var nodes = nodesTag[0].getElementsByTagName('NODE');
+	if(nodes == null){
+		return "No NODE was added.";
+	}
 
-  	var i;
-  	for(i = 0; i < nodes.length; i++){
-  		var result = this.readNode(nodes[i]);
+	var i;
+	for(i = 0; i < nodes.length; i++){
+		var result = this.readNode(nodes[i]);
 
-  		if(result != 0)
-  			return result;
-  	}
-  };
+		if(result != 0)
+			return result;
+	}
+};
 
 
 /**	@brief Função auxiliar da função parseNodes(rootElement) que faz o read de todos os valores de um determinado node
   *	@param nodeTag tag do node ao qual se pretende ler todos os seus valores
   */	
-  LSXreader.prototype.readNode = function(nodeTag) {
+LSXreader.prototype.readNode = function(nodeTag) {
 
-  	var id = this.reader.getString(nodeTag, 'id', 1);
-  	var materialID, textureID;
+	var id = this.reader.getString(nodeTag, 'id', 1);
+	var materialID, textureID;
 
-  	if(nodeTag.children[0].tagName == 'MATERIAL')
-  	{
-  		materialID = this.reader.getString(nodeTag.children[0], 'id', 1);
+	if(nodeTag.children[0].tagName == 'MATERIAL')
+	{
+		materialID = this.reader.getString(nodeTag.children[0], 'id', 1);
 
-  		if(!(materialID in this.scene.graph.materials) && (materialID != 'null'))
-  			return "The material " + materialID + " doesn't exist!"; 
-  	}	
-  	else return "MATERIAL tag is missing on NODE specifications.";
+		if(!(materialID in this.scene.graph.materials) && (materialID != 'null'))
+			return "The material " + materialID + " doesn't exist!"; 
+	}	
+	else return "MATERIAL tag is missing on NODE specifications.";
 
-  	if(nodeTag.children[1].tagName == 'TEXTURE')
-  	{
-  		textureID = this.reader.getString(nodeTag.children[1], 'id', 1);
-  		if(!(textureID in this.scene.graph.textures) && (textureID != 'null' && textureID != 'clear'))
-  			return "The texture " + textureID + " doesn't exist!"; 
-  	}
-  	else return "TEXTURE tag is missing on NODE specifications.";
+	if(nodeTag.children[1].tagName == 'TEXTURE')
+	{
+		textureID = this.reader.getString(nodeTag.children[1], 'id', 1);
+		if(!(textureID in this.scene.graph.textures) && (textureID != 'null' && textureID != 'clear'))
+			return "The texture " + textureID + " doesn't exist!"; 
+	}
+	else return "TEXTURE tag is missing on NODE specifications.";
 
 
-  	if(nodeTag.getElementsByTagName('DESCENDANTS') == null){
-  		return "DESCENDANTS tag is missing.";
-  	}
+	if(nodeTag.getElementsByTagName('DESCENDANTS') == null){
+		return "DESCENDANTS tag is missing.";
+	}
 
-  	var descendants = (nodeTag.children[nodeTag.children.length - 1]).getElementsByTagName('DESCENDANT');
+	var descendants = (nodeTag.children[nodeTag.children.length - 1]).getElementsByTagName('DESCENDANT');
 
-  	var k, desc = [];
-  	for(k=0; k < descendants.length;k++){
-  		desc.push(this.reader.getString(descendants[k], 'id', 1));
-  	}
+	var k, desc = [];
+	for(k=0; k < descendants.length;k++){
+		desc.push(this.reader.getString(descendants[k], 'id', 1));
+	}
 
-  	var numTransformations = nodeTag.children.length - 3;
-  	var mat = this.readNodeTransformations(numTransformations, nodeTag);
-  	var animations = this.readNodeAnimations(id, nodeTag);
-  	if(animations == -1)
-  		return -1;
+	var numTransformations = nodeTag.children.length - 3;
+	var mat = this.readNodeTransformations(numTransformations, nodeTag);
+	var animations = this.readNodeAnimations(id, nodeTag);
+	if(animations == -1)
+		return -1;
 
-  	var newNode = new Node(id, materialID, textureID, mat, desc, animations);
+	var newNode = new Node(id, materialID, textureID, mat, desc, animations);
 
-  	if(newNode.animations > 0)
-  		this.scene.graph.animations.push(id);
+	if(newNode.animations > 0)
+		this.scene.graph.animations.push(id);
 
-  	this.scene.graph.nodes[id] = newNode;
+	this.scene.graph.nodes[id] = newNode;
 
-  	return 0;
-  };
+	return 0;
+};
 
 
 /**	@brief Função auxiliar da função readNode(nodeTag) que faz o read de todas as transformação associadas ao nodeTag

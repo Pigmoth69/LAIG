@@ -161,7 +161,7 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 	if(this.graph.leaves[leaf] instanceof MyTerrain)
 	{
 		this.graph.textures[this.graph.leaves[leaf].texture].bind();
-
+		this.terrainShader.setUniformsValues({normScale: this.graph.leaves[leaf].normScale});
 		this.setActiveShader(this.terrainShader);
 		this.graph.textures[this.graph.leaves[leaf].heightmap].bind(1);
 		this.graph.leaves[leaf].display();
