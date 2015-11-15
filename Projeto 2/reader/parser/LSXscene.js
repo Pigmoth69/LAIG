@@ -168,6 +168,10 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 		this.setActiveShader(this.defaultShader);
 		return;
 	}
+	if(this.graph.leaves[leaf] instanceof MyVehicle){
+		this.graph.leaves[leaf].display();
+		return;
+	}
 
 
 

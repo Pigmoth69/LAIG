@@ -5,12 +5,12 @@
 
 	<INITIALS>
 		<frustum near="1" far="500"/>                    
-		<translation x="-5" y="-3" z="-5" />            
+		<translation x="-10" y="10" z="10" />            
 		<rotation axis="x" angle="0" />   
 		<rotation axis="y" angle="0" />            
 		<rotation axis="z" angle="0" />             
 		<scale sx="1" sy="1" sz="1" />                
-		<reference length="0" />                  
+		<reference length="3" />                  
 	</INITIALS>
 
 
@@ -115,6 +115,18 @@
 			<file path="./textures_casa/heightmap.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
+		<TEXTURE id="spaceship">
+			<file path="./textures_casa/spaceship.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="flame">
+			<file path="./textures_casa/flame.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="engine">
+			<file path="./textures_casa/engine.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 	</TEXTURES> 
 
 
@@ -184,7 +196,7 @@
 			<controlpoint xx="0" yy="0" zz="0"/>
 		</animation>
 
-		 <animation id="segunda" span="10" type="circular" center="5 0 -5" radius="2" startang="0" rotang="180" />
+		 <animation id="segunda" span="15" type="circular" center="0 9 0" radius="10" startang="0" rotang="10000" />
 	</animations>
 
 	<LEAVES>
@@ -240,6 +252,36 @@
 			<controlpoint x="2" y="1" z="-5" />
 			<controlpoint x="2" y="2" z="1" />
 		</LEAF>	
+
+		<LEAF id="wing1" type="patch" args="3 3 200 200"> <!--ORDER1 -  ORDER2 - partsU - partsV -->
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="1" y="0" z="1" />
+			<controlpoint x="1" y="0" z="2" />
+			<controlpoint x="0" y="0" z="3" />	
+
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="0.3" y="0.6" z="1" />
+			<controlpoint x="0.3" y="0.6" z="2" />
+			<controlpoint x="0" y="0" z="3" />
+
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="-0.3" y="0.6" z="1" />
+			<controlpoint x="-0.3" y="0.6" z="2" />
+			<controlpoint x="0" y="0" z="3" />
+
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="-1" y="0" z="1" />
+			<controlpoint x="-1" y="0" z="2" />
+			<controlpoint x="0" y="0" z="3" />
+		</LEAF>
+
+		<LEAF id="VEHICLE" type="vehicle" />
+
+
+
+
+
+
 		<LEAF id="MOUNTAIN" type="terrain" texture="terrain" heightmap="heightmap"/>
 
 	</LEAVES>
@@ -252,24 +294,47 @@
 			<MATERIAL id="default" />             
 			<TEXTURE id="null" />       
 			<DESCENDANTS> 
+				<DESCENDANT id="completehouse" />
+				<!--<DESCENDANT id="extra" />
+				<DESCENDANT id="extra2" />-->
+				<!--<DESCENDANT id="anim" />-->
+				<DESCENDANT id="shader" />
+			</DESCENDANTS>
+		</NODE>
+		
+		<NODE id="completehouse">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="null" />   
+			<TRANSLATION x="37" y="9" z="-37" />  
+			<SCALE sx="0.3" sy="0.3" sz="0.3"/> 
+			<DESCENDANTS> 
 				<DESCENDANT id="house" />
 				<DESCENDANT id="garden" />
 				<DESCENDANT id="border" />
-				<DESCENDANT id="underground" />
+				<!--<DESCENDANT id="underground" />-->
 				<DESCENDANT id="tree" />
 				<DESCENDANT id="lamps" />
 				<DESCENDANT id="gate" />
 				<DESCENDANT id="well" />
-				<DESCENDANT id="extra" />
-				<DESCENDANT id="extra2" />
-				<DESCENDANT id="shader" />
+				<DESCENDANT id="anim" />
 			</DESCENDANTS>
 		</NODE>
+
+
+		<NODE id="anim">       
+			<MATERIAL id="null" />             
+			<TEXTURE id="null" />  
+			<ANIMATIONREF id="segunda"/>  
+			<DESCENDANTS> 
+				<DESCENDANT id="VEHICLE" />
+			</DESCENDANTS>
+		</NODE>
+
 
 		<NODE id="shader">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" />   
-			<SCALE sx="10" sy="1" sz="10"/>
+			<SCALE sx="100" sy="8" sz="100"/>
 			<DESCENDANTS> 
 				<DESCENDANT id="MOUNTAIN" />
 			</DESCENDANTS>

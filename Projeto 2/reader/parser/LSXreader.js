@@ -571,7 +571,6 @@ LSXreader.prototype.onXMLReady=function() {
   				return "The LEAF "+id+" has wrong number of controlpoints!";
 
   			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
-
 			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
   	}
      else if(type == "terrain"){
@@ -583,10 +582,15 @@ LSXreader.prototype.onXMLReady=function() {
       if(this.scene.graph.textures[heightmap] == null){
         return "Invalid heightmap " + heightmap + " for terrain " + id + ".";
       }
-
       this.scene.graph.leaves[id] = new MyTerrain(this.scene, texture, heightmap);
     }
-      else return "ERROR: unexistent leaf type: " + type;
+    else if(type == "vehicle"){
+      this.scene.graph.leaves[id] = new MyVehicle(this.scene);
+    }
+    else {
+      return "ERROR: unexistent leaf type: " + type;
+    }
+        
 
 } 
 
