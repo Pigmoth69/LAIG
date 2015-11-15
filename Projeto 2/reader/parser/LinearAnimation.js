@@ -57,7 +57,7 @@ LinearAnimation.prototype = Object.create(Object.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
 LinearAnimation.prototype.updateNodeMatrix = function(matrix, milliseconds){
-	var newMatrix = mat4.clone(matrix);
+	var newMatrix = mat4.create();
 	var currDistance = milliseconds * this.totalDistance / this.span;
 
 	for(var j = 1; j < this.controlpoints.length; j++){
@@ -93,5 +93,6 @@ LinearAnimation.prototype.updateNodeMatrix = function(matrix, milliseconds){
 
 	}
 
+	mat4.multiply(newMatrix, newMatrix, matrix);
 	return newMatrix;
 };
