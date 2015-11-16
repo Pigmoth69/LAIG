@@ -90,9 +90,8 @@ LinearAnimation.prototype.updateNodeMatrix = function(matrix, milliseconds){
 			mat4.translate(newMatrix, newMatrix, this.controlpoints[j].point3D);
 			mat4.rotateY(newMatrix, newMatrix, this.controlpoints[j].orientation);
 		}
-
 	}
 
-	mat4.multiply(newMatrix, newMatrix, matrix);
+	mat4.multiply(newMatrix, matrix, newMatrix);
 	return newMatrix;
 };

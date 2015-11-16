@@ -190,7 +190,6 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 
 	if(texture != null)
 		texture.unbind(0);
-
 };
 
 
