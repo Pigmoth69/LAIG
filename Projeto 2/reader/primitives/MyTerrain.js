@@ -6,7 +6,7 @@ function MyTerrain(scene,texture,heightmap, normScale) {
 	CGFobject.call(this,scene);
 	this.texture = texture;
 	this.heightmap = heightmap;
-	this.normaScale = normScale;
+	this.normScale = normScale;
 	this.plane = new MyPlane(scene, 128, 128);
 };
 

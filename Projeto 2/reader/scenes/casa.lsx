@@ -16,7 +16,7 @@
 
 	<ILLUMINATION>
 		<ambient r="1" g="1" b="1" a="1" />          
-		<background r="0.5412" g="1" b="0.9" a="1" />       
+		<background r="0.5273" g="0.8047" b="0.99" a="1" />       
 	</ILLUMINATION>
 	
 
@@ -196,20 +196,24 @@
 		</MATERIAL>
 	</MATERIALS>
 
+
+
 	<animations>
-		<animation id="descolagem" span="5" type="linear">
-			<controlpoint xx="0" yy="0" zz="0"/>
-			<controlpoint xx="1" yy="9" zz="1"/>
-			<controlpoint xx="85" yy="9" zz="85"/>
+		<animation id="descolagem" span="8" type="linear">
+			<controlpoint xx="-85" yy="0" zz="-85"/>
+			<controlpoint xx="-84" yy="9" zz="-84"/>
+			<controlpoint xx="0" yy="9" zz="0"/>
 		</animation>
 
-		 <animation id="orbitar" span="150" type="circular" center="0 9 0" radius="5.5" startang="-90" rotang="10000" />
+		 <animation id="orbitar" span="360" type="circular" center="0 9 0" radius="5.5" startang="-90" rotang="10000" />
 	</animations>
+
+
 
 	<LEAVES>
 		<LEAF id="RECT" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
 		<LEAF id="CYL" type="cylinder" args="1 1 1 1 60" />
-		<LEAF id="SPH" type="sphere" args="1 20 50" />
+		<LEAF id="SPH" type="sphere" args="1 70 70" />
 		<LEAF id="TRI" type="triangle" args="0 1 0  -0.5 0 1  0.5 0 1" />
 		<LEAF id="CONE" type="cylinder" args="1.5 0.125 0 1 60" />
 		<LEAF id="PLANE" type="plane" args="10 10" />
@@ -237,7 +241,7 @@
 
 		<LEAF id="VEHICLE" type="vehicle" engine="engine" spaceship="spaceship" flame="flame"/>
 
-		<LEAF id="MOUNTAIN" type="terrain" texture="terrain" heightmap="heightmap" normScale="200"/>
+		<LEAF id="MOUNTAIN" type="terrain" texture="terrain" heightmap="heightmap" normScale="150"/>
 
 	</LEAVES>
 
@@ -250,8 +254,8 @@
 			<TEXTURE id="null" />       
 			<DESCENDANTS> 
 				<DESCENDANT id="completehouse" />
-				<DESCENDANT id="anim" />
-				<DESCENDANT id="shader" />
+				<DESCENDANT id="rocket" />
+				<DESCENDANT id="wonderland" />
 				<DESCENDANT id="sun" />
 			</DESCENDANTS>
 		</NODE>
@@ -283,10 +287,9 @@
 		</NODE>
 
 
-		<NODE id="anim">       
+		<NODE id="rocket">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" />  
-			<TRANSLATION x="-85" y="0" z="-85" />
 			<ANIMATIONREF id="descolagem"/>
 			<ANIMATIONREF id="orbitar"/>  
 			<DESCENDANTS> 
@@ -295,10 +298,10 @@
 		</NODE>
 
 
-		<NODE id="shader">       
+		<NODE id="wonderland">       
 			<MATERIAL id="null" />             
 			<TEXTURE id="null" /> 
-			<TRANSLATION x="-115" y="-9" z="-115" />
+			<TRANSLATION x="-115" y="-27" z="-115" />
 			<ROTATION axis="y" angle="-90" />
 			<SCALE sx="300" sy="8" sz="300"/>
 			<DESCENDANTS> 

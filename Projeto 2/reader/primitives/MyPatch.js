@@ -14,7 +14,6 @@ function MyPatch(scene,orderU,orderV,partsU,partsV,controllpoints) {
 		return surface.getPoint(u, v);
 	};
 	this.patch = new CGFnurbsObject(scene,getSurfacePoint,partsU,partsV);
-	console.warn(this.patch);
 };
 MyPatch.prototype = Object.create(CGFobject.prototype);
 MyPatch.prototype.constructor = MyPatch;

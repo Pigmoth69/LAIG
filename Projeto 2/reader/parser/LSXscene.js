@@ -1,4 +1,4 @@
-var MILLISECONDS_TO_UPDATE = 10;
+var MILLISECONDS_TO_UPDATE = 50;
 
 function LSXscene(application) {
     CGFscene.call(this);
@@ -116,7 +116,7 @@ LSXscene.prototype.updateLights = function (){
   * @param textureID ID da textura herdada pelo node antecedente.
   */
 LSXscene.prototype.drawNode = function (node, materialID, textureID) {
-	
+
 	//Se o id do node corresponder ao id de uma primitiva, desenha-a
 	if (node in this.graph.leaves) {
 		this.drawLeaf(node, materialID, textureID);
@@ -134,7 +134,7 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 	if (texture == "null")
 		texture = textureID;
 
-	if(this.graph.nodes[node].animations.length != 0)
+	if(this.graph.nodes[node].animations.length > 0)
 		this.graph.nodes[node].applyAnimations(this);
 
 	var descendants = this.graph.nodes[node].descendants;  // recolha dos descendentes do node em questao
@@ -173,9 +173,6 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 		return;
 	}
 
-
-
-
 	var texture = null;
 	if (textureID != "clear")  //Se a textura for clear, nenhuma textura sera aplicada na Scene
 	{
@@ -183,8 +180,6 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 		this.graph.leaves[leaf].updateTextCoords(texture.amplifyFactor.ampS, texture.amplifyFactor.ampT);
 		texture.bind(0); 
 	}
-
-
 
 	this.graph.leaves[leaf].display();
 
@@ -222,6 +217,9 @@ LSXscene.prototype.display = function () {
 
 	if (this.LSXreader.loadedOk)
 	{
+
+		this.milliseconds += MILLISECONDS_TO_UPDATE;
+
 		//aplica noca matriz de transformacoes a scene
 		this.multMatrix(this.graph.initials.transMatrix);	
 		
@@ -237,15 +235,3 @@ LSXscene.prototype.display = function () {
 	}
 };
 
-
-LSXscene.prototype.update = function() {
-	this.milliseconds += MILLISECONDS_TO_UPDATE;
-
-	for(var i = 0; i < this.graph.animatedNodes.length; i++)
-	{
-		if(this.graph.nodes[this.graph.animatedNodes[i]])
-		{
-			this.graph.nodes[node].applyAnimations(this);
-		}
-	}
-};

@@ -231,377 +231,370 @@ LSXreader.prototype.onXMLReady=function() {
 /**	@brief Faz o parsing da Lights do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse das lights
   */	
-  LSXreader.prototype.parseLights= function(rootElement) {
+LSXreader.prototype.parseLights= function(rootElement) {
 
-  	var lightsTag = rootElement.getElementsByTagName('LIGHTS');
+	var lightsTag = rootElement.getElementsByTagName('LIGHTS');
 
-  	if(lightsTag == null) {
-  		return "LIGHTS tag is missing.";
-  	}
+	if(lightsTag == null) {
+		return "LIGHTS tag is missing.";
+	}
 
-  	var lights = lightsTag[0].getElementsByTagName('LIGHT');
-  	if(lights.length > 8) {
-  		return "There are too many lights";
-  	}
-  	else if(lights[0] == null) 
-  	{
-  		return "No LIGHT was added.";
-  	}
+	var lights = lightsTag[0].getElementsByTagName('LIGHT');
+	if(lights.length > 8) {
+		return "There are too many lights";
+	}
+	else if(lights[0] == null) 
+	{
+		return "No LIGHT was added.";
+	}
 
-  	var i, aux;
-  	for(i=0; i < lights.length; i++) {
+	var i, aux;
+	for(i=0; i < lights.length; i++) {
 
-  		var id = this.reader.getString(lights[i], 'id', 1);
-  		if(id == null)
-  			throw "LIGHT \""+ i+"\" does no have the id tag!";
+		var id = this.reader.getString(lights[i], 'id', 1);
+		if(id == null)
+			throw "LIGHT \""+ i+"\" does no have the id tag!";
 
-  		aux = lights[i].getElementsByTagName('enable');
-  		var value = this.reader.getBoolean(aux[0], 'value', 1);
+		aux = lights[i].getElementsByTagName('enable');
+		var value = this.reader.getBoolean(aux[0], 'value', 1);
 
-  		if(this.isBadBoolean(value)){
-  			throw "The light \""+ id+"\" value is wrong or it is not well written! It should be a boolean value of 0 or 1 and the sintax for exampl <enable value=\"1\" />";
-  		}
-
-
-  		aux = lights[i].getElementsByTagName('position');
-  		var position = [this.reader.getFloat(aux[0], 'x', 1),
-  		this.reader.getFloat(aux[0], 'y', 1),
-  		this.reader.getFloat(aux[0], 'z', 1),
-  		this.reader.getFloat(aux[0], 'w', 1)];
-
-  		if(this.isBadInteger(position[0],position[1],position[2]))
-  			throw "Light \""+ id+"\" position is wrong or the tag name is missing! It shoud be <position r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-  		aux = lights[i].getElementsByTagName('ambient');
-  		var ambient= [this.reader.getFloat(aux[0], 'r', 1), 
-  		this.reader.getFloat(aux[0], 'g', 1), 
-  		this.reader.getFloat(aux[0], 'b', 1), 
-  		this.reader.getFloat(aux[0], 'a', 1)];
-
-  		if(this.isBadRGBA(ambient[0],ambient[1],ambient[2],ambient[3]))
-  			throw "Light \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be It shoud be <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-  		aux = lights[i].getElementsByTagName('diffuse');
-  		var diffuse = [this.reader.getFloat(aux[0], 'r', 1), 
-  		this.reader.getFloat(aux[0], 'g', 1), 
-  		this.reader.getFloat(aux[0], 'b', 1), 
-  		this.reader.getFloat(aux[0], 'a', 1)];
-
-  		if(this.isBadRGBA(diffuse[0],diffuse[1],diffuse[2],diffuse[3]))
-  			throw "Light \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example: It shoud be <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-  		aux = lights[i].getElementsByTagName('specular');
-  		var specular = [this.reader.getFloat(aux[0], 'r', 1), 
-  		this.reader.getFloat(aux[0], 'g', 1), 
-  		this.reader.getFloat(aux[0], 'b', 1), 
-  		this.reader.getFloat(aux[0], 'a', 1)];
-
-  		if(this.isBadRGBA(specular[0],specular[1],specular[2],specular[3]))
-  			throw "Light \""+ id+"\" specular is wrong or the tag name is missing! It shoud be <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+		if(this.isBadBoolean(value)){
+			throw "The light \""+ id+"\" value is wrong or it is not well written! It should be a boolean value of 0 or 1 and the sintax for exampl <enable value=\"1\" />";
+		}
 
 
-  		var light = new Light(this.scene, i, id, value);
-  		light.setPosition(position[0],position[1],position[2],position[3]);
-  		light.setAmbient(ambient[0],ambient[1],ambient[2],ambient[3]);
-  		light.setDiffuse(diffuse[0],diffuse[1],diffuse[2],diffuse[3]);
-  		light.setSpecular(specular[0],specular[1],specular[2],specular[3]);
-  		light.setVisible(true);
+		aux = lights[i].getElementsByTagName('position');
+		var position = [this.reader.getFloat(aux[0], 'x', 1),
+		this.reader.getFloat(aux[0], 'y', 1),
+		this.reader.getFloat(aux[0], 'z', 1),
+		this.reader.getFloat(aux[0], 'w', 1)];
 
-  		this.scene.graph.lights.push(light);
-  	}	
-  	return 0;
-  };
+		if(this.isBadInteger(position[0],position[1],position[2]))
+			throw "Light \""+ id+"\" position is wrong or the tag name is missing! It shoud be <position r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+		aux = lights[i].getElementsByTagName('ambient');
+		var ambient= [this.reader.getFloat(aux[0], 'r', 1), 
+		this.reader.getFloat(aux[0], 'g', 1), 
+		this.reader.getFloat(aux[0], 'b', 1), 
+		this.reader.getFloat(aux[0], 'a', 1)];
+
+		if(this.isBadRGBA(ambient[0],ambient[1],ambient[2],ambient[3]))
+			throw "Light \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be It shoud be <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+		aux = lights[i].getElementsByTagName('diffuse');
+		var diffuse = [this.reader.getFloat(aux[0], 'r', 1), 
+		this.reader.getFloat(aux[0], 'g', 1), 
+		this.reader.getFloat(aux[0], 'b', 1), 
+		this.reader.getFloat(aux[0], 'a', 1)];
+
+		if(this.isBadRGBA(diffuse[0],diffuse[1],diffuse[2],diffuse[3]))
+			throw "Light \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example: It shoud be <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+		aux = lights[i].getElementsByTagName('specular');
+		var specular = [this.reader.getFloat(aux[0], 'r', 1), 
+		this.reader.getFloat(aux[0], 'g', 1), 
+		this.reader.getFloat(aux[0], 'b', 1), 
+		this.reader.getFloat(aux[0], 'a', 1)];
+
+		if(this.isBadRGBA(specular[0],specular[1],specular[2],specular[3]))
+			throw "Light \""+ id+"\" specular is wrong or the tag name is missing! It shoud be <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+
+		var light = new Light(this.scene, i, id, value);
+		light.setPosition(position[0],position[1],position[2],position[3]);
+		light.setAmbient(ambient[0],ambient[1],ambient[2],ambient[3]);
+		light.setDiffuse(diffuse[0],diffuse[1],diffuse[2],diffuse[3]);
+		light.setSpecular(specular[0],specular[1],specular[2],specular[3]);
+		light.setVisible(true);
+
+		this.scene.graph.lights.push(light);
+	}	
+	return 0;
+};
 
 
 /**	@brief Faz o parsing da textures do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse das textures
   */	
-  LSXreader.prototype.parseTextures= function(rootElement) {
+LSXreader.prototype.parseTextures= function(rootElement) {
 
-  	var texturesTag = rootElement.getElementsByTagName('TEXTURES');
+	var texturesTag = rootElement.getElementsByTagName('TEXTURES');
 
-  	if(texturesTag == null) {
-  		return "TEXTURES tag is missing.";
-  	}
+	if(texturesTag == null) {
+		return "TEXTURES tag is missing.";
+	}
 
-  	var textures = texturesTag[0].getElementsByTagName('TEXTURE');
-  	if(textures == null) {
-  		return "No texture was added.";
-  	}
+	var textures = texturesTag[0].getElementsByTagName('TEXTURE');
+	if(textures == null) {
+		return "No texture was added.";
+	}
 
-  	var textureInfo = [];
-  	var i;
-  	for(i = 0; i < textures.length; i++) {
+	var textureInfo = [];
+	var i;
+	for(i = 0; i < textures.length; i++) {
 
-  		var id = this.reader.getString(textures[i], 'id', 1);
+		var id = this.reader.getString(textures[i], 'id', 1);
 
-  		if(id == null)
-  			throw "Texture \""+ i+"\" does no have the id tag!";
+		if(id == null)
+			throw "Texture \""+ i+"\" does no have the id tag!";
 
-  		var file = textures[i].getElementsByTagName('file');
-  		textureInfo['path'] = this.reader.getString(file[0], 'path', 1);
+		var file = textures[i].getElementsByTagName('file');
+		textureInfo['path'] = this.reader.getString(file[0], 'path', 1);
 
-  		var amplif_factor = textures[i].getElementsByTagName('amplif_factor');
-  		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), 
-  		this.reader.getFloat(amplif_factor[0], 't', 1)];
-  		if(this.isBadInteger(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][1]))
-  			throw "Texture \""+ id+"\" amplif_factor is wrong or the tag name is missing! It shoud be for example: <amplif_factor s=\"0.5\" t=\"0.5\" />";
+		var amplif_factor = textures[i].getElementsByTagName('amplif_factor');
+		textureInfo['amplif_factor'] = [this.reader.getFloat(amplif_factor[0], 's', 1), 
+		this.reader.getFloat(amplif_factor[0], 't', 1)];
+		if(this.isBadInteger(textureInfo['amplif_factor'][0],textureInfo['amplif_factor'][1]))
+			throw "Texture \""+ id+"\" amplif_factor is wrong or the tag name is missing! It shoud be for example: <amplif_factor s=\"0.5\" t=\"0.5\" />";
 
-  		var newTexture = new Texture(this.scene, textureInfo['path'], id, textureInfo['amplif_factor']);
-  		this.scene.graph.textures[id] = newTexture;
-  	}
-
-  	return 0;
-  };
-
-
-/**	@brief Faz o parsing dos Materials do ficheiro LSX
-  *	@param rootElement elemento a partir do qual se inicia o parse dos Materiais
-  */	
-  LSXreader.prototype.parseMaterials= function(rootElement) {
-
-  	var materialsTag = rootElement.getElementsByTagName('MATERIALS');
-
-  	if(materialsTag == null) {
-  		return "MATERIALS tag is missing.";
-  	}
-
-  	var materials = materialsTag[0].getElementsByTagName('MATERIAL');
-  	if(materials == null) {
-  		return "No MATERIAL was added.";
-  	}
-
-  	var material = [];
-  	var i;
-
-  	for(i = 0; i < materials.length; i++) {
-  		var id = this.reader.getString(materials[i], 'id', 1);
-  		if(id == null)
-  			throw "Material \""+ i+"\" does no have the id tag!";
-
-
-  		var shininess = materials[i].getElementsByTagName('shininess');
-  		material['shininess'] = this.reader.getFloat(shininess[0], 'value', 1);
-
-  		if(this.isBadInteger(material['shininess']))
-  			throw "Material \""+ id+"\" shininess is wrong or the tag name is missing! It shoud be for example: <shininess value=\"ff\" />";
-
-  		var specular = materials[i].getElementsByTagName('specular');
-  		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), 
-  		this.reader.getFloat(specular[0], 'g', 1), 
-  		this.reader.getFloat(specular[0], 'b', 1), 
-  		this.reader.getFloat(specular[0], 'a', 1)];
-
-  		if(this.isBadRGBA(material['specular'][0],material['specular'][1],material['specular'][2],material['specular'][3]))
-  			throw "Material \""+ id+"\" specular is wrong or the tag name is missing! It shoud be for example:  <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-  		var diffuse = materials[i].getElementsByTagName('diffuse');
-  		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), 
-  		this.reader.getFloat(diffuse[0], 'g', 1), 
-  		this.reader.getFloat(diffuse[0], 'b', 1), 
-  		this.reader.getFloat(diffuse[0], 'a', 1)];
-
-  		if(this.isBadRGBA(material['diffuse'][0],material['diffuse'][1],material['diffuse'][2],material['diffuse'][3]))
-  			throw "Material \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example:  <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-
-  		var ambient = materials[i].getElementsByTagName('ambient');
-  		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), 
-  		this.reader.getFloat(ambient[0], 'g', 1), 
-  		this.reader.getFloat(ambient[0], 'b', 1), 
-  		this.reader.getFloat(ambient[0], 'a', 1)];
-
-  		if(this.isBadRGBA(material['ambient'][0],material['ambient'][1],material['ambient'][2],material['ambient'][3]))
-  			throw "Material \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be for example:  <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-
-  		var emission = materials[i].getElementsByTagName('emission');
-  		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), 
-  		this.reader.getFloat(emission[0], 'g', 1), 
-  		this.reader.getFloat(emission[0], 'b', 1), 
-  		this.reader.getFloat(emission[0], 'a', 1)];
-
-  		if(this.isBadRGBA(material['emission'][0],material['emission'][1],material['emission'][2],material['emission'][3]))
-  			throw "Material \""+ id+"\" emission is wrong or the tag name is missing! It shoud be for example:  <emission r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
-
-  		var newMaterial = new Material(this.scene,id);
-  		newMaterial.setAppearance(material['shininess'],material['specular'],material['diffuse'],material['ambient'],material['emission']);
-  		this.scene.graph.materials[id] = newMaterial;
-  	}
-
-  	return 0;
-  };
-
-
-  LSXreader.prototype.parseAnimations= function(rootElement) {
-
-  	var animationsTag = rootElement.getElementsByTagName('animations');
-
-  	if(animationsTag.length == 0){
-  		return "animations tag is missing";
-  	}
-
-  	animationsTag = animationsTag[0];
-
-  	for(var i = 0; i < animationsTag.children.length; i++){
-
-  		if(animationsTag.children[i].tagName != 'animation'){
-  			return "Unknown tag name in animations section: " + animationsTag.children[i].tagName;
-  		}
-
-  		var id = this.reader.getString(animationsTag.children[i], 'id', 1);
-
-  		if(this.scene.graph.animations[id] != null){
-  			return "There are two or more animations with the following id: " + id;
-  		}
-
-  		var type = this.reader.getString(animationsTag.children[i], 'type', 1);
-
-  		if(type != 'linear' && type != 'circular'){
-  			return "Unknown animation type: " + type;
-  		}
-
-		//already stores the value in milliseconds
-		var span = (this.reader.getFloat(animationsTag.children[i], 'span', 1)) * 1000;
-
-		if(type == 'linear'){
-			var controls = animationsTag.children[i].getElementsByTagName('controlpoint');
-
-			if(controls == null){
-				return "Any controlpoints were added to animation: " + id;
-			}
-			else if(controls < 2){
-				return "Insuficient number of controlpoints for animation " + id;
-			}
-
-			var controlpoints = [];
-			for(var j = 0 ; j < controls.length; j++){
-				var xx = this.reader.getFloat(controls[j], 'xx', 1);
-				var yy = this.reader.getFloat(controls[j], 'yy', 1);
-				var zz = this.reader.getFloat(controls[j], 'zz', 1);
-				var control = vec3.fromValues(xx, yy, zz);
-				controlpoints.push(control);
-			}			
-
-
-			this.scene.graph.animations[id] = new LinearAnimation(id, span, controlpoints);
-		}
-		else{
-			var temp = this.getArgs(animationsTag.children[i], 'center', 1);
-			if(temp.length != 3){
-				return "wrong number of coordinates for center point on the animation " + id;
-			}
-			var center = vec3.fromValues(temp[0], temp[1], temp[2]);
-
-			var radius = this.reader.getFloat(animationsTag.children[i], 'radius', 1);
-
-			var startang = this.reader.getFloat(animationsTag.children[i], 'startang', 1) * Math.PI / 180;
-
-			var rotang = this.reader.getFloat(animationsTag.children[i], 'rotang', 1) * Math.PI / 180;
-
-			this.scene.graph.animations[id] = new CircularAnimation(id, span, center, radius, startang, rotang);
-		}
+		var newTexture = new Texture(this.scene, textureInfo['path'], id, textureInfo['amplif_factor']);
+		this.scene.graph.textures[id] = newTexture;
 	}
 
 	return 0;
 };
 
 
+/**	@brief Faz o parsing dos Materials do ficheiro LSX
+  *	@param rootElement elemento a partir do qual se inicia o parse dos Materiais
+  */	
+LSXreader.prototype.parseMaterials= function(rootElement) {
+
+	var materialsTag = rootElement.getElementsByTagName('MATERIALS');
+
+	if(materialsTag == null) {
+		return "MATERIALS tag is missing.";
+	}
+
+	var materials = materialsTag[0].getElementsByTagName('MATERIAL');
+	if(materials == null) {
+		return "No MATERIAL was added.";
+	}
+
+	var material = [];
+	var i;
+
+	for(i = 0; i < materials.length; i++) {
+		var id = this.reader.getString(materials[i], 'id', 1);
+		if(id == null)
+			throw "Material \""+ i+"\" does no have the id tag!";
+
+
+		var shininess = materials[i].getElementsByTagName('shininess');
+		material['shininess'] = this.reader.getFloat(shininess[0], 'value', 1);
+
+		if(this.isBadInteger(material['shininess']))
+			throw "Material \""+ id+"\" shininess is wrong or the tag name is missing! It shoud be for example: <shininess value=\"ff\" />";
+
+		var specular = materials[i].getElementsByTagName('specular');
+		material['specular'] = [this.reader.getFloat(specular[0], 'r', 1), 
+		this.reader.getFloat(specular[0], 'g', 1), 
+		this.reader.getFloat(specular[0], 'b', 1), 
+		this.reader.getFloat(specular[0], 'a', 1)];
+
+		if(this.isBadRGBA(material['specular'][0],material['specular'][1],material['specular'][2],material['specular'][3]))
+			throw "Material \""+ id+"\" specular is wrong or the tag name is missing! It shoud be for example:  <specular r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+		var diffuse = materials[i].getElementsByTagName('diffuse');
+		material['diffuse'] = [this.reader.getFloat(diffuse[0], 'r', 1), 
+		this.reader.getFloat(diffuse[0], 'g', 1), 
+		this.reader.getFloat(diffuse[0], 'b', 1), 
+		this.reader.getFloat(diffuse[0], 'a', 1)];
+
+		if(this.isBadRGBA(material['diffuse'][0],material['diffuse'][1],material['diffuse'][2],material['diffuse'][3]))
+			throw "Material \""+ id+"\" diffuse is wrong or the tag name is missing! It shoud be for example:  <diffuse r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+
+		var ambient = materials[i].getElementsByTagName('ambient');
+		material['ambient'] = [this.reader.getFloat(ambient[0], 'r', 1), 
+		this.reader.getFloat(ambient[0], 'g', 1), 
+		this.reader.getFloat(ambient[0], 'b', 1), 
+		this.reader.getFloat(ambient[0], 'a', 1)];
+
+		if(this.isBadRGBA(material['ambient'][0],material['ambient'][1],material['ambient'][2],material['ambient'][3]))
+			throw "Material \""+ id+"\" ambient is wrong or the tag name is missing! It shoud be for example:  <ambient r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+
+		var emission = materials[i].getElementsByTagName('emission');
+		material['emission'] = [this.reader.getFloat(emission[0], 'r', 1), 
+		this.reader.getFloat(emission[0], 'g', 1), 
+		this.reader.getFloat(emission[0], 'b', 1), 
+		this.reader.getFloat(emission[0], 'a', 1)];
+
+		if(this.isBadRGBA(material['emission'][0],material['emission'][1],material['emission'][2],material['emission'][3]))
+			throw "Material \""+ id+"\" emission is wrong or the tag name is missing! It shoud be for example:  <emission r=\"ff\" g=\"ff\" b=\"ff\" a=\"ff\" />";
+
+		var newMaterial = new Material(this.scene,id);
+		newMaterial.setAppearance(material['shininess'],material['specular'],material['diffuse'],material['ambient'],material['emission']);
+		this.scene.graph.materials[id] = newMaterial;
+	}
+
+	return 0;
+};
+
+
+LSXreader.prototype.parseAnimations= function(rootElement) {
+
+  var animationsTag = rootElement.getElementsByTagName('animations');
+
+  if(animationsTag.length == 0){
+  	return "animations tag is missing";
+  }
+
+	animationsTag = animationsTag[0];
+
+	for(var i = 0; i < animationsTag.children.length; i++){
+
+		if(animationsTag.children[i].tagName != 'animation'){
+			return "Unknown tag name in animations section: " + animationsTag.children[i].tagName;
+		}
+
+		var id = this.reader.getString(animationsTag.children[i], 'id', 1);
+
+		if(this.scene.graph.animations[id] != null){
+			return "There are two or more animations with the following id: " + id;
+		}
+
+		var type = this.reader.getString(animationsTag.children[i], 'type', 1);
+
+		if(type != 'linear' && type != 'circular'){
+			return "Unknown animation type: " + type;
+		}
+
+  	//already stores the value in milliseconds
+  	var span = (this.reader.getFloat(animationsTag.children[i], 'span', 1)) * 1000;
+
+  	if(type == 'linear'){
+  		var controls = animationsTag.children[i].getElementsByTagName('controlpoint');
+
+  		if(controls == null){
+  			return "Any controlpoints were added to animation: " + id;
+  		}
+  		else if(controls < 2){
+  			return "Insuficient number of controlpoints for animation " + id;
+  		}
+
+  		var controlpoints = [];
+  		for(var j = 0 ; j < controls.length; j++){
+  			var xx = this.reader.getFloat(controls[j], 'xx', 1);
+  			var yy = this.reader.getFloat(controls[j], 'yy', 1);
+  			var zz = this.reader.getFloat(controls[j], 'zz', 1);
+  			var control = vec3.fromValues(xx, yy, zz);
+  			controlpoints.push(control);
+  		}			
+
+
+  		this.scene.graph.animations[id] = new LinearAnimation(id, span, controlpoints);
+  	}
+  	else{
+  		var temp = this.getArgs(animationsTag.children[i], 'center', 1);
+  		if(temp.length != 3){
+  			return "wrong number of coordinates for center point on the animation " + id;
+  		}
+  		var center = vec3.fromValues(temp[0], temp[1], temp[2]);
+
+  		var radius = this.reader.getFloat(animationsTag.children[i], 'radius', 1);
+
+  		var startang = this.reader.getFloat(animationsTag.children[i], 'startang', 1) * Math.PI / 180;
+
+  		var rotang = this.reader.getFloat(animationsTag.children[i], 'rotang', 1) * Math.PI / 180;
+
+  		this.scene.graph.animations[id] = new CircularAnimation(id, span, center, radius, startang, rotang);
+  	}
+  }
+
+  return 0;
+};
+
+
 /**	@brief Faz o parsing da Leaves do ficheiro LSX
   *	@param rootElement elemento a partir do qual se inicia o parse das leaves
   */	
-  LSXreader.prototype.parseLeaves= function(rootElement) {
+LSXreader.prototype.parseLeaves= function(rootElement) {
+	var leavesTag = rootElement.getElementsByTagName('LEAVES');
+	if(leavesTag == null){
+		return "LEAVES tag is missing.";
+	}
 
-    	var leavesTag = rootElement.getElementsByTagName('LEAVES');
-    	if(leavesTag == null){
-    		return "LEAVES tag is missing.";
-    	}
+	var leaves = leavesTag[0].getElementsByTagName('LEAF');
+	if(leaves == null){
+		return "No LEAF was added.";
+	}
 
-    	var leaves = leavesTag[0].getElementsByTagName('LEAF');
-    	if(leaves == null){
-    		return "No LEAF was added.";
-    	}
+  var i;
 
-    	var i;
+	for(i = 0; i < leaves.length; i++){
 
-    	for(i = 0; i < leaves.length; i++){
+  		var id = this.reader.getString(leaves[i], 'id', 1);
+  		if(id == null)
+  			throw "Leave \""+ i+"\" does no have the id tag!";
 
-    		var id = this.reader.getString(leaves[i], 'id', 1);
-    		if(id == null)
-    			throw "Leave \""+ i+"\" does no have the id tag!";
+  		var type = this.reader.getString(leaves[i], 'type', 1);
 
-    		var type = this.reader.getString(leaves[i], 'type', 1);
+  		if(type == "rectangle"){
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			this.scene.graph.leaves[id] = new MyRectangle(this.scene, args);
+  		}
+  		else if(type == "sphere") {
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			this.scene.graph.leaves[id] = new MySphere(this.scene, args);
+  		}
+  		else if(type == "cylinder"){
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			this.scene.graph.leaves[id] = new MyCylinder(this.scene, args);
+  		}
+  		else if(type == "triangle"){
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			this.scene.graph.leaves[id] = new MyTriangle(this.scene, args);
+  		}
+  		else if(type == "plane"){
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			if(args[0] <=0 ||args[1]<=0 || this.isBadInteger(args[0])||this.isBadInteger(args[1]))
+  				return "The LEAF " + id + " has no parts!";
 
+  			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0], args[1]);
+  		}
+  		else if(type == "patch"){
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			if(args[0]<=0 || this.isBadInteger(args[0])||
+  				args[1]<=0 || this.isBadInteger(args[1])||
+  				 args[2]<=0 || this.isBadInteger(args[2])||
+  				  args[3]<=0 || this.isBadInteger(args[3]))
+  				return "Invalid Patch arguments!";
 
+  			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
 
-    		if(type == "rectangle"){
-    			var args = this.getArgs(leaves[i], 'args', 1);
-    			this.scene.graph.leaves[id] = new MyRectangle(this.scene, args);
-    		}
-    		else if(type == "sphere") {
-    			var args = this.getArgs(leaves[i], 'args', 1);
-    			this.scene.graph.leaves[id] = new MySphere(this.scene, args);
-    		}
-    		else if(type == "cylinder"){
-    			var args = this.getArgs(leaves[i], 'args', 1);
-    			this.scene.graph.leaves[id] = new MyCylinder(this.scene, args);
-    		}
-    		else if(type == "triangle"){
-    			var args = this.getArgs(leaves[i], 'args', 1);
-    			this.scene.graph.leaves[id] = new MyTriangle(this.scene, args);
-    		}
-    		else if(type == "plane"){
-    			var args = this.getArgs(leaves[i], 'args', 1);
-    			if(args[0] <=0 ||args[1]<=0 || this.isBadInteger(args[0])||this.isBadInteger(args[1]))
-    				return "The LEAF " + id + " has no parts!";
+  			if(controlpoints.length != (args[0]+1)*(args[1]+1))
+  				return "The LEAF "+id+" has wrong number of controlpoints!";
 
-    			this.scene.graph.leaves[id] = new MyPlane(this.scene, args[0], args[1]);
-    		}
-    		else if(type == "patch"){
-    			var args = this.getArgs(leaves[i], 'args', 1);
-    			if(args[0]<=0 || this.isBadInteger(args[0])||
-    				args[1]<=0 || this.isBadInteger(args[1])||
-    				 args[2]<=0 || this.isBadInteger(args[2])||
-    				  args[3]<=0 || this.isBadInteger(args[3]))
-    				return "Invalid Patch arguments!";
-
-    			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
-
-    			if(controlpoints.length != (args[0]+1)*(args[1]+1))
-    				return "The LEAF "+id+" has wrong number of controlpoints!";
-
-    			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
-  			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
-    	}
-       else if(type == "terrain"){
-        var texture = this.reader.getString(leaves[i], 'texture', 1);
-        if(this.scene.graph.textures[texture] == null){
-          return "Invalid texture " + texture + " for terrain " + id + ".";
-        }
-        var heightmap = this.reader.getString(leaves[i], 'heightmap', 1);
-        if(this.scene.graph.textures[heightmap] == null){
-          return "Invalid heightmap " + heightmap + " for terrain " + id + ".";
-        }
-        var normScale = this.reader.getFloat(leaves[i], 'normScale', 1);
-        this.scene.graph.leaves[id] = new MyTerrain(this.scene, texture, heightmap, normScale);
+  			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
+			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
+  	}
+     else if(type == "terrain"){
+      var texture = this.reader.getString(leaves[i], 'texture', 1);
+      if(this.scene.graph.textures[texture] == null){
+        return "Invalid texture " + texture + " for terrain " + id + ".";
       }
-      else if(type == "vehicle"){
-        var engineTexture = this.reader.getString(leaves[i], 'engine', 1);
-        if(this.scene.graph.textures[engineTexture] == null)
-          return "Invalid engine texture for vehicle";
-        var spaceshipTexture = this.reader.getString(leaves[i], 'spaceship', 1);
-        if(this.scene.graph.textures[spaceshipTexture] == null)
-          return "Invalid spaceship texture for vehicle";
-        var flameTexture = this.reader.getString(leaves[i], 'flame', 1);
-        if(this.scene.graph.textures[flameTexture] == null)
-          return "Invalid flame texture for vehicle";
-        this.scene.graph.leaves[id] = new MyVehicle(this.scene, engineTexture, spaceshipTexture, flameTexture);
+      var heightmap = this.reader.getString(leaves[i], 'heightmap', 1);
+      if(this.scene.graph.textures[heightmap] == null){
+        return "Invalid heightmap " + heightmap + " for terrain " + id + ".";
       }
-      else {
-        return "ERROR: unexistent leaf type: " + type;
-      }
-          
-
+      var normScale = this.reader.getFloat(leaves[i], 'normScale', 1);
+      this.scene.graph.leaves[id] = new MyTerrain(this.scene, texture, heightmap, normScale);
+    }
+    else if(type == "vehicle"){
+      var engineTexture = this.reader.getString(leaves[i], 'engine', 1);
+      if(this.scene.graph.textures[engineTexture] == null)
+        return "Invalid engine texture for vehicle";
+      var spaceshipTexture = this.reader.getString(leaves[i], 'spaceship', 1);
+      if(this.scene.graph.textures[spaceshipTexture] == null)
+        return "Invalid spaceship texture for vehicle";
+      var flameTexture = this.reader.getString(leaves[i], 'flame', 1);
+      if(this.scene.graph.textures[flameTexture] == null)
+        return "Invalid flame texture for vehicle";
+      this.scene.graph.leaves[id] = new MyVehicle(this.scene, engineTexture, spaceshipTexture, flameTexture);
+    }
+    else return "ERROR: unexistent leaf type: " + type;
   } 
 
   return 0; 
@@ -711,13 +704,8 @@ LSXreader.prototype.readNode = function(nodeTag) {
 	var numTransformations = nodeTag.children.length - 3;
 	var mat = this.readNodeTransformations(numTransformations, nodeTag);
 	var animations = this.readNodeAnimations(id, nodeTag);
-	if(animations == -1)
-		return -1;
 
 	var newNode = new Node(id, materialID, textureID, mat, desc, animations);
-
-	if(newNode.animations > 0)
-		this.scene.graph.animations.push(id);
 
 	this.scene.graph.nodes[id] = newNode;
 
@@ -778,8 +766,8 @@ LSXreader.prototype.readNodeTransformations = function(numTransformations, nodeT
 /**	@brief Função auxiliar da função readNode(nodeTag) que faz o read de todas as animacoes associadas ao nodeTag
   *	@param nodeTag tag do node ao qual se pretende ler as transformações
   */
-  LSXreader.prototype.readNodeAnimations = function(nodeID, nodeTag) {
-  	var animations = [];
+LSXreader.prototype.readNodeAnimations = function(nodeID, nodeTag) {
+  var animations = [];
 
 	//gathers all ANIMATIONREF tags inside an array
 	var animationRefs = nodeTag.getElementsByTagName('ANIMATIONREF');
