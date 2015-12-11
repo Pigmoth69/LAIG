@@ -592,9 +592,28 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
       if(this.scene.graph.textures[flameTexture] == null)
         return "Invalid flame texture for vehicle";
       this.scene.graph.leaves[id] = new MyVehicle(this.scene, engineTexture, spaceshipTexture, flameTexture);
-    }
-    else return "ERROR: unexistent leaf type: " + type;
-  } 
+    }else if(type == "stone"){
+      var colorTexture = this.reader.getString(leaves[i], 'color', 1);
+      if(this.scene.graph.textures[colorTexture] == null)
+        return "Invalid color texture for stone";
+      this.scene.graph.leaves[id] = new MyStone(this.scene, colorTexture);
+    }else if(type == "board"){
+
+      var topTexture = this.reader.getString(leaves[i], 'topTheme', 1);
+      if(this.scene.graph.textures[topTexture] == null)
+      	return "Invalid top theme texture for board";
+      var midTexture = this.reader.getString(leaves[i], 'midTheme', 1);
+      if(this.scene.graph.textures[midTexture] == null)
+      	return "Invalid bop theme texture for board"
+
+      var botTexture = this.reader.getString(leaves[i], 'botTheme', 1);
+      if(this.scene.graph.textures[botTexture] == null)
+      	return "Invalid bop theme texture for board"
+
+      this.scene.graph.leaves[id] = new MyBoard(this.scene,topTexture,midTexture,botTexture);
+  }
+  else return "ERROR: unexistent leaf type: " + type;
+} 
 
   return 0; 
 };

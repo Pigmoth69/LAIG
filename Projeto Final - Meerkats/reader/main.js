@@ -16,7 +16,9 @@ serialInclude(['../lib/CGF.js', './parser/LSXscene.js','./parser/LSXreader.js','
                './parser/Light.js','./parser/Texture.js','./parser/Node.js','./parser/Material.js',
                './parser/Initials.js', './parser/Illumination.js','./parser/Graph.js',
                './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
-               './primitives/MyTriangle.js', './primitives/MyPlane.js', './primitives/MyPatch.js', './primitives/MyTerrain.js','./primitives/MyVehicle.js',,
+               './primitives/MyTriangle.js', './primitives/MyPlane.js', './primitives/MyPatch.js',
+               './primitives/MyTerrain.js','./primitives/MyVehicle.js','./primitives/MyStone.js',
+               './primitives/MyBoard.js', './primitives/MyBoardTile.js',
  
 main=function()
 {
