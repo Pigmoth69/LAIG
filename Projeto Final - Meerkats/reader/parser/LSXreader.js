@@ -569,6 +569,21 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
 
   			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
 			this.scene.graph.leaves[id] = new MyPatch(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
+  	}else if(type == "bag"){
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			if(args[0]<=0 || this.isBadInteger(args[0])||
+  				args[1]<=0 || this.isBadInteger(args[1])||
+  				 args[2]<=0 || this.isBadInteger(args[2])||
+  				  args[3]<=0 || this.isBadInteger(args[3]))
+  				return "Invalid bag arguments!";
+
+  			var controlpoints = leaves[i].getElementsByTagName('controlpoint');
+
+  			if(controlpoints.length != (args[0]+1)*(args[1]+1))
+  				return "The LEAF "+id+" has wrong number of controlpoints!";
+
+  			var finalControlPoints = this.parseControlPoints(args[0],args[1],controlpoints);
+			this.scene.graph.leaves[id] = new MyBag(this.scene, args[0],args[1],args[2],args[3],finalControlPoints);
   	}
      else if(type == "terrain"){
       var texture = this.reader.getString(leaves[i], 'texture', 1);
@@ -592,11 +607,6 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
       if(this.scene.graph.textures[flameTexture] == null)
         return "Invalid flame texture for vehicle";
       this.scene.graph.leaves[id] = new MyVehicle(this.scene, engineTexture, spaceshipTexture, flameTexture);
-    }else if(type == "stone"){
-      var colorTexture = this.reader.getString(leaves[i], 'color', 1);
-      if(this.scene.graph.textures[colorTexture] == null)
-        return "Invalid color texture for stone";
-      this.scene.graph.leaves[id] = new MyStone(this.scene, colorTexture);
     }else if(type == "board"){
 
       var topTexture = this.reader.getString(leaves[i], 'topTheme', 1);
@@ -610,7 +620,23 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
       if(this.scene.graph.textures[botTexture] == null)
       	return "Invalid bop theme texture for board"
 
-      this.scene.graph.leaves[id] = new MyBoard(this.scene,topTexture,midTexture,botTexture);
+      var stone1Texture = this.reader.getString(leaves[i], 'stone1Texture', 1);
+      if(this.scene.graph.textures[stone1Texture] == null)
+      	return "Invalid stone1 texture for board"
+
+      var stone2Texture = this.reader.getString(leaves[i], 'stone2Texture', 1);
+      if(this.scene.graph.textures[stone2Texture] == null)
+      	return "Invalid stone2 texture for board"
+
+      var stone3Texture = this.reader.getString(leaves[i], 'stone3Texture', 1);
+      if(this.scene.graph.textures[stone3Texture] == null)
+      	return "Invalid stone3 texture for board"
+
+      var stone4Texture = this.reader.getString(leaves[i], 'stone4Texture', 1);
+      if(this.scene.graph.textures[stone4Texture] == null)
+      	return "Invalid stone4 texture for board"
+
+      this.scene.graph.leaves[id] = new MyBoard(this.scene,topTexture,midTexture,botTexture,stone1Texture,stone2Texture,stone3Texture,stone4Texture);
   }
   else return "ERROR: unexistent leaf type: " + type;
 } 

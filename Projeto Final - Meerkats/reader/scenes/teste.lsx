@@ -2,9 +2,9 @@
 	
 	<INITIALS>
 	    <frustum near="0.1" far="500.0"/>                      	<!-- frustum planes-->
-	    <translation x="0" y="0" z="0" />                 	<!-- initial translate -->
+	    <translation x="-10" y="-5" z="0" />                 	<!-- initial translate -->
 	    <rotation axis="x" angle="0.0" />                  		<!-- initial rotation 3 -->
-	    <rotation axis="y" angle="0.0" />                 		<!-- initial rotation 2 -->
+	    <rotation axis="y" angle="45.0" />                 		<!-- initial rotation 2 -->
 	    <rotation axis="z" angle="0.0" />                  		<!-- initial rotation 1 -->
 	    <scale sx="1" sy="1" sz="1" />                  	<!-- initial scaling -->
 	    <reference length="3" />                          		<!-- axis length; "0" means no axis-->
@@ -26,11 +26,25 @@
 	        <specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
 	    </LIGHT>
 	    <LIGHT id="screen1">                                    <!-- light identifier -->
-	        <enable value="1" />                         <!-- enable/disable -->
-	        <position x="-5" y="-5" z="-5" w="1" />       <!-- light position -->
-	        <ambient r="0.1" g="0.1" b="0.1" a="1" />        <!-- ambient component -->
-	        <diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
-	        <specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
+	    	<enable value="1" />                         <!-- enable/disable -->
+	    	<position x="-5" y="-5" z="-5" w="1" />       <!-- light position -->
+	    	<ambient r="0.1" g="0.1" b="0.1" a="1" />        <!-- ambient component -->
+	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
+	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
+	    </LIGHT>
+	    <LIGHT id="screen3">                                    <!-- light identifier -->
+	    	<enable value="1" />                         <!-- enable/disable -->
+	    	<position x="5" y="5" z="-8" w="1" />       <!-- light position -->
+	    	<ambient r="0.1" g="0.1" b="0.1" a="1" />        <!-- ambient component -->
+	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
+	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
+	    </LIGHT>
+	    	    <LIGHT id="screen4">                                    <!-- light identifier -->
+	    	<enable value="1" />                         <!-- enable/disable -->
+	    	<position x="2" y="1" z="8" w="1" />       <!-- light position -->
+	    	<ambient r="1" g="1" b="1" a="1" />        <!-- ambient component -->
+	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
+	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
 	    </LIGHT>
 	</LIGHTS>
 	
@@ -65,6 +79,10 @@
 		</TEXTURE>
 		<TEXTURE id="bopTile">
 			<file path="./textures/botTheme.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="linnen">
+			<file path="./textures/bag.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 
@@ -121,24 +139,45 @@
 			<controlpoint x="-1" y="0" z="2" />
 			<controlpoint x="0" y="0" z="3" />
 	    </LEAF>
+	    <LEAF id="StoneBag" type="bag" args="3 3 10 15">
+	    	<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="1" y="0" z="1" />
+			<controlpoint x="1" y="0" z="2" />
+			<controlpoint x="0" y="0" z="3" />	
+
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="0.3" y="0.6" z="1" />
+			<controlpoint x="0.3" y="0.6" z="2" />
+			<controlpoint x="0" y="0" z="3" />
+
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="-0.3" y="0.6" z="1" />
+			<controlpoint x="-0.3" y="0.6" z="2" />
+			<controlpoint x="0" y="0" z="3" />
+
+			<controlpoint x="0" y="0" z="0" />
+			<controlpoint x="-1" y="0" z="1" />
+			<controlpoint x="-1" y="0" z="2" />
+			<controlpoint x="0" y="0" z="3" />
+	    </LEAF>
 		<LEAF id="grass" type="terrain" texture="grass" heightmap="grassHeight" />
 
-		<LEAF id="Board" type="board" topTheme="topTile" midTheme="yellow" botTheme="bopTile" />
-
-		<LEAF id="redStone" type="stone" color="red"/>
-		<LEAF id="greenStone" type="stone" color="green"/>
-		<LEAF id="yellowStone" type="stone" color="yellow"/>
-		<LEAF id="blueStone" type="stone" color="blue"/>
+		<LEAF id="Board" type="board" topTheme="topTile" midTheme="yellow" botTheme="bopTile" stone1Texture="red" stone2Texture="blue" stone3Texture="green" stone4Texture="yellow" />
 	</LEAVES>
+
+	<STONES>
+		<STONE id="redStone" />
+	</STONES>
 	
 	<NODES>
 	    <ROOT id="root" /> 
 		
 		<NODE id="root">
 			<MATERIAL id="default" />
-			<TEXTURE id="null" />
+			<TEXTURE id="linnen" />
 			<DESCENDANTS>
-				<DESCENDANT id="Board"/>
+				<!--<DESCENDANT id="Board"/>-->
+				<DESCENDANT id="Board" />
 				<!--<DESCENDANT id="first" />
 				<DESCENDANT id="second" />
 				<DESCENDANT id="third" />

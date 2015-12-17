@@ -49,8 +49,8 @@ MyStone.prototype.makeStone = function() {
 
 	
 
-	this.top = new MyPatch(this.scene,3,3,128,128,topControlPoints);
-	this.back = new MyPatch(this.scene,3,3,128,128,backControlPoints);
+	this.top = new MyPatch(this.scene,3,3,32,32,topControlPoints);
+	this.back = new MyPatch(this.scene,3,3,32,32,backControlPoints);
 };
 
 MyStone.prototype.display = function(){
@@ -60,7 +60,7 @@ MyStone.prototype.display = function(){
 MyStone.prototype.displayStone = function(){
 this.scene.graph.textures[this.colorTexture].bind();
 	this.scene.pushMatrix();
-	//this.scene.scale(3,3,3);
+	this.scene.translate(0,0,-1.5);
 	this.top.display();
 	this.back.display();
 	this.scene.popMatrix();

@@ -47,3 +47,7 @@ Interface.prototype.loadInterfaceLigths = function(){
 Interface.prototype.setScene = function(scene) {
     this.scene = scene;
 };
+
+
+Interface.prototype.processMouseDown = function() {
+};

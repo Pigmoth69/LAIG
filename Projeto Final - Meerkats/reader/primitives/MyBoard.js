@@ -2,90 +2,172 @@
  * MyBoard
  * @constructor
  */
-function MyBoard(scene, topTexture,midTexture,botTexture) {
-	CGFobject.call(this,scene);
-	this.scene = scene;
-	this.topTexture = topTexture;
-	this.midTexture = midTexture;
-	this.botTexture = botTexture;
-	this.board = [];
-	this.tile = new MyBoardTile(scene,topTexture,midTexture,botTexture);
-	//this.makeBoard();
+ function MyBoard(scene, tileTopTexture,tileMidTexture,tileBotTexture,stone1Texture,stone2Texture,stone3Texture,stone4Texture) {
+ 	CGFobject.call(this,scene);
+ 	this.scene = scene;
+
+ 	this.stone1 = new MyStone(this.scene, stone1Texture);
+ 	this.stone2 = new MyStone(this.scene, stone2Texture);
+ 	this.stone3 = new MyStone(this.scene, stone3Texture);
+ 	this.stone4 = new MyStone(this.scene, stone4Texture);
+ 	
+ 	this.boardTiles=[];
+	this.boardPos = []; 	//posições onde se colocam as peças no board
+	this.boardStones = [];  //peças 
+	this.makeBoard();
+	this.makeBoardTiles(scene,tileTopTexture,tileMidTexture,tileBotTexture);
 };
 
 MyBoard.prototype = Object.create(CGFobject.prototype);
 MyBoard.prototype.constructor = MyBoard;
 
+/*
+Função responsável pela inicialização das posições do tabuleiro. Esta posições acedem-se da mesma forma que que no prolog.
+1-5 2-6 3-7 4-8
+5-9
+6-8 7-7 8-6 9-5
+*/
+MyBoard.prototype.makeBoard = function() {
+	var side = -1;
+	for(var y=1; y<=9; y++) {
+		this.boardPos[y] = [];
+		this.boardStones[y]=[];
+		for(var x=1; x<=9; x++) {
+			if(y >=5)
+				side = 1;
 
-/*MyBoard.prototype.makeBoard = function() {
-	for(var i = 0 ; i < 9 ; i ++){
-		this.board[i]
+			switch(y){
+				case 9:
+				case 1:
+				if(x <=5){
+					this.boardPos[y][x] = new Coords((x+1)*2,0,side*6.8);
+					this.boardStones[y][x] = null;
+				}
+				break;
+				case 8:
+				case 2:
+				if(x <=6){
+					this.boardPos[y][x] = new Coords((x+0.5)*2,0,side*5.1);
+					this.boardStones[y][x] = null;
+				}
+				break;
+				case 7:
+				case 3:
+				if(x <=7){
+					this.boardPos[y][x] = new Coords((x)*2,0,side*3.4);
+					this.boardStones[y][x] = null;
+				}
+				break;
+				case 6:
+				case 4:
+				if(x <=8){
+					this.boardPos[y][x] = new Coords((x-0.5)*2,0,side*1.7);
+					this.boardStones[y][x] = null;
+				}
+				break;
+				case 5:
+				if(x <=9){
+					this.boardPos[y][x] = new Coords((x-1)*2,0,side*0);
+					this.boardStones[y][x] = null;
+				}
+				break;
+				default:
+			}
+		}
 	}
-};*/
+};
+
+MyBoard.prototype.makeBoardTiles = function(scene,top,mid,bot) {
+	for(var i = 1 ; i <= 61; i++){
+		this.boardTiles[i] = new MyBoardTile(scene,top,mid,bot);
+	}
+}
+
+MyBoard.prototype.playStone = function(id,color) {
+	var tile = 1;
+
+	for(var y = 1 ; y <=9; y++){
+		for(var x = 1; x < this.boardPos[y].length;x++){
+			if(tile == id)
+			{
+				switch(color){
+					case 1:
+					this.boardStones[y][x] = this.stone1;
+					break;
+					case 2:
+					this.boardStones[y][x] = this.stone2;
+					break;
+					case 3:
+					this.boardStones[y][x] = this.stone3;
+					break;
+					case 4:
+					this.boardStones[y][x] = this.stone4;
+					break;
+					default:
+				}
+				return;
+			}
+			tile++;
+		}
+
+	}
+}
+MyBoard.prototype.removeStone = function(xPos,yPos) {
+	this.boardStones[yPos][xPos]= null;
+}
+
+MyBoard.prototype.displayBoard = function(){
+	var tile = 1;
+
+	for(var y = 1 ; y <=9; y++){
+		for(var x = 1; x < this.boardPos[y].length;x++){
+			this.scene.registerForPick(tile,this.boardTiles[tile]);
+			this.scene.pushMatrix();
+			this.scene.translate(this.boardPos[y][x].x,this.boardPos[y][x].y,this.boardPos[y][x].z),
+			this.boardTiles[tile].display();
+			tile++;
+			this.scene.popMatrix();
+		}
+	}
+	
+	/*tile = 1;
+	for(var y = 1 ; y <=9; y++){
+		for(var x = 1; x < this.boardPos[y].length;x++){
+			//if(this.boardStones[y][x]==null)
+				this.scene.registerForPick(tile,this.boardTiles[tile]);
+		}
+	}*/
+
+}
+
+
+MyBoard.prototype.displayStones = function(){
+	var stone = 1;
+	for(var y = 1 ; y <=9; y++){
+		for(var x = 1; x < this.boardStones[y].length;x++){
+			if(this.boardStones[y][x] instanceof MyStone){
+
+				this.scene.pushMatrix();
+				this.scene.translate(this.boardPos[y][x].x,this.boardPos[y][x].y,this.boardPos[y][x].z);
+				if(this.scene.pickMode==false)
+				this.boardStones[y][x].display();
+				stone++;
+				this.scene.popMatrix();
+			}
+		}
+	}
+}
 
 
 MyBoard.prototype.display = function(){
-
-	var side = -1;
-	for(var x = 0 ; x < 2; x++){
-
-		if(side == 1){
-			for(var i = 0 ; i < 9; i ++){
-			this.scene.pushMatrix();
-			this.scene.translate(i*2,0,0);
-			this.tile.display();
-			this.scene.popMatrix();
-		}
-		}
-
-		for(var i = 0 ; i < 8; i ++){
-			this.scene.pushMatrix();
-			this.scene.translate((i+0.5)*2,0,side*1.7);
-			this.tile.display();
-			this.scene.popMatrix();
-		}
-		for(var i = 0 ; i < 7; i ++){
-			this.scene.pushMatrix();
-			this.scene.translate((i+1)*2,0,side*3.4);
-			this.tile.display();
-			this.scene.popMatrix();
-		}
-		for(var i = 0 ; i < 6; i ++){
-			this.scene.pushMatrix();
-			this.scene.translate((i+1.5)*2,0,side*5.1);
-			this.tile.display();
-			this.scene.popMatrix();
-		}
-		for(var i = 0 ; i < 5; i ++){
-			this.scene.pushMatrix();
-			this.scene.translate((i+2)*2,0,side*6.8);
-			this.tile.display();
-			this.scene.popMatrix();
-		}
-		side = 1;
-	}
-
-	
-	
+	this.displayBoard();
+	this.displayStones();
 }
-/*
-MyBoard.prototype.displayShipBody = function(){
-this.scene.graph.textures[this.spaceshipTexture].bind();
-	this.scene.pushMatrix();
-	this.scene.scale(3,3,3);
-	this.top.display();
-	this.back.display();
-	this.scene.popMatrix();
-	this.scene.graph.textures[this.spaceshipTexture].unbind();
-};
-
-
-*/
-
+		
 
 
 MyBoard.prototype.updateTextCoords = function(ampS,ampT){
 	//this.updateTexCoordsGLBuffers();
 };
 
-	
+

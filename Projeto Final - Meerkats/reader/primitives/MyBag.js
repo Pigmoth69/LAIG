@@ -1,8 +1,8 @@
 /**
- * MyPatch
+ * MyBag
  * @constructor
  */
-function MyPatch(scene,orderU,orderV,partsU,partsV,controllpoints) {
+function MyBag(scene,orderU,orderV,partsU,partsV,controllpoints) {
 	CGFobject.call(this,scene);
 	this.orderU = orderU;
 	this.orderV = orderV;
@@ -15,11 +15,11 @@ function MyPatch(scene,orderU,orderV,partsU,partsV,controllpoints) {
 	};
 	this.patch = new CGFnurbsObject(scene,getSurfacePoint,partsU,partsV);
 };
-MyPatch.prototype = Object.create(CGFobject.prototype);
-MyPatch.prototype.constructor = MyPatch;
+MyBag.prototype = Object.create(CGFobject.prototype);
+MyBag.prototype.constructor = MyBag;
 
 
-MyPatch.prototype.makeSurface = function(){
+MyBag.prototype.makeSurface = function(){
 	var knotsU = [];
 	var knotsV = [];
 
@@ -38,10 +38,10 @@ MyPatch.prototype.makeSurface = function(){
 
 };
 
-MyPatch.prototype.display = function(){
+MyBag.prototype.display = function(){
 	this.patch.display();
 }
 
-MyPatch.prototype.updateTextCoords = function(ampS,ampT){
+MyBag.prototype.updateTextCoords = function(ampS,ampT){
 	//this.updateTexCoordsGLBuffers();
 };

@@ -30,6 +30,8 @@ LSXscene.prototype.init = function (application) {
 	this.graph = new Graph();
 	this.milliseconds = 0;
 
+	this.setPickEnabled(true);
+
 };
 
 
@@ -172,6 +174,11 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 		return;
 	}
 
+	if(this.graph.leaves[leaf] instanceof MyBoard){
+		this.graph.leaves[leaf].display();
+		return;
+	}
+
 	var texture = null;
 	if (textureID != "clear")  //Se a textura for clear, nenhuma textura sera aplicada na Scene
 	{
@@ -200,10 +207,39 @@ LSXscene.prototype.updateLightsState = function (lightid,value) {
 };
 
 
+LSXscene.prototype.logPicking = function ()
+{
+
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj)
+				{
+					var customId = this.pickResults[i][1];
+					this.graph.leaves['Board'].playStone(customId,2);
+					console.log(this.pickResults[i]);					
+					console.log("Picked object: " + obj + ", with pick id " + customId);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}		
+	}
+}
+
+
+
+
+
+
+
 /**	@brief Invoca as funcoes essenciais para a apresentacao de cada novo frame da scene
   */
 LSXscene.prototype.display = function () {
 
+	/*Registo do picking*/
+	this.logPicking();
+	this.clearPickRegistration();
 
 	//limpa o conteudo do buffer
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
