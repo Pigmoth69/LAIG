@@ -44,7 +44,7 @@ numberOfBotsScreen(NumberPlayers):-
 	getInteger(NumberBots),
 	(
 		NumberBots > NumberPlayers -> write('Number of Bots exceeds the number of Players.'), getEnter;
-		playGame(NumberPlayers)
+		playGame(NumberPlayers,NumberBots)
 	).
 
 printNumberOfBotsScreen(NumberPlayers):- 
