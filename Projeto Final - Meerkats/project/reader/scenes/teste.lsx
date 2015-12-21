@@ -7,7 +7,7 @@
 	    <rotation axis="y" angle="45.0" />                 		<!-- initial rotation 2 -->
 	    <rotation axis="z" angle="0.0" />                  		<!-- initial rotation 1 -->
 	    <scale sx="1" sy="1" sz="1" />                  	<!-- initial scaling -->
-	    <reference length="0" />                          		<!-- axis length; "0" means no axis-->
+	    <reference length="4" />                          		<!-- axis length; "0" means no axis-->
 	</INITIALS>
 	
 	
@@ -39,7 +39,7 @@
 	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
 	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
 	    </LIGHT>
-	    	<LIGHT id="screen4">                                    <!-- light identifier -->
+	    <LIGHT id="screen4">                                    <!-- light identifier -->
 	    	<enable value="1" />                         <!-- enable/disable -->
 	    	<position x="2" y="1" z="8" w="1" />       <!-- light position -->
 	    	<ambient r="1" g="1" b="1" a="1" />        <!-- ambient component -->
@@ -194,8 +194,8 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="MainMenu"/>
-				<!--<DESCENDANT id="Board"/>
-				<DESCENDANT id="Board" />
+				<DESCENDANT id="Board"/>
+				<!--<DESCENDANT id="Board" />
 				<DESCENDANT id="first" />
 				<DESCENDANT id="second" />
 				<DESCENDANT id="third" />
@@ -206,6 +206,7 @@
 		<NODE id="MainMenu">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
+			<TRANSLATION x="0" y="10" z="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="pannel" />
 				<DESCENDANT id="button" />
