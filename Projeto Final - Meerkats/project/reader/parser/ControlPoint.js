@@ -6,6 +6,3 @@ function ControlPoint(point3D, orientation) {
 	this.distance = 0;
 	this.rotationAxis = vec3.create();
 };
-
-ControlPoint.prototype.constructor = ControlPoint;
-ControlPoint.prototype = Object.create(Object.prototype);

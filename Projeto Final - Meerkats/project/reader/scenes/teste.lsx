@@ -2,9 +2,9 @@
 	
 	<INITIALS>
 	    <frustum near="0.1" far="500.0"/>                      	<!-- frustum planes-->
-	    <translation x="-10" y="-5" z="0" />                 	<!-- initial translate -->
+	    <translation x="0" y="0" z="0" />                 	<!-- initial translate -->
 	    <rotation axis="x" angle="0.0" />                  		<!-- initial rotation 3 -->
-	    <rotation axis="y" angle="45.0" />                 		<!-- initial rotation 2 -->
+	    <rotation axis="y" angle="0.0" />                 		<!-- initial rotation 2 -->
 	    <rotation axis="z" angle="0.0" />                  		<!-- initial rotation 1 -->
 	    <scale sx="1" sy="1" sz="1" />                  	<!-- initial scaling -->
 	    <reference length="4" />                          		<!-- axis length; "0" means no axis-->
@@ -12,39 +12,25 @@
 	
 	
 	<ILLUMINATION>
-	    <ambient r="0.3" g="0.3" b="0.3" a="1" />            <!-- global ambient -->
-	    <background r="0.3" g="0.3" b="0.3" a="1" />         <!-- background color -->
+	    <ambient r="0.3" g="0.3" b="0.3" a="1" />
+	    <background r="0.3" g="0.3" b="0.3" a="1" />
 	</ILLUMINATION>
 	
 	
 	<LIGHTS>
-	    <LIGHT id="screen">                                    <!-- light identifier -->
-	        <enable value="1" />                         <!-- enable/disable -->
-	        <position x="5" y="5" z="5" w="1" />       <!-- light position -->
-	        <ambient r="0.1" g="0.1" b="0.1" a="1" />        <!-- ambient component -->
-	        <diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
-	        <specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
+	    <LIGHT id="board">
+	        <enable value="1" />
+	        <position x="0" y="10" z="10" w="1" />
+	        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+	        <diffuse r="1" g="1" b="1" a="1" />
+	        <specular r="1" g="1" b="1" a="1" />
 	    </LIGHT>
-	    <LIGHT id="screen1">                                    <!-- light identifier -->
-	    	<enable value="1" />                         <!-- enable/disable -->
-	    	<position x="-5" y="-5" z="-5" w="1" />       <!-- light position -->
-	    	<ambient r="0.1" g="0.1" b="0.1" a="1" />        <!-- ambient component -->
-	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
-	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
-	    </LIGHT>
-	    <LIGHT id="screen3">                                    <!-- light identifier -->
-	    	<enable value="1" />                         <!-- enable/disable -->
-	    	<position x="5" y="5" z="-8" w="1" />       <!-- light position -->
-	    	<ambient r="0.1" g="0.1" b="0.1" a="1" />        <!-- ambient component -->
-	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
-	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
-	    </LIGHT>
-	    <LIGHT id="screen4">                                    <!-- light identifier -->
-	    	<enable value="1" />                         <!-- enable/disable -->
-	    	<position x="2" y="1" z="8" w="1" />       <!-- light position -->
-	    	<ambient r="1" g="1" b="1" a="1" />        <!-- ambient component -->
-	    	<diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
-	    	<specular r="1" g="1" b="1" a="1" />       	<!-- specular component --> <!-- no specular here because it's a wide source of light -->
+	    <LIGHT id="menu">
+	        <enable value="1" />
+	        <position x="0" y="25" z="10" w="1" />
+	        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+	        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+	        <specular r="0.5" g="0.5" b="0.5" a="1" />
 	    </LIGHT>
 	</LIGHTS>
 	
@@ -116,7 +102,7 @@
 		<MATERIAL id="orange">                                  
 			<shininess value="5" />
 			<specular r="0" g="0" b="0" a="1" /> 
-			<diffuse r="0.99" g="0.5" b="0.01" a="1" />
+			<diffuse r="0.9" g="0.5" b="0.01" a="1" />
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
@@ -179,7 +165,7 @@
 	    </LEAF>
 		<LEAF id="grass" type="terrain" texture="grass" heightmap="grassHeight" />
 
-		<LEAF id="Board" type="board" topTheme="topTile" midTheme="yellow" botTheme="bopTile" stone1Texture="red" stone2Texture="blue" stone3Texture="green" stone4Texture="yellow" />
+		<LEAF id="board" type="board" topTheme="topTile" midTheme="yellow" botTheme="bopTile" stone1Texture="red" stone2Texture="blue" stone3Texture="green" stone4Texture="yellow" />
 	</LEAVES>
 
 	<STONES>
@@ -203,10 +189,21 @@
 			</DESCENDANTS>
 		</NODE>
 
+		<NODE id="Board">
+			<MATERIAL id="default" />
+			<TEXTURE id="null" />
+			<TRANSLATION x="-8" y="0" z="0"/>
+			<DESCENDANTS>
+				<DESCENDANT id="board" />
+			</DESCENDANTS>
+		</NODE>
+
 		<NODE id="MainMenu">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="10" z="0"/>
+			<TRANSLATION x="0" y="20" z="0"/>
+			<ROTATION axis="y" angle="-10"/>
+			<ROTATION axis="x" angle="-10"/>
 			<DESCENDANTS>
 				<DESCENDANT id="pannel" />
 				<DESCENDANT id="button" />

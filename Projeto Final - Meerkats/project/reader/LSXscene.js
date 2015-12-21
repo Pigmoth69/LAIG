@@ -1,4 +1,3 @@
-var MILLISECONDS_TO_UPDATE = 50;
 
 function LSXscene(application) {
     CGFscene.call(this);
@@ -20,11 +19,8 @@ LSXscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
     this.enableTextures(true);
 
-    this.setUpdatePeriod(MILLISECONDS_TO_UPDATE);
-
-    this.terrainShader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
-    this.terrainShader.setUniformsValues({heightmap: 1});
-	this.terrainShader.setUniformsValues({normScale: 18.5});
+    this.MILLISECONDS_TO_UPDATE = 100;
+    this.setUpdatePeriod(this.MILLISECONDS_TO_UPDATE);
 
 	this.defaultAppearance = new CGFappearance(this);
 	this.graph = new Graph();
@@ -52,7 +48,8 @@ LSXscene.prototype.setInterface = function (interface) {
 /**	@brief Inicializa a camara da scene com valores de predefinicao
   */
 LSXscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(0, 15, 15), vec3.fromValues(0, 20, 0));
+    this.cameraAnimation = new CameraAnimation(this);
 };
 
 
@@ -249,7 +246,9 @@ LSXscene.prototype.logPicking = function (){
 				if (obj)
 				{
 					var customId = this.pickResults[i][1];
-					this.graph.leaves['Board'].playStone(customId,2);
+					if(customId == 1)
+						this.cameraAnimation.startCameraAnimation(9000, vec3.fromValues(0, 25, 30), vec3.fromValues(0,0,0));
+					//this.graph.leaves['Board'].playStone(customId,2);
 					console.log(this.pickResults[i]);					
 					console.log("Picked object: " + obj + ", with pick id " + customId);
 				}
@@ -257,7 +256,11 @@ LSXscene.prototype.logPicking = function (){
 			this.pickResults.splice(0,this.pickResults.length);
 		}		
 	}
-}
+};
+
+LSXscene.prototype.moveCamera = function(){
+
+};
 
 
 /**	@brief Invoca as funcoes essenciais para a apresentacao de cada novo frame da scene
@@ -277,6 +280,7 @@ LSXscene.prototype.display = function () {
 	this.loadIdentity();
 	this.applyViewMatrix();
 
+
 	if (this.LSXreader.loadedOk)
 	{
 		var currTime = new Date();
@@ -295,6 +299,8 @@ LSXscene.prototype.display = function () {
 
 		//inicializa a leitura e desenho do grafo obtido no ficheiro .lsx
 		this.graph.pickID = 1;
+		if(this.cameraAnimation.animationSteps > 0)
+		this.cameraAnimation.animateCamera();
 		this.drawNode(this.graph.rootID, 'null', 'clear');
 	}
 };
