@@ -72,8 +72,28 @@ LSXscene.prototype.onGraphLoaded = function () {
 	this.loadInitials();
 	this.loadIllumination();
 	this.loadLights();
-	this.interface.loadInterfaceLigths();
+	this.loadInterface();
 };
+
+/** @brief Funcao responsavel pelo load da interface da cena
+  */
+ LSXscene.prototype.loadInterface = function () {
+  	this.interface.loadInterfaceLigths();
+  	this.graph.Players['Bots'] = ['None','1','2','3','4'];
+  	this.graph.Players['Humans'] = ['None','1','2','3','4'];
+
+  	this.graph.gameStatus['PLAY']=function(){
+  		console.log("PLAY!");
+  	}
+
+  	this.graph.gameStatus['RESTART']=function(){
+  		console.log("RESTART!");
+  	}
+
+  	this.interface.loadInterfacePlayers();
+  	this.interface.loadInterfaceGameFunctions();
+
+ }
 
 
 /** @brief Altera valores de frustum da camara e cria a estrutura de eixos com as dimensoes obtidas do ficheiro .lsx
