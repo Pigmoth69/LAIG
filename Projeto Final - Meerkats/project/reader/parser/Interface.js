@@ -19,7 +19,6 @@ Interface.prototype.init = function(application) {
 
 	this.gui = new dat.GUI();
 	this.gui.open();
-
 };
 
 
@@ -44,6 +43,7 @@ Interface.prototype.loadInterfaceLigths = function(){
 	}
 };
 
+
 /**	@brief Carrega a GUI com os parametros a interagir, criando um handler para controlar o numero de jogadores
   */
 Interface.prototype.loadInterfacePlayers = function(){
@@ -54,18 +54,8 @@ Interface.prototype.loadInterfacePlayers = function(){
 
     players.add(this.scene.graph.Players, 'Humans', [ 'None', '1', '2','3','4' ] );
     players.add(this.scene.graph.Players, 'Bots', [ 'None', '1', '2','3','4' ] );
-	/*for(id in this.scene.graph.lightsStateValue)
-	{
-		//adiciona as opcoes com o id das luzes da scene
-	    var listener = lights.add(this.scene.graph.lightsStateValue, id);
-	    
-	    //handler que le a acao do utilizador e atualiza a informaçao das luzes na scene
-	    listener.onChange(function(bool) 
-	    {
-	    	scene.updateLightsState(this.property, bool);
-	    });
-	}*/
 };
+
 
 Interface.prototype.loadInterfaceGameFunctions = function(){
 	var game = this.gui.addFolder('Game');
@@ -75,26 +65,32 @@ Interface.prototype.loadInterfaceGameFunctions = function(){
 
     game.add(this.scene.graph.gameStatus,'PLAY');
     game.add(this.scene.graph.gameStatus,'RESTART');
-	/*for(id in this.scene.graph.lightsStateValue)
-	{
-		//adiciona as opcoes com o id das luzes da scene
-	    var listener = lights.add(this.scene.graph.lightsStateValue, id);
-	    
-	    //handler que le a acao do utilizador e atualiza a informaçao das luzes na scene
-	    listener.onChange(function(bool) 
-	    {
-	    	scene.updateLightsState(this.property, bool);
-	    });
-	}*/
 };
 
+
+Interface.prototype.loadInterfaceGameCameras = function(){
+	var camera = this.gui.addFolder('Cameras');
+    camera.open();
+
+    var scene = this.scene;
+	camera.add(this.scene.cameraAnimation, 'Rotation');
+
+    var listener = camera.add(this.scene.cameraAnimation, 'Perspective', ['Player Perspective', 'Upper Perspective']);
+    listener.onChange(function(option)
+    {
+    	var originalOrientation = vec3.fromValues(0,0,1);
+    	var vectorOrientation = vec3.fromValues(scene.camera.position[0], 0, scene.camera.position[2]);
+    	var angle  = Math.acos(vec3.dot(originalOrientation, vectorOrientation)/(vec3.length(vectorOrientation) * vec3.length(originalOrientation)));
+
+    	if(option == 'Upper Perspective')
+    		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(0.5*Math.sin(angle),45,0.5*Math.cos(angle)), vec3.fromValues(0,0,0));
+    	else 
+    		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(30*Math.sin(angle),25,30*Math.cos(angle)), vec3.fromValues(0,0,0));
+    });
+
+};
 
 
 Interface.prototype.setScene = function(scene) {
     this.scene = scene;
 };
-
-/*
-Interface.prototype.processMouseDown = function() {
-};
-*/

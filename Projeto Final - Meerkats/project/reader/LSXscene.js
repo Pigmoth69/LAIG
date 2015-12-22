@@ -30,7 +30,7 @@ LSXscene.prototype.init = function (application) {
 
 	this.setPickEnabled(true);
 
-//==================================================================================
+	//==================================================================================
 	var requestString = "[play," + "1" + ", " + "[[1,1,1],[0,0,0],[2,2,2]]" + "," + "1-1" + "," + "_NP" + "," + "_NB" + "," + "_M" + "]";
 	this.postGameRequest(requestString, this.handleReply);
 
@@ -48,7 +48,7 @@ LSXscene.prototype.setInterface = function (interface) {
 /**	@brief Inicializa a camara da scene com valores de predefinicao
   */
 LSXscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(0, 15, 15), vec3.fromValues(0, 20, 0));
+    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
     this.cameraAnimation = new CameraAnimation(this);
 };
 
@@ -89,6 +89,7 @@ LSXscene.prototype.onGraphLoaded = function () {
 
   	this.interface.loadInterfacePlayers();
   	this.interface.loadInterfaceGameFunctions();
+  	this.interface.loadInterfaceGameCameras();
 
  }
 
@@ -247,7 +248,9 @@ LSXscene.prototype.logPicking = function (){
 				{
 					var customId = this.pickResults[i][1];
 					if(customId == 1)
-						this.cameraAnimation.startCameraAnimation(9000, vec3.fromValues(0, 25, 30), vec3.fromValues(0,0,0));
+						this.cameraAnimation.startCameraAnimation(2500, vec3.fromValues(0, 25, 30), vec3.fromValues(0,0,0));
+					else if(this.cameraAnimation.Rotation)
+						this.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/4);
 					//this.graph.leaves['Board'].playStone(customId,2);
 					console.log(this.pickResults[i]);					
 					console.log("Picked object: " + obj + ", with pick id " + customId);
@@ -258,17 +261,14 @@ LSXscene.prototype.logPicking = function (){
 	}
 };
 
-LSXscene.prototype.moveCamera = function(){
-
-};
-
 
 /**	@brief Invoca as funcoes essenciais para a apresentacao de cada novo frame da scene
   */
 LSXscene.prototype.display = function () {
 
 	/*Registo do picking*/
-	this.logPicking();
+	if(this.cameraAnimation.span == 0)
+		this.logPicking();
 	this.clearPickRegistration();
 
 	//limpa o conteudo do buffer
@@ -285,7 +285,6 @@ LSXscene.prototype.display = function () {
 	{
 		var currTime = new Date();
 		this.milliseconds = currTime.getTime() - this.time.getTime();
-		//console.log(this.milliseconds);
 
 		//aplica noca matriz de transformacoes a scene
 		this.multMatrix(this.graph.initials.transMatrix);	
@@ -299,7 +298,7 @@ LSXscene.prototype.display = function () {
 
 		//inicializa a leitura e desenho do grafo obtido no ficheiro .lsx
 		this.graph.pickID = 1;
-		if(this.cameraAnimation.animationSteps > 0)
+		if(this.cameraAnimation.span != 0)
 		this.cameraAnimation.animateCamera();
 		this.drawNode(this.graph.rootID, 'null', 'clear');
 	}
