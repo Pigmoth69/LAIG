@@ -2,14 +2,14 @@
  * MyBoard
  * @constructor
  */
- function MyBoard(scene, tileTopTexture,tileMidTexture,tileBotTexture,stone1Texture,stone2Texture,stone3Texture,stone4Texture) {
+ function MyBoard(scene,tileTopTexture,tileMidTexture,tileBotTexture,stone1Texture,stone2Texture,stone3Texture,stone4Texture) {
  	CGFobject.call(this,scene);
  	this.scene = scene;
 
- 	this.stone1 = new MyStone(this.scene, stone1Texture);
- 	this.stone2 = new MyStone(this.scene, stone2Texture);
- 	this.stone3 = new MyStone(this.scene, stone3Texture);
- 	this.stone4 = new MyStone(this.scene, stone4Texture);
+ 	this.blueStone = new MyStone(this.scene, stone1Texture);
+ 	this.redStone = new MyStone(this.scene, stone2Texture);
+ 	this.greenStone = new MyStone(this.scene, stone3Texture);
+ 	this.yellowStone = new MyStone(this.scene, stone4Texture);
  	
  	this.boardTiles=[];
 	this.boardPos = []; 	//posições onde se colocam as peças no board
@@ -127,13 +127,13 @@ MyBoard.prototype.removeStone = function(xPos,yPos) {
 
 MyBoard.prototype.displayBoard = function(){
 	var tile = 1;
-
 	for(var y = 1 ; y <= 9; y++){
 		for(var x = 1; x < this.boardPos[y].length;x++){
-			this.scene.registerForPick(tile,this.boardTiles[tile]);
+			this.scene.registerForPick(this.scene.graph.pickID,this.boardTiles[tile]);
 			this.scene.pushMatrix();
 			this.scene.translate(this.boardPos[y][x].x,this.boardPos[y][x].y,this.boardPos[y][x].z),
 			this.boardTiles[tile].display();
+			this.scene.graph.pickID++;
 			tile++;
 			this.scene.popMatrix();
 		}

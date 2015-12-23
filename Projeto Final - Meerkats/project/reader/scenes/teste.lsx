@@ -173,19 +173,22 @@
 	</STONES>
 	
 	<NODES>
-	    <ROOT id="root" /> 
+	    <ROOT id="Main Menu"/> 
+	    <ROOT id="Gameplay"/> 
 		
-		<NODE id="root">
+		<NODE id="Main Menu">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 				<DESCENDANT id="MainMenu"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="Gameplay">
+			<MATERIAL id="default" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
 				<DESCENDANT id="Board"/>
-				<!--<DESCENDANT id="Board" />
-				<DESCENDANT id="first" />
-				<DESCENDANT id="second" />
-				<DESCENDANT id="third" />
-				<DESCENDANT id="forth" />-->
 			</DESCENDANTS>
 		</NODE>
 
@@ -254,7 +257,7 @@
 				<DESCENDANT id="redStone" />
 			</DESCENDANTS>
 		</NODE>
-		<NODE id="forth">
+		<NODE id="fourth">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
 			<TRANSLATION x="4.5" y="0" z="0" />

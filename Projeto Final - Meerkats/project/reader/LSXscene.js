@@ -24,8 +24,10 @@ LSXscene.prototype.init = function (application) {
 
 	this.defaultAppearance = new CGFappearance(this);
 	this.graph = new Graph();
+	this.stateMachine = new StateMachine(this);
+    this.cameraAnimation = new CameraAnimation(this);
 
-	this.time = new Date();
+	this.startingTime = new Date();
 	this.milliseconds = 0;
 
 	this.setPickEnabled(true);
@@ -49,7 +51,6 @@ LSXscene.prototype.setInterface = function (interface) {
   */
 LSXscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
-    this.cameraAnimation = new CameraAnimation(this);
 };
 
 
@@ -72,9 +73,10 @@ LSXscene.prototype.onGraphLoaded = function () {
 	this.loadInterface();
 };
 
+
 /** @brief Funcao responsavel pelo load da interface da cena
   */
- LSXscene.prototype.loadInterface = function () {
+LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfaceLigths();
   	this.graph.Players['Bots'] = ['None','1','2','3','4'];
   	this.graph.Players['Humans'] = ['None','1','2','3','4'];
@@ -219,7 +221,6 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 
 	this.graph.leaves[leaf].display();
 
-	this.registerForPick(1, this.graph.nodes['button']);
 	if(texture != null)
 		texture.unbind(0);
 };
@@ -240,20 +241,23 @@ LSXscene.prototype.updateLightsState = function (lightid,value) {
 
 LSXscene.prototype.logPicking = function (){
 
-	if (this.pickMode == false) {
-		if (this.pickResults != null && this.pickResults.length > 0) {
+	if (this.pickMode == false) 
+	{
+		if (this.pickResults != null && this.pickResults.length > 0)
+		{
 			for (var i=0; i< this.pickResults.length; i++) {
 				var obj = this.pickResults[i][0];
 				if (obj)
 				{
-					var customId = this.pickResults[i][1];
-					if(customId == 1)
-						this.cameraAnimation.startCameraAnimation(2500, vec3.fromValues(0, 25, 30), vec3.fromValues(0,0,0));
-					else if(this.cameraAnimation.Rotation)
-						this.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/4);
+					var selectedID = this.pickResults[i][1];
+
+					this.stateMachine.pickingHandler(selectedID);
+
 					//this.graph.leaves['Board'].playStone(customId,2);
-					console.log(this.pickResults[i]);					
-					console.log("Picked object: " + obj + ", with pick id " + customId);
+					
+
+					//console.log(this.pickResults[i]);					
+					//console.log("Picked object: " + obj + ", with pick id " + customId);
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -284,7 +288,7 @@ LSXscene.prototype.display = function () {
 	if (this.LSXreader.loadedOk)
 	{
 		var currTime = new Date();
-		this.milliseconds = currTime.getTime() - this.time.getTime();
+		this.milliseconds = currTime.getTime() - this.startingTime.getTime();
 
 		//aplica noca matriz de transformacoes a scene
 		this.multMatrix(this.graph.initials.transMatrix);	
@@ -298,12 +302,12 @@ LSXscene.prototype.display = function () {
 
 		//inicializa a leitura e desenho do grafo obtido no ficheiro .lsx
 		this.graph.pickID = 1;
-		if(this.cameraAnimation.span != 0)
-		this.cameraAnimation.animateCamera();
-		this.drawNode(this.graph.rootID, 'null', 'clear');
+
+
+		this.cameraAnimation.handler();
+		this.stateMachine.displayHandler();
 	}
 };
-
 
 
 LSXscene.prototype.postGameRequest = function(requestString, onSuccess, onError){
@@ -316,6 +320,7 @@ LSXscene.prototype.postGameRequest = function(requestString, onSuccess, onError)
 	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 	request.send('requestString='+encodeURIComponent(requestString));			
 };
+
 
 LSXscene.prototype.handleReply = function(data){
 	var lista = data.target.response.split(";");

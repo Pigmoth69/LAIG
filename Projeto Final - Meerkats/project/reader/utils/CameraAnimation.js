@@ -14,6 +14,26 @@ function CameraAnimation(scene) {
 	this.animationType = 'null';
 };
 
+
+CameraAnimation.prototype.handler = function(){
+	if(this.span != 0)
+	{
+		this.animateCamera();
+		return;
+	}
+
+	var state = this.scene.stateMachine.currentState;
+		switch(state)
+		{
+			case 'Main Menu to Gameplay':
+				this.scene.stateMachine.currentState = 'Gameplay';
+				break;
+			default: break;
+		}
+	
+};
+
+
 CameraAnimation.prototype.startCameraAnimation = function(time, finalPosition, finalTarget)
 {
 	this.startTime = this.scene.milliseconds;

@@ -694,11 +694,19 @@ LSXreader.prototype.parseNodes= function(rootElement) {
 	}
 
 	var root = nodesTag[0].getElementsByTagName('ROOT');
-	if(root == null){
-		return "ROOT tag is missing.";
+	if(root != null){
+		for(var i = 0; i < root.length; i++)
+		{
+			var rootID = this.reader.getString(root[i], 'id', 1);
+			if(rootID == 'Main Menu')
+				this.scene.graph.root['Main Menu'] = 'Main Menu';
+			else if(rootID == 'Gameplay')
+				this.scene.graph.root['Gameplay'] = 'Gameplay';
+			else 
+				return 'Invalid root ID (expected "Main Menu" or "Gameplay")';
+		}
 	}
-
-	this.scene.graph.rootID = this.reader.getString(root[0], 'id', 1);
+	else return "ROOT tag is missing.";
 
 	var nodes = nodesTag[0].getElementsByTagName('NODE');
 	if(nodes == null){
@@ -712,6 +720,7 @@ LSXreader.prototype.parseNodes= function(rootElement) {
 		if(result != 0)
 			return result;
 	}
+
 };
 
 
@@ -765,6 +774,7 @@ LSXreader.prototype.readNode = function(nodeTag) {
 	var newNode = new Node(id, materialID, textureID, mat, desc, animations, pickable);
 
 	this.scene.graph.nodes[id] = newNode;
+
 
 	return 0;
 };

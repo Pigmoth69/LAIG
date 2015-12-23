@@ -1,5 +1,5 @@
 function Graph() {
-	this.rootID = 'root';
+	this.root = [];
 	this.initials = new Initials();
 	this.illumination = new Illumination();
 	this.lights = [];
