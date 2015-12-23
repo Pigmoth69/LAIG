@@ -2,12 +2,13 @@
  * MyBoardTile
  * @constructor
  */
-function MyBoardTile(scene,topTexture,midTexture,botTexture) {
+function MyBoardTile(scene,topTexture,midTexture,botTexture,position) {
 	CGFobject.call(this,scene);
 	this.scene = scene;
 	this.topTexture = topTexture;
 	this.midTexture = midTexture;
 	this.botTexture = botTexture;
+	this.position = position;
 	this.topArgs=[0,1,1,6,6];
 	this.midArgs=[0.2,1,1,6,6];
 	this.botArgs=[1,1,1,6,6];
@@ -50,10 +51,8 @@ MyBoardTile.prototype.display = function(){
 
 	this.scene.popMatrix();
 
-}
+};
 
 MyBoardTile.prototype.updateTextCoords = function(ampS,ampT){
 	//this.updateTexCoordsGLBuffers();
 };
-
-	

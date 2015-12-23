@@ -256,8 +256,8 @@ LSXscene.prototype.logPicking = function (){
 					//this.graph.leaves['Board'].playStone(customId,2);
 					
 
-					//console.log(this.pickResults[i]);					
-					//console.log("Picked object: " + obj + ", with pick id " + customId);
+					console.log(this.pickResults[i]);					
+					console.log("Picked object: " + obj + ", with pick id " + selectedID);
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
