@@ -61,9 +61,11 @@ StateMachine.prototype.mainMenuPicking = function(ID){
 };
 
 StateMachine.prototype.gameplayPicking = function(ID){
-
+	var requestString = "[play," + "1" + ", " + "[[1,1,1],[0,0,0],[2,2,2]]" + "," + "1-1" + "," + "_NP" + "," + "_NB" + "," + "_M" + "]";
 	switch(ID){
-		default: break;
+		default: 
+			this.scene.socket.sendRequest(requestString);
+			break;
 	}
 
 	

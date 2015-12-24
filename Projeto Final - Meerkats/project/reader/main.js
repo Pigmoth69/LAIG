@@ -19,7 +19,7 @@ serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parse
                './primitives/MyTriangle.js', './primitives/MyPlane.js', './primitives/MyPatch.js',
                './primitives/MyTerrain.js','./primitives/MyVehicle.js','./primitives/MyStone.js',
                './primitives/MyBoard.js', './primitives/MyBoardTile.js','./utils/Coords.js','./primitives/MyBag.js',
-               './utils/CameraAnimation.js', './utils/StateMachine.js',
+               './utils/CameraAnimation.js', './utils/StateMachine.js', './utils/Socket.js',
 
 main=function()
 {

@@ -26,6 +26,8 @@ LSXscene.prototype.init = function (application) {
 	this.graph = new Graph();
 	this.stateMachine = new StateMachine(this);
     this.cameraAnimation = new CameraAnimation(this);
+    this.socket = new Socket(this);
+
 
 	this.startingTime = new Date();
 	this.milliseconds = 0;
@@ -272,6 +274,7 @@ LSXscene.prototype.logPicking = function (){
 /**	@brief Invoca as funcoes essenciais para a apresentacao de cada novo frame da scene
   */
 LSXscene.prototype.display = function () {
+	
 	this.gl.clearColor(this.BackgroundRGB[0]/255,this.BackgroundRGB[1]/255,this.BackgroundRGB[2]/255,1);
 
 	/*Registo do picking*/
@@ -281,7 +284,7 @@ LSXscene.prototype.display = function () {
 
 	//limpa o conteudo do buffer
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    this.gl.clear(this.gl.DEPTH_BUFFER_BIT | this.gl.COLOR_BUFFER_BIT);
 
     //recarrega a matriz de transformacoes da cena
 	this.updateProjectionMatrix();

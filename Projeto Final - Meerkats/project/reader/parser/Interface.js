@@ -50,7 +50,12 @@ Interface.prototype.loadInterfaceBackgroundColor = function(){
 
     var scene = this.scene;
 
-    this.color.addColor(this.scene, 'BackgroundRGB' );
+    var listener = this.color.addColor(this.scene, 'BackgroundRGB' );
+
+    listener.onChange(function(color) 
+    {
+        //scene.gl.clearColor(color[0]/255,color[1]/255,color[2]/255,1);
+    });
 };
 
 
