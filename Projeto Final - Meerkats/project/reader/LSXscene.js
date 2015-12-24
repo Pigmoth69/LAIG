@@ -50,7 +50,7 @@ LSXscene.prototype.setInterface = function (interface) {
 /**	@brief Inicializa a camara da scene com valores de predefinicao
   */
 LSXscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
+    this.camera = new CGFcamera(0.5, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
 };
 
 

@@ -2,10 +2,11 @@
  * MyStone
  * @constructor
  */
-function MyStone(scene, colorTexture) {
+function MyStone(scene, colorMaterial, position) {
 	CGFobject.call(this,scene);
 	this.scene = scene;
-	this.colorTexture = colorTexture;
+	this.position = position;
+	this.colorMaterial = colorMaterial;
 	this.makeStone();
 };
 
@@ -58,13 +59,11 @@ MyStone.prototype.display = function(){
 }
 
 MyStone.prototype.displayStone = function(){
-this.scene.graph.textures[this.colorTexture].bind();
+	this.scene.graph.materials[this.colorMaterial].apply();
 	this.scene.pushMatrix();
-	this.scene.translate(0,0,-1.5);
 	this.top.display();
 	this.back.display();
 	this.scene.popMatrix();
-	this.scene.graph.textures[this.colorTexture].unbind();
 };
 
 

@@ -99,6 +99,34 @@
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
+		<MATERIAL id="redStone">                                  
+			<shininess value="120" />
+			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
+			<diffuse r="0.9" g="0.1" b="0.1" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
+		<MATERIAL id="blueStone">                                  
+			<shininess value="120" />
+			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
+			<diffuse r="0.2" g="0.6" b="0.9" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
+		<MATERIAL id="yellowStone">                                  
+			<shininess value="120" />
+			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
+			<diffuse r="0.9" g="0.9" b="0.05" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
+		<MATERIAL id="greenStone">                               
+			<shininess value="120" />                    
+			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
+			<diffuse r="0.4" g="0.8" b="0.1" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
 		<MATERIAL id="orange">                                  
 			<shininess value="5" />
 			<specular r="0" g="0" b="0" a="1" /> 
@@ -195,7 +223,6 @@
 		<NODE id="Board">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
-			<TRANSLATION x="-8" y="0" z="0"/>
 			<DESCENDANTS>
 				<DESCENDANT id="board" />
 			</DESCENDANTS>

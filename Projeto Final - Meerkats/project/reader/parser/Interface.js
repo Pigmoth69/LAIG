@@ -25,15 +25,15 @@ Interface.prototype.init = function(application) {
 /**	@brief Carrega a GUI com os parametros a interagir, criando um handler para controlar o estado das luzes
   */
 Interface.prototype.loadInterfaceLigths = function(){
-	var lights = this.gui.addFolder('Lights');
-    lights.open();
+	this.lights = this.gui.addFolder('Lights');
+    this.lights.open();
 
     var scene = this.scene;
 
 	for(id in this.scene.graph.lightsStateValue)
 	{
 		//adiciona as opcoes com o id das luzes da scene
-	    var listener = lights.add(this.scene.graph.lightsStateValue, id);
+	    var listener = this.lights.add(this.scene.graph.lightsStateValue, id);
 	    
 	    //handler que le a acao do utilizador e atualiza a informaçao das luzes na scene
 	    listener.onChange(function(bool) 
@@ -47,35 +47,35 @@ Interface.prototype.loadInterfaceLigths = function(){
 /**	@brief Carrega a GUI com os parametros a interagir, criando um handler para controlar o numero de jogadores
   */
 Interface.prototype.loadInterfacePlayers = function(){
-	var players = this.gui.addFolder('Players');
-    players.open();
+	this.players = this.gui.addFolder('Players');
+    this.players.open();
 
     var scene = this.scene;
 
-    players.add(this.scene.graph.Players, 'Humans', [ 'None', '1', '2','3','4' ] );
-    players.add(this.scene.graph.Players, 'Bots', [ 'None', '1', '2','3','4' ] );
+    this.players.add(this.scene.graph.Players, 'Humans', [ 'None', '1', '2','3','4' ] );
+    this.players.add(this.scene.graph.Players, 'Bots', [ 'None', '1', '2','3','4' ] );
 };
 
 
 Interface.prototype.loadInterfaceGameFunctions = function(){
-	var game = this.gui.addFolder('Game');
-    game.open();
+	this.game = this.gui.addFolder('Game');
+    this.game.open();
 
     var scene = this.scene;
 
-    game.add(this.scene.graph.gameStatus,'PLAY');
-    game.add(this.scene.graph.gameStatus,'RESTART');
+    this.game.add(this.scene.graph.gameStatus,'PLAY');
+    this.game.add(this.scene.graph.gameStatus,'RESTART');
 };
 
 
 Interface.prototype.loadInterfaceGameCameras = function(){
-	var camera = this.gui.addFolder('Cameras');
-    camera.open();
+	this.camera = this.gui.addFolder('Cameras');
+    this.camera.open();
 
     var scene = this.scene;
-	camera.add(this.scene.cameraAnimation, 'Rotation');
+	this.camera.add(this.scene.cameraAnimation, 'Rotation');
 
-    var listener = camera.add(this.scene.cameraAnimation, 'Perspective', ['Player Perspective', 'Upper Perspective']);
+    var listener = this.camera.add(this.scene.cameraAnimation, 'Perspective', ['Player Perspective', 'Upper Perspective']);
     listener.onChange(function(option)
     {
     	var originalOrientation = vec3.fromValues(0,0,1);
@@ -83,7 +83,7 @@ Interface.prototype.loadInterfaceGameCameras = function(){
     	var angle  = Math.acos(vec3.dot(originalOrientation, vectorOrientation)/(vec3.length(vectorOrientation) * vec3.length(originalOrientation)));
 
     	if(option == 'Upper Perspective')
-    		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(0.5*Math.sin(angle),45,0.5*Math.cos(angle)), vec3.fromValues(0,0,0));
+    		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(0.5*Math.sin(angle),50,0.5*Math.cos(angle)), vec3.fromValues(0,0,0));
     	else 
     		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(30*Math.sin(angle),25,30*Math.cos(angle)), vec3.fromValues(0,0,0));
     });

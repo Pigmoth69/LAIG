@@ -12,9 +12,11 @@ StateMachine.prototype.displayHandler = function(){
 
 	switch(this.currentState){
 		case 'Main Menu':
+			this.scene.interface.camera.close();
 			this.scene.drawNode(this.scene.graph.root['Main Menu'], 'null', 'clear');
 			break;
 		case 'Main Menu to Gameplay':
+			this.scene.interface.camera.open();
 			this.scene.drawNode(this.scene.graph.root['Main Menu'], 'null', 'clear');
 			this.scene.drawNode(this.scene.graph.root['Gameplay'], 'null', 'clear');
 			break;
@@ -27,8 +29,8 @@ StateMachine.prototype.displayHandler = function(){
 };
 
 
-StateMachine.prototype.pickingHandler = function(ID){
-
+StateMachine.prototype.pickingHandler = function(ID)
+{
 	switch(this.currentState){
 		case 'Main Menu':
 			this.mainMenuPicking(ID);
