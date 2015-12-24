@@ -99,7 +99,6 @@ MyBoard.prototype.prepareStones = function(){
 			angle += angleStep;
 		}
 	}
-
 };
 
 
