@@ -126,8 +126,10 @@ MyBoard.prototype.displayStones = function(){
 	for(var i = 0; i < 60; i++)
 	{
 		this.scene.pushMatrix();
+		this.scene.registerForPick(this.scene.graph.pickID,this.stones[i]);
 		this.scene.translate(this.stones[i].position.x,this.stones[i].position.y,this.stones[i].position.z);
 		this.stones[i].display();
+		this.scene.graph.pickID++;
 		this.scene.popMatrix();
 	}
 }
