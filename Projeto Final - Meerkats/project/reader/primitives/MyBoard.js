@@ -8,7 +8,7 @@
 
 	this.tile = new MyBoardTile(scene,tileTopTexture,tileMidTexture,tileBotTexture);
 
-	this.boardPositions = []; 	//posições onde se colocam as peças no board
+	this.board = []; 	//posições onde se colocam as peças no board
 	this.stones = [];  //peças 
 
 	this.makeBoard();
@@ -35,39 +35,48 @@ MyBoard.prototype.constructor = MyBoard;
 MyBoard.prototype.makeBoard = function() {
 	var side = -1;
 	for(var y=1; y<=9; y++) {
-		this.boardPositions[y] = [];
+		this.board[y] = [];
 		for(var x=1; x<=9; x++) {
 			if(y >=5)
 				side = 1;
-
 			switch(y){
 				case 9:
 				case 1:
 				if(x <=5){
-					this.boardPositions[y][x] = new Coords((x+1)*2  - 8,0,side*6.8);
+					this.board[y][x] = [];
+					this.board[y][x]['position'] = new Coords((x+1)*2  - 8,0,side*6.8);
+					this.board[y][x]['info'] = 0;
 				}
 				break;
 				case 8:
 				case 2:
 				if(x <=6){
-					this.boardPositions[y][x] = new Coords((x+0.5)*2  - 8,0,side*5.1);
+					this.board[y][x] = [];
+					this.board[y][x]['position'] = new Coords((x+0.5)*2  - 8,0,side*5.1);
+					this.board[y][x]['info'] = 0;
 				}
 				break;
 				case 7:
 				case 3:
 				if(x <=7){
-					this.boardPositions[y][x] = new Coords((x)*2  - 8,0,side*3.4);
+					this.board[y][x] = [];
+					this.board[y][x]['position'] = new Coords((x)*2  - 8,0,side*3.4);
+					this.board[y][x]['info'] = 0;
 				}
 				break;
 				case 6:
 				case 4:
 				if(x <=8){
-					this.boardPositions[y][x] = new Coords((x-0.5)*2  - 8,0,side*1.7);
+					this.board[y][x] = [];
+					this.board[y][x]['position'] = new Coords((x-0.5)*2  - 8,0,side*1.7);
+					this.board[y][x]['info'] = 0;
 				}
 				break;
 				case 5:
 				if(x <=9){
-					this.boardPositions[y][x] = new Coords((x-1)*2  - 8,0,side*0);
+					this.board[y][x] = [];
+					this.board[y][x]['position'] = new Coords((x-1)*2  - 8,0,side*0);
+					this.board[y][x]['info'] = 0;
 				}
 				break;
 				default:
@@ -109,10 +118,10 @@ MyBoard.prototype.removeStone = function(xPos,yPos) {
 
 MyBoard.prototype.displayBoard = function(){
 	for(var y = 1 ; y <= 9; y++){
-		for(var x = 1; x < this.boardPositions[y].length;x++){
+		for(var x = 1; x < this.board[y].length;x++){
 			this.scene.registerForPick(this.scene.graph.pickID,this.tile);
 			this.scene.pushMatrix();
-			this.scene.translate(this.boardPositions[y][x].x,this.boardPositions[y][x].y,this.boardPositions[y][x].z),
+			this.scene.translate(this.board[y][x]['position'].x,this.board[y][x]['position'].y,this.board[y][x]['position'].z),
 			this.tile.display();
 			this.scene.graph.pickID++;
 			this.scene.popMatrix();
