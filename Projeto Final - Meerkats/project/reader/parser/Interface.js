@@ -85,7 +85,7 @@ Interface.prototype.loadInterfaceGameCameras = function(){
     	if(option == 'Upper Perspective')
     		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(0.5*Math.sin(angle),50,0.5*Math.cos(angle)), vec3.fromValues(0,0,0));
     	else 
-    		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(30*Math.sin(angle),25,30*Math.cos(angle)), vec3.fromValues(0,0,0));
+    		scene.cameraAnimation.startCameraAnimation(2000, vec3.fromValues(33*Math.sin(angle),25,33*Math.cos(angle)), vec3.fromValues(0,0,0));
     });
 
 };
