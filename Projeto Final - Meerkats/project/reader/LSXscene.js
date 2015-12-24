@@ -29,7 +29,7 @@ LSXscene.prototype.init = function (application) {
 
 	this.startingTime = new Date();
 	this.milliseconds = 0;
-  	this.BackgroundRGB = [76.5, 76.5, 76.5, 255];
+  	this.BackgroundRGB = [76.5, 76.5, 76.5];
 
 	this.setPickEnabled(true);
 
@@ -272,7 +272,7 @@ LSXscene.prototype.logPicking = function (){
 /**	@brief Invoca as funcoes essenciais para a apresentacao de cada novo frame da scene
   */
 LSXscene.prototype.display = function () {
-	this.gl.clearColor(this.BackgroundRGB[0]/255,this.BackgroundRGB[1]/255,this.BackgroundRGB[2]/255,this.BackgroundRGB[3]/255);
+	this.gl.clearColor(this.BackgroundRGB[0]/255,this.BackgroundRGB[1]/255,this.BackgroundRGB[2]/255,1);
 
 	/*Registo do picking*/
 	if(this.cameraAnimation.span == 0)
