@@ -44,6 +44,16 @@ Interface.prototype.loadInterfaceLigths = function(){
 };
 
 
+Interface.prototype.loadInterfaceBackgroundColor = function(){
+    this.color = this.gui.addFolder('Background Color');
+    this.color.close();
+
+    var scene = this.scene;
+
+    this.color.addColor(this.scene, 'BackgroundRGB' );
+};
+
+
 /**	@brief Carrega a GUI com os parametros a interagir, criando um handler para controlar o numero de jogadores
   */
 Interface.prototype.loadInterfacePlayers = function(){
