@@ -18,8 +18,10 @@ serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parse
                './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
                './primitives/MyTriangle.js', './primitives/MyPlane.js', './primitives/MyPatch.js',
                './primitives/MyTerrain.js','./primitives/MyVehicle.js','./primitives/MyStone.js',
-               './primitives/MyBoard.js', './primitives/MyBoardTile.js','./utils/Coords.js','./primitives/MyBag.js',
+               './primitives/MyBoard.js', './primitives/MyBoardTile.js','./primitives/MyDice.js',
+               './utils/Coords.js','./primitives/MyBag.js','./primitives/MyQuad.js',
                './utils/CameraAnimation.js', './utils/StateMachine.js', './utils/Socket.js',
+               './utils/PlayMenu.js', './utils/Game.js', 
 
 main=function()
 {
@@ -35,7 +37,7 @@ main=function()
   myScene.setInterface(myInterface);
   myInterface.setScene(myScene);
 
-  //myInterface.setActiveCamera(myScene.camera);
+  myInterface.setActiveCamera(myScene.camera);
 
 	var filename=getUrlVars()['file'] || "teste.lsx";
 

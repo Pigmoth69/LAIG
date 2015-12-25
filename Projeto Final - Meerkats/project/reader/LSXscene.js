@@ -35,10 +35,6 @@ LSXscene.prototype.init = function (application) {
 
 	this.setPickEnabled(true);
 
-	//==================================================================================
-	var requestString = "[play," + "1" + ", " + "[[1,1,1],[0,0,0],[2,2,2]]" + "," + "1-1" + "," + "_NP" + "," + "_NB" + "," + "_M" + "]";
-	this.postGameRequest(requestString, this.handleReply);
-
 };
 
 
@@ -54,16 +50,18 @@ LSXscene.prototype.setInterface = function (interface) {
   */
 LSXscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.5, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
+    //this.camera = new CGFcamera(0.5, 1, 500, vec3.fromValues(0, 10, 10), vec3.fromValues(0, 0, 0));
 };
 
 
 /**	@brief Atribui valores de aparência predefinidos a scene
   */
 LSXscene.prototype.setDefaultAppearance = function () {
-   	this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
-    this.defaultAppearance.setDiffuse(0.2, 0.4, 0.8, 1.0);
-    this.defaultAppearance.setSpecular(0.2, 0.4, 0.8, 1.0);
-    this.defaultAppearance.setShininess(10.0);
+   	this.defaultAppearance.setAmbient(0.2, 0.2, 0.2, 1.0);
+    this.defaultAppearance.setDiffuse(0.2, 0.2, 0.2, 1.0);
+    this.defaultAppearance.setSpecular(0.2, 0.2, 0.2, 1.0);
+    this.defaultAppearance.setEmission(0,0,0,1);
+    this.defaultAppearance.setShininess(120.0);
 };
 
 
@@ -170,12 +168,6 @@ LSXscene.prototype.drawNode = function (node, materialID, textureID) {
 	if(this.graph.nodes[node].animations.length > 0)
 		this.graph.nodes[node].applyAnimations(this);
 
-	if(this.graph.nodes[node].pickable)
-	{
-		this.registerForPick(this.graph.pickID, this.graph.nodes[node]);
-		this.graph.pickID++;
-	}
-
 	var descendants = this.graph.nodes[node].descendants;  // recolha dos descendentes do node em questao
 	for (var i = 0; i < descendants.length; ++i) {
 		this.drawNode(descendants[i], material, texture);
@@ -254,15 +246,15 @@ LSXscene.prototype.logPicking = function (){
 				var obj = this.pickResults[i][0];
 				if (obj)
 				{
-					var selectedID = this.pickResults[i][1];
+					var selectedID = this.pickResults[i];
 
-					this.stateMachine.pickingHandler(selectedID);
+					this.stateMachine.pickingHandler(this.pickResults[0]);
 
 					//this.graph.leaves['Board'].playStone(customId,2);
 					
 
-					console.log(this.pickResults[i]);					
-					console.log("Picked object: " + obj + ", with pick id " + selectedID);
+					//console.log(this.pickResults[i]);					
+					//console.log("Picked object: " + obj + ", with pick id " + selectedID);
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -317,20 +309,11 @@ LSXscene.prototype.display = function () {
 };
 
 
-LSXscene.prototype.postGameRequest = function(requestString, onSuccess, onError){
-	var request = new XMLHttpRequest();
-	request.open('POST', '../../game', true);
-
-	request.onload = onSuccess;
-	request.onerror = onError || function(){console.log("Error waiting for response");};
-
-	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-	request.send('requestString='+encodeURIComponent(requestString));			
-};
-
-
-LSXscene.prototype.handleReply = function(data){
-	var lista = data.target.response.split(";");
-
-	console.log(lista);
+LSXscene.prototype.register = function (obj) {
+	
+	if(!this.stateMachine.animation)
+	{
+		this.registerForPick(this.graph.pickID,obj);
+		this.graph.pickID++;
+	}
 };

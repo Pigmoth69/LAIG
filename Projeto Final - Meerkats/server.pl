@@ -43,6 +43,20 @@ processString([_Par=Val]):-
 
 %---------------------------------------------
 
+validDropPositions(Board, Result):-
+	validDropPositionsPL(Board, Result),
+	formatAsJSON([Result]).
+
+validDropPositionsPL([], []).
+validDropPositionsPL([0 | Tail], [0 | RTail]):-
+	validDropPositionsPL(Tail, RTail).
+validDropPositionsPL([Head | Tail], [RHead | RTail]):-
+	is_list(Head),
+	validDropPositionsPL(Head, RHead),
+	validDropPositionsPL(Tail, RTail).
+validDropPositionsPL([_ | Tail], [1 | RTail]):-
+	validDropPositionsPL(Tail, RTail).
+
 play(Player, Board, Play, NextPlayer, NewBoard, Message):-
 	% Game Logic
 	Board=[[_|A]|B], NewBoard=[[Play|A]|B],

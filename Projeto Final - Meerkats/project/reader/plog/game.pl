@@ -537,15 +537,15 @@ getNotEqualCoords(Initial1,Initial2,ResCoord1,ResCoord2):-
 
 
 logicalBoard([
-	            [empty, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	[empty, empty, empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	            [empty, empty, empty, empty, empty]
+	            [0, 0, 0, 0, 0],
+	         [0, 0, 0, 0, 0, 0],
+	      [0, 0, 0, 0, 0, 0, 0],
+	   [0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   [0, 0, 0, 0, 0, 0, 0, 0],
+	      [0, 0, 0, 0, 0, 0, 0],
+	         [0, 0, 0, 0, 0, 0],
+	            [0, 0, 0, 0, 0]
 	]).
 
 displayBoard([

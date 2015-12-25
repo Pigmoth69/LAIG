@@ -2,19 +2,17 @@
  * MyBoard
  * @constructor
  */
- function MyBoard(scene,tileTopTexture,tileMidTexture,tileBotTexture,stone1Texture,stone2Texture,stone3Texture,stone4Texture) {
+ function MyBoard(scene) {
  	CGFobject.call(this,scene);
  	this.scene = scene;
-
-	this.tile = new MyBoardTile(scene,tileTopTexture,tileMidTexture,tileBotTexture);
-
-	this.board = []; 	//posições onde se colocam as peças no board, armazenando informaçao logica e coordenadas na cena
-		this.board['position'] = [];
-		this.board['info'] = [];
+	this.board = []
 	this.stones = [];  //peças 
+	this.validDropPositions = false;
+	this.validDragPositions = false;
 
 	this.makeBoard();
 	this.prepareStones();
+
 };
 
 MyBoard.prototype = Object.create(CGFobject.prototype);
@@ -37,8 +35,7 @@ MyBoard.prototype.constructor = MyBoard;
 MyBoard.prototype.makeBoard = function() {
 	var side = -1;
 	for(var y=1; y<=9; y++) {
-		this.board['position'][y] = [];
-		this.board['info'][y] = [];
+		this.board[y] = [];
 		for(var x=1; x<=9; x++) {
 			if(y >=5)
 				side = 1;
@@ -46,35 +43,30 @@ MyBoard.prototype.makeBoard = function() {
 				case 9:
 				case 1:
 				if(x <=5){
-					this.board['position'][y][x] = new Coords((x+1)*2  - 8,0,side*6.8);
-					this.board['info'][y][x] = 0;
+					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x+1)*2  - 8,0,side*6.8));
 				}
 				break;
 				case 8:
 				case 2:
 				if(x <=6){
-					this.board['position'][y][x] = new Coords((x+0.5)*2  - 8,0,side*5.1);
-					this.board['info'][y][x] = 0;
+					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x+0.5)*2  - 8,0,side*5.1));
 				}
 				break;
 				case 7:
 				case 3:
 				if(x <=7){
-					this.board['position'][y][x] = new Coords((x)*2  - 8,0,side*3.4);
-					this.board['info'][y][x] = 0;
+					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x)*2  - 8,0,side*3.4));
 				}
 				break;
 				case 6:
 				case 4:
 				if(x <=8){
-					this.board['position'][y][x] = new Coords((x-0.5)*2  - 8,0,side*1.7);
-					this.board['info'][y][x] = 0;
+					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x-0.5)*2  - 8,0,side*1.7));
 				}
 				break;
 				case 5:
 				if(x <=9){
-					this.board['position'][y][x] = new Coords((x-1)*2  - 8,0,side*0);
-					this.board['info'][y][x] = 0;
+					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x-1)*2  - 8,0,side*0));
 				}
 				break;
 				default:
@@ -92,7 +84,7 @@ MyBoard.prototype.prepareStones = function(){
 	{
 		for(var j = 0; j < 15; j++)
 		{
-			var position = new Coords(radius*Math.sin(angle), 0, radius*Math.cos(angle) - 1.5);
+			var position = new Coords(radius*Math.sin(angle), 0, radius*Math.cos(angle));
 
 			if(i == 0)
 				this.stones.push(new MyStone(this.scene, 'blueStone', position));
@@ -116,11 +108,14 @@ MyBoard.prototype.removeStone = function(xPos,yPos) {
 
 MyBoard.prototype.displayBoard = function(){
 	for(var y = 1 ; y <= 9; y++){
-		for(var x = 1; x < this.board['position'][y].length;x++){
-			this.scene.registerForPick(this.scene.graph.pickID,this.tile);
+		for(var x = 1; x < this.board[y].length;x++){
+			this.scene.register(this.board[y][x]);
 			this.scene.pushMatrix();
-			this.scene.translate(this.board['position'][y][x].x,this.board['position'][y][x].y,this.board['position'][y][x].z),
-			this.tile.display();
+			this.scene.translate(this.board[y][x].position.x,this.board[y][x].position.y,this.board[y][x].position.z);
+			if(this.validDropPositions && this.board[y][x].info == 0)
+				this.board[y][x].highlight = true;
+			else this.board[y][x].highlight = false;
+			this.board[y][x].display();
 			this.scene.graph.pickID++;
 			this.scene.popMatrix();
 		}
@@ -132,8 +127,8 @@ MyBoard.prototype.displayStones = function(){
 	for(var i = 0; i < 60; i++)
 	{
 		this.scene.pushMatrix();
-		this.scene.registerForPick(this.scene.graph.pickID,this.stones[i]);
-		this.scene.translate(this.stones[i].position.x,this.stones[i].position.y,this.stones[i].position.z);
+		this.scene.register(this.stones[i]);
+		this.scene.translate(this.stones[i].position.x,this.stones[i].position.y+0.1,this.stones[i].position.z-1.5);
 		this.stones[i].display();
 		this.scene.graph.pickID++;
 		this.scene.popMatrix();

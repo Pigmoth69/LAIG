@@ -63,7 +63,11 @@
 			<file path="./textures/topTheme.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-		<TEXTURE id="bopTile">
+		<TEXTURE id="topTileHighlight">
+			<file path="./textures/topThemeHighlight.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="botTile">
 			<file path="./textures/botTheme.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
@@ -363,11 +367,7 @@
 		</NODE>
 
 
-
-
-
-
-		</NODE>
+	</NODES>
 
 
 		

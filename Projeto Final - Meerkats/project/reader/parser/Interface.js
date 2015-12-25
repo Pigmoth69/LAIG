@@ -46,16 +46,12 @@ Interface.prototype.loadInterfaceLigths = function(){
 
 Interface.prototype.loadInterfaceBackgroundColor = function(){
     this.color = this.gui.addFolder('Background Color');
-    this.color.close();
+    this.color.open();
 
     var scene = this.scene;
 
-    var listener = this.color.addColor(this.scene, 'BackgroundRGB' );
+    this.color.addColor(this.scene, 'BackgroundRGB' );
 
-    listener.onChange(function(color) 
-    {
-        //scene.gl.clearColor(color[0]/255,color[1]/255,color[2]/255,1);
-    });
 };
 
 
@@ -109,3 +105,4 @@ Interface.prototype.loadInterfaceGameCameras = function(){
 Interface.prototype.setScene = function(scene) {
     this.scene = scene;
 };
+

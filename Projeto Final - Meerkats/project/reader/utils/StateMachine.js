@@ -1,5 +1,7 @@
 function StateMachine(scene) {
 	this.scene = scene;
+	this.playMenu = new PlayMenu(this.scene);
+	this.game = new Game(this.scene);
 	this.currentState = 'Main Menu';
 };
 
@@ -13,15 +15,18 @@ StateMachine.prototype.displayHandler = function(){
 	switch(this.currentState){
 		case 'Main Menu':
 			this.scene.interface.camera.close();
-			this.scene.drawNode(this.scene.graph.root['Main Menu'], 'null', 'clear');
+			this.playMenu.display();
 			break;
 		case 'Main Menu to Gameplay':
 			this.scene.interface.camera.open();
-			this.scene.drawNode(this.scene.graph.root['Main Menu'], 'null', 'clear');
+			this.scene.interface.players.close();
+			this.playMenu.display();			
 			this.scene.drawNode(this.scene.graph.root['Gameplay'], 'null', 'clear');
 			break;
 		case 'Gameplay':
-			this.scene.drawNode(this.scene.graph.root['Gameplay'], 'null', 'clear');
+			this.scene.interface.players.close();
+			this.game.handler();
+			this.game.display();
 			break;
 		default: break;
 
@@ -29,45 +34,20 @@ StateMachine.prototype.displayHandler = function(){
 };
 
 
-StateMachine.prototype.pickingHandler = function(ID)
+StateMachine.prototype.pickingHandler = function(obj)
 {
+
 	switch(this.currentState){
 		case 'Main Menu':
-			this.mainMenuPicking(ID);
+			this.playMenu.picking(obj);
 			break;
 		case 'Gameplay':
-			this.gameplayPicking(ID);
+			this.game.picking(obj);
 			break;
 		default: break;
 	}
 
-	/*else if(this.cameraAnimation.Rotation)
-		this.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/4);
-	*/				
-
 };
 
 
-StateMachine.prototype.mainMenuPicking = function(ID){
 
-	switch(ID){
-		case 1:
-			this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 30, 33), vec3.fromValues(0,0,0));
-			this.currentState = 'Main Menu to Gameplay';
-			break;
-		default: break;
-	}				
-
-};
-
-StateMachine.prototype.gameplayPicking = function(ID){
-	var requestString = "[play," + "1" + ", " + "[[1,1,1],[0,0,0],[2,2,2]]" + "," + "1-1" + "," + "_NP" + "," + "_NB" + "," + "_M" + "]";
-	switch(ID){
-		default: 
-			this.scene.socket.sendRequest(requestString);
-			break;
-	}
-
-	
-	//this.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/4);
-};

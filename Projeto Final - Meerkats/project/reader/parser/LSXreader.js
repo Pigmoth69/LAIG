@@ -615,34 +615,7 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
 	    }
 	    else if(type == "board"){
 
-			var topTexture = this.reader.getString(leaves[i], 'topTheme', 1);
-			if(this.scene.graph.textures[topTexture] == null)
-				return "Invalid top theme texture for board";
-			var midTexture = this.reader.getString(leaves[i], 'midTheme', 1);
-			if(this.scene.graph.textures[midTexture] == null)
-				return "Invalid bot theme texture for board";
-
-			var botTexture = this.reader.getString(leaves[i], 'botTheme', 1);
-			if(this.scene.graph.textures[botTexture] == null)
-				return "Invalid bot theme texture for board";
-
-			var stone1Texture = this.reader.getString(leaves[i], 'stone1Texture', 1);
-			if(this.scene.graph.textures[stone1Texture] == null)
-				return "Invalid stone1 texture for board";
-
-			var stone2Texture = this.reader.getString(leaves[i], 'stone2Texture', 1);
-			if(this.scene.graph.textures[stone2Texture] == null)
-				return "Invalid stone2 texture for board";
-
-			var stone3Texture = this.reader.getString(leaves[i], 'stone3Texture', 1);
-			if(this.scene.graph.textures[stone3Texture] == null)
-				return "Invalid stone3 texture for board";
-
-			var stone4Texture = this.reader.getString(leaves[i], 'stone4Texture', 1);
-			if(this.scene.graph.textures[stone4Texture] == null)
-				return "Invalid stone4 texture for board";
-
-	 		this.scene.graph.leaves[id] = new MyBoard(this.scene,topTexture,midTexture,botTexture,stone1Texture,stone2Texture,stone3Texture,stone4Texture);
+	 		this.scene.graph.leaves[id] = new MyBoard(this.scene);
 	  }
 	  else return "ERROR: unexistent leaf type: " + type;
 	} 

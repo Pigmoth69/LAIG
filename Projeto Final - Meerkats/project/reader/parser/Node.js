@@ -1,5 +1,5 @@
 
-function Node(id, material, texture, matrix, descendants, animations, pickable) {
+function Node(id, material, texture, matrix, descendants, animations) {
 	this.id = id;
 	this.material = material;
 	this.texture = texture;
@@ -7,7 +7,6 @@ function Node(id, material, texture, matrix, descendants, animations, pickable) 
 	this.originalMatrix = matrix; // matrix original do node
 	this.descendants = descendants;
 	this.animations = animations;
-	this.pickable = pickable;
 };
 
 Node.prototype.constructor = Node;
