@@ -129,6 +129,7 @@ MyStone.prototype.movementAnimation = function(){
 		this.scene.stateMachine.game.animation = false;
 		this.scene.stateMachine.game.pickedStone = null;
 		this.scene.stateMachine.game.playedStoneID = this.id;
+		this.scene.socket.boardResponse = null;
 		this.dropAnimationTimer = 0;
 	}
 	

@@ -51,10 +51,92 @@ sortColors([Players], [Bots], Result):-
 	append(FinalBOTsInfo, FinalPlayersInfo, Result),
 	formatAsJSON([Result]).
 %---------------------------------------------	
+validDragPositions(Row, Col, Board, Result):-
+	registBoard(R),
+	validDragLeft(Row, Col, Board, R, R1),
+	validDragRight(Row, Col, Board, R1, R2),
+	validDragUpLeft(Row, Col, Board, R2, R3),
+	validDragUpRight(Row, Col, Board, R3, R4),
+	validDragDownLeft(Row, Col, Board, R4, R5),
+	validDragDownRight(Row, Col, Board, R5, Result),
+	formatAsJSON([Result]).
+
+validDragLeft(Row, Col, Board, Register, FinalRegister):-
+	PrevCol is Col - 1,
+	getInfo(Row, PrevCol, 0, Board),
+	setInfo(Row, PrevCol, 1, Register, Temp),
+	validDragLeft(Row, PrevCol, Board, Temp, FinalRegister).
+validDragLeft(_, _, _, Register, Register).
+
+validDragRight(Row, Col, Board, Register, FinalRegister):-
+	NextCol is Col + 1,
+	getInfo(Row, NextCol, 0, Board),
+	setInfo(Row, NextCol, 1, Register, Temp),
+	validDragRight(Row, NextCol, Board, Temp, FinalRegister).
+validDragRight(_, _, _, Register, Register).
+
+validDragUpLeft(Row, Col, Board, Register, FinalRegister):-
+	Row > 5,
+	PrevRow is Row - 1,
+	getInfo(PrevRow, Col, 0, Board),
+	setInfo(PrevRow, Col, 1, Register, Temp),
+	validDragUpLeft(PrevRow, Col, Board, Temp, FinalRegister).
+validDragUpLeft(Row, Col, Board, Register, FinalRegister):-
+	Row < 6,
+	PrevCol is Col - 1,
+	PrevRow is Row - 1,
+	getInfo(PrevRow, PrevCol, 0, Board),
+	setInfo(PrevRow, PrevCol, 1, Register, Temp),
+	validDragUpLeft(PrevRow, PrevCol, Board, Temp, FinalRegister).
+validDragUpLeft(_, _, _, Register, Register).
+
+validDragUpRight(Row, Col, Board, Register, FinalRegister):-
+	Row > 5,
+	PrevRow is Row - 1,
+	NextCol is Col + 1,
+	getInfo(PrevRow, NextCol, 0, Board),
+	setInfo(PrevRow, NextCol, 1, Register, Temp),
+	validDragUpRight(PrevRow, NextCol, Board, Temp, FinalRegister).
+validDragUpRight(Row, Col, Board, Register, FinalRegister):-
+	Row < 6,
+	PrevRow is Row - 1,
+	getInfo(PrevRow, Col, 0, Board),
+	setInfo(PrevRow, Col, 1, Register, Temp),
+	validDragUpRight(PrevRow, Col, Board, Temp, FinalRegister).
+validDragUpRight(_, _, _, Register, Register).
+
+validDragDownLeft(Row, Col, Board, Register, FinalRegister):-
+	Row < 5,
+	NextRow is Row + 1,
+	getInfo(NextRow, Col, 0, Board),
+	setInfo(NextRow, Col, 1, Register, Temp),
+	validDragDownLeft(NextRow, Col, Board, Temp, FinalRegister).
+validDragDownLeft(Row, Col, Board, Register, FinalRegister):-
+	Row > 4,
+	NextRow is Row + 1,
+	PrevCol is Col - 1,
+	getInfo(NextRow, PrevCol, 0, Board),
+	setInfo(NextRow, PrevCol, 1, Register, Temp),
+	validDragDownLeft(NextRow, PrevCol, Board, Temp, FinalRegister).
+validDragDownLeft(_, _, _, Register, Register).
+
+validDragDownRight(Row, Col, Board, Register, FinalRegister):-
+	Row < 5,
+	NextRow is Row + 1,
+	NextCol is Col + 1,
+	getInfo(NextRow, NextCol, 0, Board),
+	setInfo(NextRow, NextCol, 1, Register, Temp),
+	validDragDownRight(NextRow, NextCol, Board, Temp, FinalRegister).
+validDragDownRight(Row, Col, Board, Register, FinalRegister):-
+	Row > 4,
+	NextRow is Row + 1,
+	getInfo(NextRow, Col, 0, Board),
+	setInfo(NextRow, Col, 1, Register, Temp),
+	validDragDownRight(NextRow, Col, Board, Temp, FinalRegister).
+validDragDownRight(_, _, _, Register, Register).
 
 
-
-
+%---------------------------------------------	
 validDropPositions(Board, Result):-
 	validDropPositionsPL(Board, Result),
 	formatAsJSON([Result]).

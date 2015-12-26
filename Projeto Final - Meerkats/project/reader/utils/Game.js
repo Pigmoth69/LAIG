@@ -2,14 +2,12 @@ function Game(scene) {
 	this.board = new MyBoard(scene);
 
 
-
 	this.scene = scene;
 	this.players = [];
 	this.animation = false;
 	this.pickedStone = null;
 	this.playedStone = null;
 	this.pickedBoardTile = null;
-	this.boardValidPositions = null;
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
 };
@@ -25,7 +23,6 @@ Game.prototype.display = function(){
 };
 
 Game.prototype.picking = function(obj){
-	var requestString = "";
 	var ID = obj[1];
 	if(obj[0] instanceof MyStone)
 	{
@@ -39,35 +36,18 @@ Game.prototype.picking = function(obj){
 };
 
 Game.prototype.handler = function(){
+	if(this.validDragPositions && this.scene.socket.boardResponse != null)
+	{
+		this.board.highlightDragPositions(this.scene.socket.boardResponse);
+		this.validDragPositions = false;
+		this.scene.socket.boardResponse = null;
+	}
 
 	if(this.animation)
 	{
 		this.pickedStone.movementAnimation();
 	}
-	else if(this.pickedStone != null)
-	{
-		if(this.boardValidPositions == null && this.pickedStone.picked)
-		{
-			if(this.roundMove == 'drag' && this.scene.socket.boardResponse != null)
-			{
-				this.boardValidPositions = this.scene.socket.boardResponse;
-				this.board.validDropPositions = false;
-				this.board.validDragPositions = true;
-			}
-			else if(this.roundMove == 'drop')
-			{
-				this.board.validDropPositions = true;
-				this.board.validDragPositions = false;
-			}
-		}
-	}
-	else 
-	{
-		this.board.validDropPositions = false;
-		this.board.validDragPositions = false;
-		this.scene.socket.boardResponse = null;
-		this.boardValidPositions = null;
-	}
+
 };
 
 Game.prototype.dropStone = function(tile){
@@ -101,13 +81,13 @@ Game.prototype.pickingStone = function(obj){
 	if(this.pickedStone != null)
 	{
 		//se a pickedStone for a mesma que a peça selecionada, elimina-se a seleçao e termina se a execuçao da funcao
-		if(this.pickedStone.picked && obj[0].picked) 
+		if(this.pickedStone.id && obj[0].id) 
 		{
 			this.pickedStone.standByAnimationHeight = 0;
 			this.pickedStone.standByAnimationVelocity = 0.13;
 			this.pickedStone.picked = false;
 			this.pickedStone = null;
-
+			this.board.resetHighlight();
 			return;
 		}
 
@@ -124,24 +104,19 @@ Game.prototype.pickingStone = function(obj){
 		this.pickedStone = obj[0];
 
 		if(this.roundMove == 'drop')
-		{
-			this.board.validDropPositions = true;
-			this.board.validDragPositions = false;
-		}
+			this.board.highlightDropPositions();
 		else if(this.roundMove == 'drag')
 		{
-			this.board.validDropPositions = false;
-			this.board.validDragPositions = true;
-			var board = this.scene.socket.processBoardToString();
-			//requestString = "[validDropPositions," + board + ",_Result" + "]";
-			//if(requestString != "")
-			//	this.scene.socket.sendRequest(requestString, 'board');
+			this.validDragPositions = true;
+			var stringBoard = this.scene.socket.processBoardToString();
+			var requestString = "[validDragPositions," + this.pickedStone.tile.row + ',' + this.pickedStone.tile.col + ',' + stringBoard + ",_Result" + "]";
+			this.scene.socket.sendRequest(requestString, 'board');
 		}
 	}
 };
 
 Game.prototype.pickingTile = function(obj){
-	if(this.pickedStone != null && obj[0].info == 0)
+	if(this.pickedStone != null && obj[0].info == 0 && obj[0].highlight)
 	{
 		if(this.roundMove == 'drag')
 			this.pickedStone.tile.info = 0;
@@ -149,6 +124,7 @@ Game.prototype.pickingTile = function(obj){
 		this.pickedStone.tile = obj[0];
 		this.animation = true;
 		this.dropStone(obj[0]);
+		this.board.resetHighlight();
 
 		if(this.roundMove == 'drop')
 			if(this.roundNumber == 1 )

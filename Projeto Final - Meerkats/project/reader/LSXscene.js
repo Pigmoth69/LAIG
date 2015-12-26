@@ -90,8 +90,7 @@ LSXscene.prototype.loadInterface = function () {
 			scene.stateMachine.game.pickedStone = null;
 			scene.stateMachine.game.animation = false;
 			scene.stateMachine.game.playedStone = null;
-			scene.stateMachine.game.pickedBoardTile = null;
-			scene.stateMachine.game.boardValidPositions = null;		
+			scene.stateMachine.game.pickedBoardTile = null;	
 			scene.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/scene.stateMachine.game.players.length);
 	 	} 		
   	}

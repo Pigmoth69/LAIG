@@ -2,9 +2,11 @@
  * MyBoardTile
  * @constructor
  */
-function MyBoardTile(scene,position) {
+function MyBoardTile(scene,position, row, col) {
 	CGFobject.call(this,scene);
 	this.scene = scene;
+	this.row = row;
+	this.col = col;
 	this.topTexture = "topTile";
 	this.topTextureHighlight = 'topTileHighlight';
 	this.midTexture = "botTile";
