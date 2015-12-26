@@ -1,6 +1,7 @@
 function Socket(scene) {
 	this.scene = scene;
 	this.response = [];
+	this.colorsResponse = [];
 	this.boardResponse = [];
 };
 
@@ -9,11 +10,13 @@ Socket.prototype = Object.create(Object.prototype);
 Socket.prototype.constructor = Socket;
 
 
-Socket.prototype.sendRequest = function(requestString, expectedBoardResult){
-
-	if(expectedBoardResult)
+Socket.prototype.sendRequest = function(requestString, type){
+	if(type == 'board')
 		this.postGameRequest(requestString, this.handleBoardReply);
-	else this.postGameRequest(requestString, this.handleReply);
+	else if(type == 'colors')
+		this.postGameRequest(requestString, this.handleColorsReply);
+	else
+		this.postGameRequest(requestString, this.handleReply);
 };
 
 Socket.prototype.postGameRequest = function(requestString, onSuccess, onError){
@@ -28,40 +31,46 @@ Socket.prototype.postGameRequest = function(requestString, onSuccess, onError){
 };
 
 Socket.prototype.handleReply = function(data){
+	console.log('reply');
 
 	var message = data.target.response.split(";");
 
-	this.response = data.target.response.split(";");
-
-	console.log(JSON.parse(message));
-	console.log(this.response);
+	console.log(message);
 };
 
 Socket.prototype.handleBoardReply = function(data){
 
 	var message = data.target.response.split(";");
 	var board = JSON.parse(message);
-	this.boardResponse = board.slice();
+	this.boardResponse = board.slice(',');
 	console.log(this.boardResponse);
+};
+
+Socket.prototype.handleColorsReply = function(data){
+
+	var message = data.target.response.split(";");
+	var board = JSON.parse(message);
+	this.colorsResponse = board.slice();
+	console.log(this.colorsResponse);
 };
 
 Socket.prototype.processBoardToString = function(){
 	var result = "[";
 
-	for(var i = 1; i < this.scene.graph.leaves['board'].board.length; i++)
+	for(var i = 1; i < this.scene.stateMachine.game.board.length; i++)
 	{
 		var line = '[';
 
-		for(var j = 1; j < this.scene.graph.leaves['board'].board[i].length; j++)
+		for(var j = 1; j < this.scene.stateMachine.game.board[i].length; j++)
 		{
-			line += this.scene.graph.leaves['board'].board[i][j].info;
+			line += this.scene.stateMachine.game.board[i][j].info;
 
-			if(j != this.scene.graph.leaves['board'].board[i].length - 1)
+			if(j != this.scene.stateMachine.game.board[i].length - 1)
 				line += ',';
 		}
 
 		line += ']';
-		if(i != this.scene.graph.leaves['board'].board.length - 1)
+		if(i != this.scene.stateMachine.game.board.length - 1)
 			line += ',';
 
 		result += line;

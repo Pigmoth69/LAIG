@@ -42,6 +42,15 @@ processString([_Par=Val]):-
 		Term.
 
 %---------------------------------------------
+sortColors([Players], [Bots], Result):-
+	atom_number(Players, NumberPlayers),
+	atom_number(Bots, NumberBots),
+	availableColors(Colors),
+	assignBOTColor(NumberBots,Colors,5,FinalBOTsInfo,ResultColors),
+	assignPlayerColor(NumberPlayers, ResultColors, 1, FinalPlayersInfo,_),
+	append(FinalBOTsInfo, FinalPlayersInfo, Result),
+	formatAsJSON([Result]).
+
 
 validDropPositions(Board, Result):-
 	validDropPositionsPL(Board, Result),

@@ -18,12 +18,19 @@
 	
 	
 	<LIGHTS>
-	    <LIGHT id="board">
+	    <LIGHT id="board1">
 	        <enable value="1" />
 	        <position x="0" y="15" z="0" w="1" />
-	        <ambient r="0.1" g="0.1" b="0.1" a="1" />
-	        <diffuse r="1" g="1" b="1" a="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <diffuse r="0" g="0" b="0" a="1" />
 	        <specular r="1" g="1" b="1" a="1" />
+	    </LIGHT>
+	    <LIGHT id="board2">
+	        <enable value="1" />
+	        <position x="0" y="30" z="0" w="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <diffuse r="1" g="1" b="1" a="1" />
+	        <specular r="0" g="0" b="0" a="1" />
 	    </LIGHT>
 	    <LIGHT id="menu">
 	        <enable value="1" />
@@ -196,8 +203,6 @@
 			<controlpoint x="0" y="0" z="3" />
 	    </LEAF>
 		<LEAF id="grass" type="terrain" texture="grass" heightmap="grassHeight" />
-
-		<LEAF id="board" type="board" topTheme="topTile" midTheme="yellow" botTheme="bopTile" stone1Texture="red" stone2Texture="blue" stone3Texture="green" stone4Texture="yellow" />
 	</LEAVES>
 
 	<STONES>
@@ -220,18 +225,11 @@
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-				<DESCENDANT id="Board"/>
+				
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="Board">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="board" />
-			</DESCENDANTS>
-		</NODE>
-
+		
 		<NODE id="MainMenu">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />

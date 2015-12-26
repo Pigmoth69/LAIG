@@ -1,4 +1,5 @@
-availableColors([blue, red, green, yellow]).
+%availableColors(['blue', 'red', 'green', 'yellow']).
+availableColors([1, 2, 3, 4]).
 availableStones([[15|blue],[15|red],[15|green],[15|yellow]]).
 playerInfo([]).
 
@@ -48,9 +49,7 @@ assignPlayerColor(0,Colors,_,[],Colors).
 
 assignPlayerColor(NumberPlayers, Colors, N, [[N| [Color | []]] | ResultInfo], ResultColors):-
 										N =< NumberPlayers,
-										playerReadyForColorAssignment(N),
 										sortPlayerColor(N, Colors, [N | [Color | []]] , RemainingColors),
-										playerColorScreen(N, Color),
 										N1 is N + 1,
 										assignPlayerColor(NumberPlayers, RemainingColors, N1, ResultInfo, ResultColors).			
 
@@ -679,10 +678,10 @@ registBoard([
 
 
 floodFill(L,R):-
-				flood(blue, Rb, L),
-				flood(red, Rr, L),
-				flood(green, Rg, L),
-				flood(yellow, Ry, L),
+				flood(1, Rb, L),
+				flood(2, Rr, L),
+				flood(3, Rg, L),
+				flood(4, Ry, L),
 				append([Rb], [Rr], R1), append([Rg], [Ry], R2), append(R1, R2, R).
 
 flood(Color, Result, LogicalBoard):- 	registBoard(RegistBoard),

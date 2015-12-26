@@ -21,7 +21,7 @@ StateMachine.prototype.displayHandler = function(){
 			this.scene.interface.camera.open();
 			this.scene.interface.players.close();
 			this.playMenu.display();			
-			this.scene.drawNode(this.scene.graph.root['Gameplay'], 'null', 'clear');
+			this.game.display();
 			break;
 		case 'Gameplay':
 			this.scene.interface.players.close();

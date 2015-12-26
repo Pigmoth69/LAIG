@@ -9,7 +9,7 @@ function Graph() {
 	this.nodes = [];
 	this.lightsStateValue = [];
 	this.animations = [];
-	this.Players = [];
+	//this.Players = [];
 	this.gameStatus = [];
 	this.pickID = 1;
 };

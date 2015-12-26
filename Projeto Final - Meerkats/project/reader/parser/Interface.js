@@ -62,9 +62,9 @@ Interface.prototype.loadInterfacePlayers = function(){
     this.players.open();
 
     var scene = this.scene;
+    var humansListener = this.players.add(this.scene, 'Humans', 0, 4).step(1);
+    var botsListener = this.players.add(this.scene, 'Bots', 0, 4).step(1);
 
-    this.players.add(this.scene.graph.Players, 'Humans', [ 'None', '1', '2','3','4' ] );
-    this.players.add(this.scene.graph.Players, 'Bots', [ 'None', '1', '2','3','4' ] );
 };
 
 
@@ -74,7 +74,9 @@ Interface.prototype.loadInterfaceGameFunctions = function(){
 
     var scene = this.scene;
 
-    this.game.add(this.scene.graph.gameStatus,'PLAY');
+    this.game.add(this.scene.graph.gameStatus,'PASS TURN');
+
+
     this.game.add(this.scene.graph.gameStatus,'RESTART');
 };
 
@@ -84,7 +86,6 @@ Interface.prototype.loadInterfaceGameCameras = function(){
     this.camera.open();
 
     var scene = this.scene;
-	this.camera.add(this.scene.cameraAnimation, 'Rotation');
 
     var listener = this.camera.add(this.scene.cameraAnimation, 'Perspective', ['Player Perspective', 'Upper Perspective']);
     listener.onChange(function(option)

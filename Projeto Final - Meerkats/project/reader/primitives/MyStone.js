@@ -2,12 +2,14 @@
  * MyStone
  * @constructor
  */
-function MyStone(scene, colorMaterial, position) {
+function MyStone(scene, id, colorMaterial, position) {
 	CGFobject.call(this,scene);
+	this.id = id;
 	this.scene = scene;
 	this.position = position;
 	this.colorMaterial = colorMaterial;
 	this.makeStone();
+	this.tile = null;
 	this.picked = false;
 
 	this.standByAnimationVelocity = 0.13;
@@ -125,6 +127,8 @@ MyStone.prototype.movementAnimation = function(){
 	{
 		fraction = -1;
 		this.scene.stateMachine.game.animation = false;
+		this.scene.stateMachine.game.pickedStone = null;
+		this.scene.stateMachine.game.playedStoneID = this.id;
 		this.dropAnimationTimer = 0;
 	}
 	

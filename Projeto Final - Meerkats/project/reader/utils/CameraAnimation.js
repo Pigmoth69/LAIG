@@ -1,7 +1,6 @@
 
 function CameraAnimation(scene) {
 	this.scene = scene;
-	this.Rotation = true;
 	this.Perspective = 'Player Perspective';
 	this.startTime = 0;
 	this.span = 0;

@@ -77,6 +77,7 @@ MyBoard.prototype.makeBoard = function() {
 
 
 MyBoard.prototype.prepareStones = function(){
+	var id = 1;
 	var radius = 12;
 	var angleStep = 2*Math.PI/60;
 	var angle = 0;
@@ -87,15 +88,16 @@ MyBoard.prototype.prepareStones = function(){
 			var position = new Coords(radius*Math.sin(angle), 0, radius*Math.cos(angle));
 
 			if(i == 0)
-				this.stones.push(new MyStone(this.scene, 'blueStone', position));
+				this.stones.push(new MyStone(this.scene, id, 'blueStone', position));
 			else if(i == 1)
-				this.stones.push(new MyStone(this.scene, 'redStone', position));
+				this.stones.push(new MyStone(this.scene, id, 'redStone', position));
 			else if(i == 2)
-				this.stones.push(new MyStone(this.scene, 'yellowStone', position));
+				this.stones.push(new MyStone(this.scene, id, 'yellowStone', position));
 			else if(i == 3)
-				this.stones.push(new MyStone(this.scene, 'greenStone', position));
+				this.stones.push(new MyStone(this.scene, id, 'greenStone', position));
 
 			angle += angleStep;
+			id++;
 		}
 	}
 };
@@ -109,12 +111,12 @@ MyBoard.prototype.removeStone = function(xPos,yPos) {
 MyBoard.prototype.displayBoard = function(){
 	for(var y = 1 ; y <= 9; y++){
 		for(var x = 1; x < this.board[y].length;x++){
-			this.scene.register(this.board[y][x]);
 			this.scene.pushMatrix();
 			this.scene.translate(this.board[y][x].position.x,this.board[y][x].position.y,this.board[y][x].position.z);
 			if(this.validDropPositions && this.board[y][x].info == 0)
 				this.board[y][x].highlight = true;
 			else this.board[y][x].highlight = false;
+			this.scene.register(this.board[y][x]);
 			this.board[y][x].display();
 			this.scene.graph.pickID++;
 			this.scene.popMatrix();
@@ -127,8 +129,8 @@ MyBoard.prototype.displayStones = function(){
 	for(var i = 0; i < 60; i++)
 	{
 		this.scene.pushMatrix();
-		this.scene.register(this.stones[i]);
 		this.scene.translate(this.stones[i].position.x,this.stones[i].position.y+0.1,this.stones[i].position.z-1.5);
+		this.scene.register(this.stones[i]);
 		this.stones[i].display();
 		this.scene.graph.pickID++;
 		this.scene.popMatrix();

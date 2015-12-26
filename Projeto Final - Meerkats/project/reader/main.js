@@ -37,7 +37,7 @@ main=function()
   myScene.setInterface(myInterface);
   myInterface.setScene(myScene);
 
-  myInterface.setActiveCamera(myScene.camera);
+  //myInterface.setActiveCamera(myScene.camera);
 
 	var filename=getUrlVars()['file'] || "teste.lsx";
 

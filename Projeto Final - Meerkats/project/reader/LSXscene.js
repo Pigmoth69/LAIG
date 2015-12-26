@@ -58,8 +58,8 @@ LSXscene.prototype.initCameras = function () {
   */
 LSXscene.prototype.setDefaultAppearance = function () {
    	this.defaultAppearance.setAmbient(0.2, 0.2, 0.2, 1.0);
-    this.defaultAppearance.setDiffuse(0.2, 0.2, 0.2, 1.0);
-    this.defaultAppearance.setSpecular(0.2, 0.2, 0.2, 1.0);
+    this.defaultAppearance.setDiffuse(0.9, 0.9, 0.9, 1.0);
+    this.defaultAppearance.setSpecular(0.9, 0.9, 0.9, 1.0);
     this.defaultAppearance.setEmission(0,0,0,1);
     this.defaultAppearance.setShininess(120.0);
 };
@@ -79,17 +79,29 @@ LSXscene.prototype.onGraphLoaded = function () {
   */
 LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfaceLigths();
-  	this.graph.Players['Bots'] = ['None','1','2','3','4'];
-  	this.graph.Players['Humans'] = ['None','1','2','3','4'];
-
-  	this.graph.gameStatus['PLAY']=function(){
-  		console.log("PLAY!");
+  	//this.graph.Players['Bots'] = ['None','1','2','3','4'];
+  	//this.graph.Players['Humans'] = ['None','1','2','3','4'];
+  	var scene = this;
+  	this.graph.gameStatus['PASS TURN']=function(){
+  		if(scene.stateMachine.game.roundMove == 'pass')
+  		{
+  			scene.stateMachine.game.roundNumber++;
+			scene.stateMachine.game.roundMove = 'drop';
+			scene.stateMachine.game.pickedStone = null;
+			scene.stateMachine.game.animation = false;
+			scene.stateMachine.game.playedStone = null;
+			scene.stateMachine.game.pickedBoardTile = null;
+			scene.stateMachine.game.boardValidPositions = null;		
+			scene.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/scene.stateMachine.game.players.length);
+	 	} 		
   	}
 
   	this.graph.gameStatus['RESTART']=function(){
   		console.log("RESTART!");
   	}
 
+  	this.Humans = 2;
+  	this.Bots = 0;
 
   	this.interface.loadInterfaceBackgroundColor();
   	this.interface.loadInterfacePlayers();
@@ -266,7 +278,6 @@ LSXscene.prototype.logPicking = function (){
 /**	@brief Invoca as funcoes essenciais para a apresentacao de cada novo frame da scene
   */
 LSXscene.prototype.display = function () {
-	
 	this.gl.clearColor(this.BackgroundRGB[0]/255,this.BackgroundRGB[1]/255,this.BackgroundRGB[2]/255,1);
 
 	/*Registo do picking*/
@@ -311,7 +322,7 @@ LSXscene.prototype.display = function () {
 
 LSXscene.prototype.register = function (obj) {
 	
-	if(!this.stateMachine.animation)
+	if(!this.stateMachine.game.animation)
 	{
 		this.registerForPick(this.graph.pickID,obj);
 		this.graph.pickID++;
