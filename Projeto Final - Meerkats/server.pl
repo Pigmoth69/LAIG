@@ -50,6 +50,9 @@ sortColors([Players], [Bots], Result):-
 	assignPlayerColor(NumberPlayers, ResultColors, 1, FinalPlayersInfo,_),
 	append(FinalBOTsInfo, FinalPlayersInfo, Result),
 	formatAsJSON([Result]).
+%---------------------------------------------	
+
+
 
 
 validDropPositions(Board, Result):-

@@ -322,7 +322,7 @@ LSXscene.prototype.display = function () {
 
 LSXscene.prototype.register = function (obj) {
 	
-	if(!this.stateMachine.game.animation)
+	if(!this.stateMachine.game.animation && this.cameraAnimation.span == 0)
 	{
 		this.registerForPick(this.graph.pickID,obj);
 		this.graph.pickID++;
