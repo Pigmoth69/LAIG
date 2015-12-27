@@ -565,16 +565,6 @@ logicalBoard([
 	      [0, 0, 0, 0, 0, 0, 0],
 	         [0, 0, 0, 0, 1, 0],
 	            [0, 0, 0, 0, 0]
-
-	            [empty, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	[empty, empty, empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	            [empty, empty, empty, empty, empty]
 	]).
 	
 logicalBoardTest([
@@ -587,7 +577,6 @@ logicalBoardTest([
 	      [empty, empty, empty, empty, empty, empty, empty],
 	         [empty, empty, blue, empty, empty, empty],
 	            [empty, empty, empty, empty, empty]
->>>>>>> 674678cdbba6426a693d55afa702f26d6d59bd96
 	]).
 
 displayBoard([
