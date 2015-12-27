@@ -536,15 +536,15 @@ getNotEqualCoords(Initial1,Initial2,ResCoord1,ResCoord2):-
 
 
 logicalBoard([
-	            [0, 0, 0, 0, 0],
-	         [0, 0, 0, 0, 0, 0],
+	            [2, 0, 0, 0, 0],
+	         [2, 2, 0, 0, 0, 0],
+	      [0, 2, 2, 2, 0, 0, 0],
+	   [0, 0, 0, 0, 0, 0, 1, 0],
+	[0, 0, 0, 0, 2, 0, 0, 1, 1],
+	   [0, 0, 0, 2, 0, 0, 0, 0],
 	      [0, 0, 0, 0, 0, 0, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	      [0, 0, 0, 0, 0, 0, 0],
-	         [0, 0, 0, 0, 0, 0],
-	            [0, 0, 0, 0, 0]
+	         [0, 0, 0, 0, 1, 0],
+	            [1, 1, 1, 1, 1]
 	]).
 
 displayBoard([
@@ -614,9 +614,9 @@ winner(L, W, A):-
 				floodFill(L, R), nl,
 				calculateWinner(R, W, A).
 
-winner(_, [0], 0).
+winner(_, 0, 0).
 
-calculateWinner(Result, Winner, AreaResult):-	getMainGroups(Result, 16, Winner, AreaResult), !.
+calculateWinner(Result, Winner, AreaResult):-	getMainGroups(Result, 16, [Winner|_], AreaResult), !.
 
 
 

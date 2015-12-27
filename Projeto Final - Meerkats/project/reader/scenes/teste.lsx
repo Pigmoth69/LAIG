@@ -299,9 +299,8 @@
 	
 	<NODES>
 	    <ROOT id="Main Menu"/> 
-	    <ROOT id="cena1"/> 
-	    <ROOT id="cena2"/>
-	    <ROOT id="cena3"/>
+	    <ROOT id="Space"/> 
+	    <ROOT id="Camp"/>
 		
 		<NODE id="Main Menu">
 			<MATERIAL id="default" />
@@ -311,20 +310,13 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="cena1">
+		<NODE id="Space">
 			<MATERIAL id="default" />
 			<TEXTURE id="space" />
 			<DESCENDANTS>
 				<DESCENDANT id="spaceambient"/>
 				<DESCENDANT id="aviao"/>
 				<DESCENDANT id="spacebase"/>
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="cena2">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="grass"/>
 			</DESCENDANTS>
 		</NODE>
 
@@ -338,7 +330,7 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="cena3">
+		<NODE id="Camp">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>

@@ -29,6 +29,9 @@ LSXscene.prototype.init = function (application) {
     this.socket = new Socket(this);
 
 
+	this.terrainShader=new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+
+
 	this.startingTime = new Date();
 	this.milliseconds = 0;
   	this.BackgroundRGB = [76.5, 76.5, 76.5];
@@ -51,7 +54,7 @@ LSXscene.prototype.setInterface = function (interface) {
 /**	@brief Inicializa a camara da scene com valores de predefinicao
   */
 LSXscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.7, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
+    this.camera = new CGFcamera(0.65, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
 };
 
 
@@ -220,19 +223,16 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 
 	if(this.graph.leaves[leaf] instanceof MyTerrain)
 	{
-		this.graph.textures[this.graph.leaves[leaf].texture].bind();
+    	this.terrainShader.setUniformsValues({heightmap: 1});
+		this.terrainShader.setUniformsValues({normScale: 50.0});
 		this.setActiveShader(this.terrainShader);
+		this.graph.textures[this.graph.leaves[leaf].texture].bind();
 		this.graph.textures[this.graph.leaves[leaf].heightmap].bind(1);
 		this.graph.leaves[leaf].display();
 		this.setActiveShader(this.defaultShader);
 		return;
 	}
 	if(this.graph.leaves[leaf] instanceof MyVehicle){
-		this.graph.leaves[leaf].display();
-		return;
-	}
-
-	if(this.graph.leaves[leaf] instanceof MyBoard){
 		this.graph.leaves[leaf].display();
 		return;
 	}
