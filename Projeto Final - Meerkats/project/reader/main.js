@@ -21,7 +21,7 @@ serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parse
                './primitives/MyBoard.js', './primitives/MyBoardTile.js','./primitives/MyDice.js',
                './utils/Coords.js','./primitives/MyBag.js','./primitives/MyQuad.js',
                './utils/CameraAnimation.js', './utils/StateMachine.js', './utils/Socket.js',
-               './utils/PlayMenu.js', './utils/Game.js', 
+               './utils/PlayMenu.js', './utils/Game.js', './primitives/MyInvertedSphere.js',
 
 main=function()
 {
@@ -37,7 +37,7 @@ main=function()
   myScene.setInterface(myInterface);
   myInterface.setScene(myScene);
 
-  //myInterface.setActiveCamera(myScene.camera);
+  myInterface.setActiveCamera(myScene.camera);
 
 	var filename=getUrlVars()['file'] || "teste.lsx";
 

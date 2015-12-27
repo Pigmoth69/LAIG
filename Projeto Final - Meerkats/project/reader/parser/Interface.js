@@ -81,6 +81,20 @@ Interface.prototype.loadInterfaceGameFunctions = function(){
 };
 
 
+Interface.prototype.loadInterfaceScenes = function(){
+    this.scenes = this.gui.addFolder('Scenes');
+    this.scenes.open();
+
+    var scene = this.scene;
+    var listener = this.scenes.add(this.scene.graph,'scenarios',this.scene.graph.scenarios).listen();
+    listener.setValue("None");
+    listener.onChange(function(cena){
+        scene.changeScene(cena);
+    });
+
+};
+
+
 Interface.prototype.loadInterfaceGameCameras = function(){
 	this.camera = this.gui.addFolder('Cameras');
     this.camera.open();

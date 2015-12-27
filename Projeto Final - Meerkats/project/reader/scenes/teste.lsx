@@ -7,12 +7,13 @@
 	    <rotation axis="y" angle="0.0" />                 		<!-- initial rotation 2 -->
 	    <rotation axis="z" angle="0.0" />                  		<!-- initial rotation 1 -->
 	    <scale sx="1" sy="1" sz="1" />                  	<!-- initial scaling -->
-	    <reference length="0" />                          		<!-- axis length; "0" means no axis-->
+	    <reference length="5" />                          		<!-- axis length; "0" means no axis-->
 	</INITIALS>
 	
 	
 	<ILLUMINATION>
-	    <ambient r="0.3" g="0.3" b="0.3" a="1" />
+	   <!-- <ambient r="0.3" g="0.3" b="0.3" a="1" />-->
+	   <ambient r="0.5" g="0.5" b="0.5" a="1" />
 	    <background r="0.3" g="0.3" b="0.3" a="1" />
 	</ILLUMINATION>
 	
@@ -86,6 +87,39 @@
 			<file path="./textures/play.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
+		<TEXTURE id="space">
+			<file path="./textures/space.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+
+		<TEXTURE id="engine">
+			<file path="./textures/engine.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="spaceship">
+			<file path="./textures/spaceship.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="flame">
+			<file path="./textures/flame.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="wood">
+			<file path="./textures/wood.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="spaceship2">
+			<file path="./textures/spaceship2.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="sky">
+			<file path="./textures/sky.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="landscape">
+			<file path="./textures/landscape.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 	</TEXTURES>
 	
 	<MATERIALS>
@@ -145,21 +179,37 @@
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
+		<MATERIAL id="iluminated">                                  
+			<shininess value="120" />
+			<specular r="0" g="0" b="0" a="1" /> 
+			<diffuse r="0.9" g="0.8" b="0.8" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0.5" g="0.5" b="0.5" a="1" /> 
+		</MATERIAL>
 	</MATERIALS>
 
 	<animations>
+		<animation id="descolagem" span="8" type="linear">
+			<controlpoint xx="-85" yy="0" zz="-85"/>
+			<controlpoint xx="-84" yy="9" zz="-84"/>
+			<controlpoint xx="0" yy="9" zz="0"/>
+		</animation>
+		 <animation id="orbitar" span="72000000" type="circular" center="0 9 0" radius="12.5" startang="-90" rotang="1000000000" />
 	</animations>
 	
 	<LEAVES>
 	    <LEAF id="rectangle" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
 	    <LEAF id="cylinder" type="cylinder" args="1 1 1 5 20" />
+	    <LEAF id="base" type="cylinder" args="1 13 13 5 50" />
 	    <LEAF id="circle" type="cylinder" args="0 1 0 1 20" />
 	    <LEAF id="sphere" type="sphere" args="1 20 20" />
+	    <LEAF id="InvertedSphere" type="invertedSphere" args="60 50 50" />
 	    <LEAF id="triangle" type="triangle" args="0 0 0 0 0 1 0 1 0" />
 	    <LEAF id="triangle2" type="triangle" args="0 0 1 0 0 0 0 1 0" />
 	    <LEAF id="triangle3" type="triangle" args="1 1 0 0 1 1 0 0 0" />
 	    <LEAF id="triangle4" type="triangle" args="1 1 0 0 0 0 0 1 -1" />
 	    <LEAF id="plane" type="plane" args="50 50"/>
+	    <LEAF id="VEHICLE" type="vehicle" engine="engine" spaceship="spaceship" flame="flame"/>
 	    <LEAF id="patch" type="patch" args="3 3 10 15">
 	    	<controlpoint x="0" y="0" z="0" />
 			<controlpoint x="1" y="0" z="1" />
@@ -211,7 +261,9 @@
 	
 	<NODES>
 	    <ROOT id="Main Menu"/> 
-	    <ROOT id="Gameplay"/> 
+	    <ROOT id="cena1"/> 
+	    <ROOT id="cena2"/>
+	    <ROOT id="cena3"/>
 		
 		<NODE id="Main Menu">
 			<MATERIAL id="default" />
@@ -221,13 +273,76 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="Gameplay">
+		<NODE id="cena1">
+			<MATERIAL id="default" />
+			<TEXTURE id="space" />
+			<DESCENDANTS>
+				<DESCENDANT id="spaceambient"/>
+				<DESCENDANT id="aviao"/>
+				<DESCENDANT id="spacebase"/>
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="cena2">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-				
+				<DESCENDANT id="grass"/>
 			</DESCENDANTS>
 		</NODE>
+
+		<NODE id="aviao">
+			<MATERIAL id="default" />
+			<TEXTURE id="null" />
+			<ANIMATIONREF id="orbitar"/>
+			<SCALE sx="0.5" sy="0.5" sz="0.5"/>  
+			<DESCENDANTS>
+				<DESCENDANT id="VEHICLE"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="cena3">
+			<MATERIAL id="default" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="ambient"/>
+				<DESCENDANT id="table"/>
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="ambient">
+			<MATERIAL id="iluminated" />
+			<TEXTURE id="landscape" />
+			<ROTATION axis="x" angle="65" />
+			<DESCENDANTS>
+				<DESCENDANT id="InvertedSphere"/>
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="spaceambient">
+			<MATERIAL id="iluminated" />
+			<TEXTURE id="space" />
+			<DESCENDANTS>
+				<DESCENDANT id="InvertedSphere"/>
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="table">
+			<MATERIAL id="default" />
+			<TEXTURE id="wood" />
+			<TRANSLATION x="0" y="-0.2" z="0" />
+			<ROTATION axis="x" angle="90" />
+			<DESCENDANTS>
+				<DESCENDANT id="base"/>
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="spacebase">
+			<MATERIAL id="default" />
+			<TEXTURE id="spaceship2" />
+			<TRANSLATION x="0" y="-0.2" z="0" />
+			<ROTATION axis="x" angle="90" />
+			<DESCENDANTS>
+				<DESCENDANT id="base"/>
+			</DESCENDANTS>
+		</NODE>
+
 
 		
 		<NODE id="MainMenu">

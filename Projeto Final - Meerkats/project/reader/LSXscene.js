@@ -107,7 +107,19 @@ LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfacePlayers();
   	this.interface.loadInterfaceGameCameras();
   	this.interface.loadInterfaceGameFunctions();
+  	//scene.graph.scenarios=['merda1','merda2','merda3'];
+  	this.interface.loadInterfaceScenes();
 
+ }
+
+ /*@brief Altera a cena para a cena pretendida pelo utilizador*/
+ LSXscene.prototype.changeScene = function(cena){
+ 	console.warn("cena: "+cena);
+ 	var scene = this;
+ 	console.warn("Anterior: "+scene.stateMachine.scenarios);
+ 	scene.stateMachine.currentScenario = cena;
+ 	console.warn("Novo: "+scene.stateMachine.scenarios);
+ 	
  }
 
 
