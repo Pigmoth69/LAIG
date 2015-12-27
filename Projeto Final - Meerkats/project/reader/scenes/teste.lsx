@@ -90,6 +90,10 @@
 			<file path="./textures/char.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
+		<TEXTURE id="numbers">
+			<file path="./textures/numbers.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 	</TEXTURES>
 	
 	<MATERIALS>

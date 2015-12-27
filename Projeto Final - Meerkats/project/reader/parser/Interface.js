@@ -75,9 +75,8 @@ Interface.prototype.loadInterfaceGameFunctions = function(){
     var scene = this.scene;
 
     this.game.add(this.scene.graph.gameStatus,'PASS TURN');
-
-
-    this.game.add(this.scene.graph.gameStatus,'RESTART');
+    this.game.add(this.scene.graph.gameStatus,'UNDO');
+    this.game.add(this.scene.graph.gameStatus,'EXIT');
 };
 
 

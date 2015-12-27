@@ -4,7 +4,7 @@
  	this.scene = scene;
  	this.quad = new MyQuad(this.scene);
  	this.pannel = new MyPannel(this.scene);
- 	this.fontTexture = this.scene.graph.textures['char'];
+ 	this.fontTexture = this.scene.graph.textures['numbers'];
  	this.material = material;
 
  	this.first = 0;
@@ -12,7 +12,7 @@
 
 
 	this.textShader=new CGFshader(this.scene.gl, "shaders/font.vert", "shaders/font.frag");
-	this.textShader.setUniformsValues({'dims': [16, 16]});
+	this.textShader.setUniformsValues({'dims': [10, 1]});
 };
 
 MyMarker.prototype = Object.create(CGFobject.prototype);
@@ -21,7 +21,7 @@ MyMarker.prototype.constructor = MyMarker;
 MyMarker.prototype.display = function(){
 	
 	this.scene.pushMatrix();
-	this.scene.graph.materials[this.material].setTexture(this.scene.graph.textures['char']);
+	this.scene.graph.materials[this.material].setTexture(this.scene.graph.textures['numbers']);
 	this.scene.graph.materials[this.material].apply();
 
 	//front
@@ -32,21 +32,19 @@ MyMarker.prototype.display = function(){
 	this.scene.popMatrix();
 
 	//front
-	this.scene.pushMatrix();
 	this.scene.setActiveShaderSimple(this.textShader);
+	this.scene.pushMatrix();
 	this.scene.translate(-0.5, 0, 0.5);
-	this.scene.activeShader.setUniformsValues({'charCoords': [this.first -0.1,3]});
+	this.scene.activeShader.setUniformsValues({'charCoords': [this.first,0]});
 	this.pannel.display();
-	this.scene.setActiveShaderSimple(this.scene.defaultShader);
 	this.scene.popMatrix();
 
 	this.scene.pushMatrix();
-	this.scene.setActiveShaderSimple(this.textShader);
 	this.scene.translate(0.5, 0, 0.5);
-	this.scene.activeShader.setUniformsValues({'charCoords': [this.second -0.1,3]});
+	this.scene.activeShader.setUniformsValues({'charCoords': [this.second,0]});
 	this.pannel.display();
-	this.scene.setActiveShaderSimple(this.scene.defaultShader);
 	this.scene.popMatrix();
+	this.scene.setActiveShaderSimple(this.scene.defaultShader);
 
 
 	//top

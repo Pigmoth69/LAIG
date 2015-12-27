@@ -2,7 +2,7 @@ function Socket(scene) {
 	this.scene = scene;
 	this.boardResponse = null;
 	this.scoreResponse = null;
-	this.colorsResponse = [];
+	this.colorsResponse = null;
 };
 
 var validPositions = null;
@@ -31,7 +31,14 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var board = JSON.parse(message);
 									socket.scoreResponse = board.slice(',');
 									//console.log(socket.scoreResponse);
-								};							
+								};
+	else if(type == 'colors')
+		request.onload = function(data){
+									var message = data.target.response.split(";");
+									var array = JSON.parse(message);
+									socket.colorsResponse = array.slice(',');
+									console.log(socket.colorsResponse);
+								};						
 
 	request.onerror = function(){console.log("Error waiting for response");};
 

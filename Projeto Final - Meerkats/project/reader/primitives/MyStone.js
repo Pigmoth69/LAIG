@@ -128,9 +128,17 @@ MyStone.prototype.movementAnimation = function(){
 		fraction = -1;
 		this.scene.stateMachine.game.animation = false;
 		this.scene.stateMachine.game.pickedStone = null;
-		this.scene.stateMachine.game.playedStoneID = this.id;
+
+		if(!this.scene.stateMachine.game.undo && this.scene.stateMachine.game.playedStone == null)
+			this.scene.stateMachine.game.playedStone = this;
+		else if(this.scene.stateMachine.game.undo && this.scene.stateMachine.game.roundMove == 'drag')
+			this.scene.stateMachine.game.playedStone = this.scene.stateMachine.game.undoRegister['drag']['playedStone'];
+
 		this.scene.socket.boardResponse = null;
 		this.dropAnimationTimer = 0;
+
+
+		this.scene.stateMachine.game.undo = false;
 	}
 	
 	this.position = new Coords(this.dropAnimationCenter[0] - inc[0], 1-Math.abs(fraction), this.dropAnimationCenter[2] - inc[2]);

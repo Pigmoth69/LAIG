@@ -4,15 +4,22 @@ function Game(scene) {
 
 	this.scene = scene;
 	this.players = [];
-	this.animation = false;
-	this.pickedStone = null;
-	this.playedStone = null;
-	this.pickedBoardTile = null;
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
 	this.score = [0, 0, 0, 0];
-	this.validDragPositions = false;
+
+	this.animation = false;
 	this.updateScore = false;
+	this.validDragPositions = false;
+
+	this.pickedStone = null;
+
+	this.playedStone = null;
+
+	this.pickedBoardTile = null;
+
+	this.undo = false;
+	this.undoRegister = [];
 };
 
 
@@ -26,19 +33,18 @@ Game.prototype.display = function(){
 };
 
 Game.prototype.picking = function(obj){
-	var ID = obj[1];
 	if(obj[0] instanceof MyStone)
-	{
 		this.pickingStone(obj);
-	}
 	else if(obj[0] instanceof MyBoardTile)
-	{
 		this.pickingTile(obj);
-	}
 
 };
 
 Game.prototype.handler = function(){
+	if(this.scene.socket.colorsResponse != null){
+		this.generatePlayersList();
+	}
+
 	if(this.animation)
 	{
 		this.pickedStone.movementAnimation();
@@ -56,11 +62,39 @@ Game.prototype.handler = function(){
 		this.updateGameScore();
 		this.updateScore = false;
 		this.scene.socket.scoreResponse = null;
-		console.log(this.score);
 	}
 
+	if(this.roundNumber >= 16 && this.roundNumber <= 60){
+		if(this.score.indexOf(15) != -1)
+			console.log('alguem ganhou');
 
+	}
+	else if(this.roundNumber == 61){
+
+	}
 };
+
+Game.prototype.generatePlayersList = function(){
+	var totalPlayers = this.scene.Humans + this.scene.Bots;
+	var index = this.scene.socket.colorsResponse.length -1;
+	for(var i = 1; i <= this.scene.Humans; i++, index--)
+	{
+		var Human = 'Player' + i;
+		var player = [Human, this.scene.socket.colorsResponse[index][1]];
+		this.players.push(player);
+	}
+
+	for(var i = 1; i <= this.scene.Bots; i++, index--)
+	{
+		var Bot = 'Bot' + i;
+		var player = [Bot, this.scene.socket.colorsResponse[index][1]];
+		this.players.push(player);
+	}
+
+	this.scene.socket.colorsResponse = null;
+	console.log(this.players);
+};
+
 
 Game.prototype.dropStone = function(tile){
 
@@ -110,7 +144,7 @@ Game.prototype.pickingStone = function(obj){
 	
 
 	//registando peça selecionada no picking
-	if((this.roundMove == 'drop' && obj[0].tile == null) || (this.roundMove == 'drag' && obj[0].tile != null && obj[0].id != this.playedStoneID))
+	if((this.roundMove == 'drop' && obj[0].tile == null) || (this.roundMove == 'drag' && obj[0].tile != null && obj[0].id != this.playedStone.id))
 	{
 		obj[0].picked = true;
 		this.pickedStone = obj[0];
@@ -132,6 +166,8 @@ Game.prototype.pickingTile = function(obj){
 	{
 		if(this.roundMove == 'drag')
 			this.pickedStone.tile.info = 0;
+
+		this.saveUNDO();
 
 		this.pickedStone.tile = obj[0];
 		this.animation = true;
@@ -158,24 +194,12 @@ Game.prototype.updateGameScore = function(){
 	{
 		max = Math.max.apply(null, this.scene.socket.scoreResponse[0][1]);
 		this.score[0] = max;
-
-		if(max > 9)
-			this.scene.scoreBoard.blueMarker.first = 1;
-		else this.scene.scoreBoard.blueMarker.first = 0;
-
-		this.scene.scoreBoard.blueMarker.second = max % 10;
 	}
 
 	if(this.scene.socket.scoreResponse[1][1].length > 0)
 	{
 		max = Math.max.apply(null, this.scene.socket.scoreResponse[1][1]);
 		this.score[1] = max;
-
-		if(max > 9)
-			this.scene.scoreBoard.redMarker.first = 1;
-		else this.scene.scoreBoard.redMarker.first = 0;
-
-		this.scene.scoreBoard.redMarker.second = max % 10;
 	}
 
 	if(this.scene.socket.scoreResponse[2][1].length > 0)
@@ -183,22 +207,137 @@ Game.prototype.updateGameScore = function(){
 		max = Math.max.apply(null, this.scene.socket.scoreResponse[2][1]);
 		this.score[2] = max;
 
-		if(max > 9)
-			this.scene.scoreBoard.greenMarker.first = 1;
-		else this.scene.scoreBoard.greenMarker.first = 0;
-
-		this.scene.scoreBoard.greenMarker.second = max % 10;
 	}
 
 	if(this.scene.socket.scoreResponse[3][1].length > 0)
 	{
 		max = Math.max.apply(null, this.scene.socket.scoreResponse[3][1]);
 		this.score[3] = max;
+	}
 
-		if(max > 9)
+	this.updateMarkers();
+};
+
+
+Game.prototype.updateMarkers = function(){
+	if(this.score[0] > 9)
+			this.scene.scoreBoard.blueMarker.first = 1;
+		else this.scene.scoreBoard.blueMarker.first = 0;
+
+		this.scene.scoreBoard.blueMarker.second = this.score[0] % 10;
+
+	if(this.score[1] > 9)
+			this.scene.scoreBoard.redMarker.first = 1;
+		else this.scene.scoreBoard.redMarker.first = 0;
+
+		this.scene.scoreBoard.redMarker.second = this.score[1] % 10;
+
+	if(this.score[2] > 9)
+			this.scene.scoreBoard.greenMarker.first = 1;
+		else this.scene.scoreBoard.greenMarker.first = 0;
+
+		this.scene.scoreBoard.greenMarker.second = this.score[2] % 10;
+
+	if(this.score[3] > 9)
 			this.scene.scoreBoard.yellowMarker.first = 1;
 		else this.scene.scoreBoard.yellowMarker.first = 0;
 
-		this.scene.scoreBoard.yellowMarker.second = max % 10;
+		this.scene.scoreBoard.yellowMarker.second = this.score[3] % 10;
+}
+
+
+
+Game.prototype.saveUNDO = function(){
+	if(this.roundMove == 'drop')
+	{
+		this.undoRegister['drop'] = [];
+		this.undoRegister['drop']['stone'] = this.pickedStone;
+		this.undoRegister['drop']['initialPosition'] = this.pickedStone.position;
+		
+		this.undoRegister['drop']['score'] = [];
+		this.undoRegister['drop']['score'][0] = this.score[0];this.undoRegister['drop']['score'][1] = this.score[1];
+		this.undoRegister['drop']['score'][2] = this.score[2];this.undoRegister['drop']['score'][3] = this.score[3];
 	}
+	else if(this.roundMove == 'drag')
+	{
+		this.undoRegister['drag'] = [];
+		this.undoRegister['drag']['stone'] = this.pickedStone;
+		this.undoRegister['drag']['playedStone'] = this.playedStone;
+		this.undoRegister['drag']['tile'] = this.pickedStone.tile;
+		this.undoRegister['drag']['initialPosition'] = this.pickedStone.position;
+
+		this.undoRegister['drag']['score'] = [];
+		this.undoRegister['drag']['score'][0] = this.score[0];this.undoRegister['drag']['score'][1] = this.score[1];
+		this.undoRegister['drag']['score'][2] = this.score[2];this.undoRegister['drag']['score'][3] = this.score[3];
+	}
+
 };
+
+Game.prototype.processUNDO = function(){
+	this.undo = true;
+
+
+	if(this.roundMove == 'drag' || (this.roundMove == 'pass' && this.roundNumber == 1))
+	{
+		this.undoRegister['drop']['stone'].tile.info = 0;
+		this.undoRegister['drop']['stone'].dropStone(this.undoRegister['drop']['initialPosition']);
+		this.playedStone = null;
+
+		this.undoRegister['drop']['stone'].tile = null;
+		this.undoRegister['drop']['stone'].standByAnimationHeight = 0;
+		this.undoRegister['drop']['stone'].standByAnimationVelocity = 0.13;
+		this.animation = true;
+		this.pickedStone = this.undoRegister['drop']['stone'];
+		this.undoRegister['drop']['stone'].dropStone(this.undoRegister['drop']['initialPosition']);
+
+		this.score[0] = this.undoRegister['drop']['score'][0];this.score[1] = this.undoRegister['drop']['score'][1];
+		this.score[2] = this.undoRegister['drop']['score'][2];this.score[3] = this.undoRegister['drop']['score'][3];
+	}
+	else if(this.roundMove == 'pass'){
+
+		switch(this.undoRegister['drag']['stone'].colorMaterial){
+			case 'blueStone':
+				this.undoRegister['drag']['tile'].info = 1;
+				break;
+			case 'redStone':
+				this.undoRegister['drag']['tile'].info = 2;
+				break;
+			case 'greenStone':
+				this.undoRegister['drag']['tile'].info = 3;
+				break;
+			case 'yellowStone':
+				this.undoRegister['drag']['tile'].info = 4;
+				break;
+			default: break;
+		}
+
+		this.playedStone = this.undoRegister['drag']['playedStone'];
+		this.undoRegister['drag']['stone'].tile.info = 0;
+		this.undoRegister['drag']['stone'].tile = this.undoRegister['drag']['tile'];
+		this.undoRegister['drag']['stone'].standByAnimationHeight = 0;
+		this.undoRegister['drag']['stone'].standByAnimationVelocity = 0.13;
+		this.animation = true;
+		this.pickedStone = this.undoRegister['drag']['stone'];
+		this.undoRegister['drag']['stone'].dropStone(this.undoRegister['drag']['initialPosition']);
+
+		this.score[0] = this.undoRegister['drag']['score'][0];this.score[1] = this.undoRegister['drag']['score'][1];
+		this.score[2] = this.undoRegister['drag']['score'][2];this.score[3] = this.undoRegister['drag']['score'][3];
+	}
+
+
+
+	if(this.roundMove == 'pass')
+		{
+			if(this.roundNumber == 1)
+				this.roundMove = 'drop';
+			else this.roundMove = 'drag';
+		}
+	else if(this.roundMove == 'drag')
+		this.roundMove = 'drop';
+
+	this.updateMarkers();
+
+};
+
+
+

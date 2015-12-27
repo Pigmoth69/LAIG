@@ -686,7 +686,7 @@ floodFill(L,R):-
 
 flood(Color, Result, LogicalBoard):- 	registBoard(RegistBoard),
 										searchNextColorOcurrence(1, 1, LogicalBoard, RegistBoard, Color, [Row | [Col | _]]),
-										searchColorGroups(Row, Col, Color, LogicalBoard, RegistBoard, Rz),
+										searchColorGroups(Row, Col, Color, LogicalBoard, RegistBoard, R),
 										append([Color], [R], Result), !.
 
 searchColorGroups(9, 6, _, _, _, []).

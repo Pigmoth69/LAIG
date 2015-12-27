@@ -1,5 +1,5 @@
 
- function MyScoreBoard(scene, material) {
+ function MyScoreBoard(scene) {
  	CGFobject.call(this,scene);
  	this.scene = scene;
  	this.blueMarker = new MyMarker(scene, 'blueMarker');

@@ -35,7 +35,7 @@ LSXscene.prototype.init = function (application) {
 
 	this.setPickEnabled(true);
 
-	this.scoreBoard = new MyScoreBoard(this, 'blueMarker');
+	this.scoreBoard = new MyScoreBoard(this);
 
 };
 
@@ -51,8 +51,7 @@ LSXscene.prototype.setInterface = function (interface) {
 /**	@brief Inicializa a camara da scene com valores de predefinicao
   */
 LSXscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.5, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
-    //this.camera = new CGFcamera(0.5, 1, 500, vec3.fromValues(0, 10, 10), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.6, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
 };
 
 
@@ -85,10 +84,11 @@ LSXscene.prototype.loadInterface = function () {
   	//this.graph.Players['Humans'] = ['None','1','2','3','4'];
   	var scene = this;
   	this.graph.gameStatus['PASS TURN']=function(){
-  		if(scene.stateMachine.game.roundMove == 'pass')
+  		if(scene.stateMachine.game.roundMove == 'pass' && scene.stateMachine.game.pickedStone == null)
   		{
   			scene.stateMachine.game.roundNumber++;
 			scene.stateMachine.game.roundMove = 'drop';
+			scene.stateMachine.game.undoRegister = [];
 			scene.stateMachine.game.pickedStone = null;
 			scene.stateMachine.game.animation = false;
 			scene.stateMachine.game.playedStone = null;
@@ -97,8 +97,18 @@ LSXscene.prototype.loadInterface = function () {
 	 	} 		
   	}
 
-  	this.graph.gameStatus['RESTART']=function(){
-  		console.log("RESTART!");
+  	this.graph.gameStatus['UNDO']=function(){
+  			if(!scene.stateMachine.game.animation){
+  			if(scene.stateMachine.game.pickedStone != null)
+  				scene.stateMachine.game.pickedStone.picked = false;
+  			scene.stateMachine.game.pickedStone = null;
+  			scene.stateMachine.game.board.resetHighlight();
+  			scene.stateMachine.game.processUNDO();
+  		}
+  	}
+
+  	this.graph.gameStatus['EXIT']=function(){
+  		console.log("EXIT!");
   	}
 
   	this.Humans = 2;
@@ -337,7 +347,7 @@ LSXscene.prototype.display = function () {
 
 LSXscene.prototype.register = function (obj) {
 	
-	if(!this.stateMachine.game.animation && this.cameraAnimation.span == 0)
+	if(!this.stateMachine.game.animation && this.cameraAnimation.span == 0 && this.stateMachine.game.roundMove != 'pass')
 	{
 		this.registerForPick(this.graph.pickID,obj);
 		this.graph.pickID++;
