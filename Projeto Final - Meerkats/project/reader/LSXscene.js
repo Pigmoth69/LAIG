@@ -51,7 +51,7 @@ LSXscene.prototype.setInterface = function (interface) {
 /**	@brief Inicializa a camara da scene com valores de predefinicao
   */
 LSXscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.6, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
+    this.camera = new CGFcamera(0.7, 1, 500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
 };
 
 
@@ -80,8 +80,6 @@ LSXscene.prototype.onGraphLoaded = function () {
   */
 LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfaceLigths();
-  	//this.graph.Players['Bots'] = ['None','1','2','3','4'];
-  	//this.graph.Players['Humans'] = ['None','1','2','3','4'];
   	var scene = this;
   	this.graph.gameStatus['PASS TURN']=function(){
   		if(scene.stateMachine.game.roundMove == 'pass' && scene.stateMachine.game.pickedStone == null)
@@ -118,7 +116,15 @@ LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfacePlayers();
   	this.interface.loadInterfaceGameCameras();
   	this.interface.loadInterfaceGameFunctions();
+  	this.interface.loadInterfaceScenes();
 
+ }
+
+ /*@brief Altera a cena para a cena pretendida pelo utilizador*/
+ LSXscene.prototype.changeScene = function(cena){
+ 	var scene = this;
+ 	scene.stateMachine.currentScenario = cena;
+ 
  }
 
 

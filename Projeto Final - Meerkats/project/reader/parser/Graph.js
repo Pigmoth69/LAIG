@@ -11,6 +11,7 @@ function Graph() {
 	this.animations = [];
 	//this.Players = [];
 	this.gameStatus = [];
+	this.scenarios = ['None'];
 	this.pickID = 1;
 };
 

@@ -3,6 +3,7 @@ function StateMachine(scene) {
 	this.playMenu = new PlayMenu(this.scene);
 	this.game = new Game(this.scene);
 	this.currentState = 'Main Menu';
+	this.currentScenario = null;
 };
 
 
@@ -12,6 +13,17 @@ StateMachine.prototype.constructor = StateMachine;
 
 StateMachine.prototype.displayHandler = function(){
 
+
+	if(this.currentScenario != null)
+		if(this.scene.graph.nodes[this.currentScenario]!=null)
+			this.scene.drawNode(this.scene.graph.root[this.currentScenario], 'null', 'clear');
+		else{
+			this.currentScenario = null;
+			console.warn("Nodes for that current scenario does not exist!");
+		}
+			
+	
+				
 	switch(this.currentState){
 		case 'Main Menu':
 			this.scene.interface.camera.close();

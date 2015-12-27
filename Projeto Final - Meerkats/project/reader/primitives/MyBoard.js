@@ -125,7 +125,7 @@ MyBoard.prototype.displayStones = function(){
 	for(var i = 0; i < 60; i++)
 	{
 		this.scene.pushMatrix();
-		this.scene.translate(this.stones[i].position.x,this.stones[i].position.y+0.1,this.stones[i].position.z-1.5);
+		this.scene.translate(this.stones[i].position.x,this.stones[i].position.y+0.2,this.stones[i].position.z-1.5);
 		this.scene.register(this.stones[i]);
 		this.stones[i].display();
 		this.scene.graph.pickID++;

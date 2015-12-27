@@ -539,6 +539,10 @@ LSXreader.prototype.parseLeaves= function(rootElement) {
   			var args = this.getArgs(leaves[i], 'args', 1);
   			this.scene.graph.leaves[id] = new MySphere(this.scene, args);
   		}
+  		else if(type == "invertedSphere") {
+  			var args = this.getArgs(leaves[i], 'args', 1);
+  			this.scene.graph.leaves[id] = new MyInvertedSphere(this.scene, args);
+  		}
   		else if(type == "cylinder"){
   			var args = this.getArgs(leaves[i], 'args', 1);
   			this.scene.graph.leaves[id] = new MyCylinder(this.scene, args);
@@ -665,7 +669,7 @@ LSXreader.prototype.parseNodes= function(rootElement) {
 	if(nodesTag == null){
 		return "NODES tag is missing.";
 	}
-
+	//this.scene.graph.scenarios['Scenes']=[];
 	var root = nodesTag[0].getElementsByTagName('ROOT');
 	if(root != null){
 		for(var i = 0; i < root.length; i++)
@@ -675,8 +679,18 @@ LSXreader.prototype.parseNodes= function(rootElement) {
 				this.scene.graph.root['Main Menu'] = 'Main Menu';
 			else if(rootID == 'Gameplay')
 				this.scene.graph.root['Gameplay'] = 'Gameplay';
-			else 
-				return 'Invalid root ID (expected "Main Menu" or "Gameplay")';
+			else{
+				if(this.scene.graph.root[rootID]!=null)
+					return "Invalid rootID! That rootID already exists!";
+				else{
+					this.scene.graph.root[rootID]= rootID;
+					this.scene.graph.scenarios.push(rootID);
+
+				}
+					
+			} 
+
+				/*return 'Invalid root ID (expected "Main Menu" or "Gameplay")';*/
 		}
 	}
 	else return "ROOT tag is missing.";
