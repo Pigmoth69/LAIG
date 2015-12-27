@@ -15,9 +15,11 @@ StateMachine.prototype.displayHandler = function(){
 	switch(this.currentState){
 		case 'Main Menu':
 			this.scene.interface.camera.close();
+			this.scene.interface.game.close();
 			this.playMenu.display();
 			break;
 		case 'Main Menu to Gameplay':
+			this.scene.interface.game.open();
 			this.scene.interface.camera.open();
 			this.scene.interface.players.close();
 			this.playMenu.display();			

@@ -1,6 +1,7 @@
 function Socket(scene) {
 	this.scene = scene;
 	this.boardResponse = null;
+	this.scoreResponse = null;
 	this.colorsResponse = [];
 };
 
@@ -10,12 +11,7 @@ Socket.prototype.constructor = Socket;
 
 
 Socket.prototype.sendRequest = function(requestString, type){
-	if(type == 'board')
-		this.postGameRequest(requestString, type);
-	else if(type == 'colors')
-		this.postGameRequest(requestString, type);
-	else
-		this.postGameRequest(requestString, type);
+	this.postGameRequest(requestString, type);
 };
 
 Socket.prototype.postGameRequest = function(requestString, type){
@@ -27,8 +23,15 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var message = data.target.response.split(";");
 									var board = JSON.parse(message);
 									socket.boardResponse = board.slice(',');
-									console.log(socket.boardResponse);
+									//console.log(socket.boardResponse);
 								};
+	else if(type == 'score')
+		request.onload = function(data){
+									var message = data.target.response.split(";");
+									var board = JSON.parse(message);
+									socket.scoreResponse = board.slice(',');
+									//console.log(socket.scoreResponse);
+								};							
 
 	request.onerror = function(){console.log("Error waiting for response");};
 

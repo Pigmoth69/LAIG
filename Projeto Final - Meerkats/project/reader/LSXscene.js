@@ -35,6 +35,8 @@ LSXscene.prototype.init = function (application) {
 
 	this.setPickEnabled(true);
 
+	this.scoreBoard = new MyScoreBoard(this, 'blueMarker');
+
 };
 
 
@@ -287,15 +289,29 @@ LSXscene.prototype.display = function () {
 	//limpa o conteudo do buffer
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.DEPTH_BUFFER_BIT | this.gl.COLOR_BUFFER_BIT);
+    this.gl.enable(this.gl.BLEND);
+ 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
     //recarrega a matriz de transformacoes da cena
 	this.updateProjectionMatrix();
 	this.loadIdentity();
-	this.applyViewMatrix();
 
 
 	if (this.LSXreader.loadedOk)
 	{
+		if(this.stateMachine.currentState == 'Gameplay')
+		{
+			this.pushMatrix();
+				this.translate(-2.5,2.1,-10);
+				this.rotate(Math.PI/6, 0, 1, 0);
+				this.rotate(Math.PI/30, 0, 0, 1);
+				this.scale(0.3, 0.3, 0.3);
+				this.scoreBoard.display();
+			this.popMatrix();
+		}
+
+		this.applyViewMatrix();
+
 		var currTime = new Date();
 		this.milliseconds = currTime.getTime() - this.startingTime.getTime();
 

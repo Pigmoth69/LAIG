@@ -18,10 +18,11 @@ serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parse
                './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
                './primitives/MyTriangle.js', './primitives/MyPlane.js', './primitives/MyPatch.js',
                './primitives/MyTerrain.js','./primitives/MyVehicle.js','./primitives/MyStone.js',
-               './primitives/MyBoard.js', './primitives/MyBoardTile.js','./primitives/MyDice.js',
+               './primitives/MyBoard.js', './primitives/MyBoardTile.js','./primitives/MyMarker.js',
                './utils/Coords.js','./primitives/MyBag.js','./primitives/MyQuad.js',
                './utils/CameraAnimation.js', './utils/StateMachine.js', './utils/Socket.js',
-               './utils/PlayMenu.js', './utils/Game.js', 
+               './utils/PlayMenu.js', './utils/Game.js', './primitives/MyPannel.js',
+               './primitives/MyScoreBoard.js',
 
 main=function()
 {

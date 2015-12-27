@@ -86,6 +86,10 @@
 			<file path="./textures/play.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
+		<TEXTURE id="char">
+			<file path="./textures/char.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 	</TEXTURES>
 	
 	<MATERIALS>
@@ -137,6 +141,34 @@
 			<diffuse r="0.4" g="0.8" b="0.1" a="1" />
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
+		<MATERIAL id="redMarker">                                  
+			<shininess value="120" />
+			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
+			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0.9" g="0.1" b="0.1" a="1" />
+		</MATERIAL>
+		<MATERIAL id="blueMarker">                                  
+			<shininess value="120" />
+			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
+			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0.2" g="0.6" b="0.9" a="1" />
+		</MATERIAL>
+		<MATERIAL id="yellowMarker">                                  
+			<shininess value="120" />
+			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
+			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0.9" g="0.9" b="0.05" a="1" />
+		</MATERIAL>
+		<MATERIAL id="greenMarker">                               
+			<shininess value="120" />                    
+			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
+			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0.4" g="0.8" b="0.1" a="1" />
 		</MATERIAL>
 		<MATERIAL id="orange">                                  
 			<shininess value="5" />

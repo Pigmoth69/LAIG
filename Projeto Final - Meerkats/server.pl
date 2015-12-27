@@ -134,31 +134,11 @@ validDragDownRight(Row, Col, Board, Register, FinalRegister):-
 	setInfo(NextRow, Col, 1, Register, Temp),
 	validDragDownRight(NextRow, Col, Board, Temp, FinalRegister).
 validDragDownRight(_, _, _, Register, Register).
-
-
 %---------------------------------------------	
-validDropPositions(Board, Result):-
-	validDropPositionsPL(Board, Result),
+checkScore(Board, Result):-
+	floodFill(Board, Result),
 	formatAsJSON([Result]).
 
-validDropPositionsPL([], []).
-validDropPositionsPL([0 | Tail], [0 | RTail]):-
-	validDropPositionsPL(Tail, RTail).
-validDropPositionsPL([Head | Tail], [RHead | RTail]):-
-	is_list(Head),
-	validDropPositionsPL(Head, RHead),
-	validDropPositionsPL(Tail, RTail).
-validDropPositionsPL([_ | Tail], [1 | RTail]):-
-	validDropPositionsPL(Tail, RTail).
 
-play(Player, Board, Play, NextPlayer, NewBoard, Message):-
-	% Game Logic
-	Board=[[_|A]|B], NewBoard=[[Play|A]|B],
-	next(Player, NextPlayer),
-	Message = "Move Validated",
-	formatAsJSON([NextPlayer, NewBoard, Message]).
-
-next(1,0).
-next(0,1).
 
 :- server(8081).

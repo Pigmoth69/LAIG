@@ -70,7 +70,7 @@ Interface.prototype.loadInterfacePlayers = function(){
 
 Interface.prototype.loadInterfaceGameFunctions = function(){
 	this.game = this.gui.addFolder('Game');
-    this.game.open();
+    this.game.close();
 
     var scene = this.scene;
 
@@ -83,7 +83,7 @@ Interface.prototype.loadInterfaceGameFunctions = function(){
 
 Interface.prototype.loadInterfaceGameCameras = function(){
 	this.camera = this.gui.addFolder('Cameras');
-    this.camera.open();
+    this.camera.close();
 
     var scene = this.scene;
 

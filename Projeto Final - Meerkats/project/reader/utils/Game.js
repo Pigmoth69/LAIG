@@ -10,6 +10,9 @@ function Game(scene) {
 	this.pickedBoardTile = null;
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
+	this.score = [0, 0, 0, 0];
+	this.validDragPositions = false;
+	this.updateScore = false;
 };
 
 
@@ -36,6 +39,11 @@ Game.prototype.picking = function(obj){
 };
 
 Game.prototype.handler = function(){
+	if(this.animation)
+	{
+		this.pickedStone.movementAnimation();
+	}
+
 	if(this.validDragPositions && this.scene.socket.boardResponse != null)
 	{
 		this.board.highlightDragPositions(this.scene.socket.boardResponse);
@@ -43,10 +51,14 @@ Game.prototype.handler = function(){
 		this.scene.socket.boardResponse = null;
 	}
 
-	if(this.animation)
+	if(this.updateScore && this.scene.socket.scoreResponse != null)
 	{
-		this.pickedStone.movementAnimation();
+		this.updateGameScore();
+		this.updateScore = false;
+		this.scene.socket.scoreResponse = null;
+		console.log(this.score);
 	}
+
 
 };
 
@@ -116,7 +128,7 @@ Game.prototype.pickingStone = function(obj){
 };
 
 Game.prototype.pickingTile = function(obj){
-	if(this.pickedStone != null && obj[0].info == 0 && obj[0].highlight)
+	if(this.pickedStone != null && obj[0].highlight)
 	{
 		if(this.roundMove == 'drag')
 			this.pickedStone.tile.info = 0;
@@ -132,5 +144,61 @@ Game.prototype.pickingTile = function(obj){
 			else this.roundMove = 'drag';
 		else if(this.roundMove == 'drag')
 			this.roundMove = 'pass';
+
+		this.updateScore = true;
+		var stringBoard = this.scene.socket.processBoardToString();
+		var requestString = "[checkScore," + stringBoard + ",_Result]";
+		this.scene.socket.sendRequest(requestString, 'score');
+	}
+};
+
+Game.prototype.updateGameScore = function(){
+	var max = 0;
+	if(this.scene.socket.scoreResponse[0][1].length > 0)
+	{
+		max = Math.max.apply(null, this.scene.socket.scoreResponse[0][1]);
+		this.score[0] = max;
+
+		if(max > 9)
+			this.scene.scoreBoard.blueMarker.first = 1;
+		else this.scene.scoreBoard.blueMarker.first = 0;
+
+		this.scene.scoreBoard.blueMarker.second = max % 10;
+	}
+
+	if(this.scene.socket.scoreResponse[1][1].length > 0)
+	{
+		max = Math.max.apply(null, this.scene.socket.scoreResponse[1][1]);
+		this.score[1] = max;
+
+		if(max > 9)
+			this.scene.scoreBoard.redMarker.first = 1;
+		else this.scene.scoreBoard.redMarker.first = 0;
+
+		this.scene.scoreBoard.redMarker.second = max % 10;
+	}
+
+	if(this.scene.socket.scoreResponse[2][1].length > 0)
+	{
+		max = Math.max.apply(null, this.scene.socket.scoreResponse[2][1]);
+		this.score[2] = max;
+
+		if(max > 9)
+			this.scene.scoreBoard.greenMarker.first = 1;
+		else this.scene.scoreBoard.greenMarker.first = 0;
+
+		this.scene.scoreBoard.greenMarker.second = max % 10;
+	}
+
+	if(this.scene.socket.scoreResponse[3][1].length > 0)
+	{
+		max = Math.max.apply(null, this.scene.socket.scoreResponse[3][1]);
+		this.score[3] = max;
+
+		if(max > 9)
+			this.scene.scoreBoard.yellowMarker.first = 1;
+		else this.scene.scoreBoard.yellowMarker.first = 0;
+
+		this.scene.scoreBoard.yellowMarker.second = max % 10;
 	}
 };
