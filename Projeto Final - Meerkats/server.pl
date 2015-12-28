@@ -140,9 +140,7 @@ checkScore(Board, Result):-
 	formatAsJSON([Result]).
 %---------------------------------------------
 checkWinner(Board, Result):-
-	winner(Board, Result, _);
-	formatAsJSON(Result).
-
-
+	winner(Board, Result, _),
+	formatAsJSON([Result]).
 
 :- server(8081).

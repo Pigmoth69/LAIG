@@ -541,10 +541,10 @@ logicalBoard([
 	      [1, 1, 0, 1, 0, 0, 0],
 	   [0, 0, 0, 0, 1, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 2, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	      [0, 0, 0, 2, 2, 0, 0],
-	         [0, 0, 0, 0, 0, 0],
-	            [2, 2, 2, 2, 0]
+	   [0, 0, 0, 0, 0, 0, 2, 0],
+	      [0, 0, 0, 2, 2, 2, 2],
+	         [0, 0, 2, 2, 2, 2],
+	            [2, 2, 2, 2, 2] 
 	]).
 
 displayBoard([
@@ -611,7 +611,7 @@ printTopBorder:- write('           ---------------------').
 %------------------------------------%
 
 winner(L, W, A):-
-				floodFill(L, R), nl,
+				floodFill(L, R),
 				calculateWinner(R, W, A).
 
 winner(_, [0], 0).
@@ -623,13 +623,11 @@ calculateWinner(Result, Winner, AreaResult):-	getMainGroups(Result, 16, Winner, 
 
 getMainGroups(Result, MaxValue, ColorResult, Area):- 	findMaxAreaValue(Result, MaxValue, AreaResult),	%retorna o valor da maior area ate MaxValue unidades
 												getCorrespondentTeam(Result, _, AreaResult, X), %retorna lista com as cores com areas da dimensao de AreaResult
-												%nl, nl, write(MaxValue), nl, write(Area), nl, write(FinalResult), nl, write(X), nl, nl,
 												length(X, Length),
-												%write(Length),
 												(
-													Length > 1 -> write('1'),NewMax is AreaResult, getMainGroups(Result, NewMax, ColorResult, Area);
-													Length == 1 ->  write('1'),append([], X, ColorResult), Area is AreaResult;
-													Length == 0 ->  write('1'),append([], [], ColorResult), Area is AreaResult
+													Length > 1 -> NewMax is AreaResult, getMainGroups(Result, NewMax, ColorResult, Area);
+													Length == 1 ->  append([], X, ColorResult), Area is AreaResult;
+													Length == 0 ->  append([], [], ColorResult), Area is AreaResult
 												). 
 												
 
@@ -654,7 +652,7 @@ getCorrespondentTeam([], [], _, []).
 getCorrespondentTeam([Head | Tail] , [Head | FinalResult], AreaResult, [Color | ColorResult]):- checkMember(AreaResult, Head, Color), !, 
 																								getCorrespondentTeam(Tail, FinalResult, AreaResult, ColorResult), !.
 
-getCorrespondentTeam([[Color | [_]] | Tail] , [[Color | [[]]] | FinalResult], AreaResult, ColorResult):- 	getCorrespondentTeam(Tail, FinalResult, AreaResult, ColorResult), !.
+getCorrespondentTeam([[Color | [_]] | Tail] , [[Color | [[]]] | FinalResult], AreaResult, ColorResult):- getCorrespondentTeam(Tail, FinalResult, AreaResult, ColorResult), !.
 
 checkMember(Value, [Result | [Tail | _]], Result):- member(Value, Tail).
 

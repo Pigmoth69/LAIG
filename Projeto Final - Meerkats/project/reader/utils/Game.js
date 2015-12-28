@@ -7,7 +7,7 @@ function Game(scene) {
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
 	this.score = [0, 0, 0, 0];
-	this.endGame = false;
+	this.winner = null;
 
 	this.animation = false;
 	this.updateScore = false;
@@ -48,6 +48,32 @@ Game.prototype.picking = function(obj){
  */
 Game.prototype.handler = function(){
 
+	if(this.endGame && this.winner != null)
+	{
+		this.scene.stateMachine.currentState = 'EndScreen';
+		var endScreenTexture = 'draw';
+
+		switch(this.winner)
+		{
+			case 1: 
+				endScreenTexture = 'blueWon';
+				break;
+			case 2:
+				endScreenTexture = 'redWon';
+				break;
+			case 3:
+				endScreenTexture = 'greenWon';
+				break;
+			case 4:
+				endScreenTexture = 'yellowWon';
+				break;
+			default: break;
+		}
+
+		this.scene.stateMachine.endScreen = new MyScreen(this.scene, endScreenTexture);
+		winner = null;
+	}
+
 	//recolhe a informaçao relativa a cores sorteadas para cada jogador
 	if(this.scene.socket.colorsResponse != null){
 		this.generatePlayersList();
@@ -74,18 +100,24 @@ Game.prototype.handler = function(){
 	}
 
 	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
-	if(this.roundNumber >= 15 && this.roundNumber <= 60){
+	if(this.roundNumber >= 3 && this.roundNumber <= 60){
 
 		//primeira condiçao de vitoria: um grupo de cores tiver dimensao de 15
-		var groupOf15 = this.score.indexOf(15);
-		if(groupOf15 != -1 && this.colorAssigned(groupOf15))
+		var groupOf15 = this.score.indexOf(3);
+		if(groupOf15 != -1 && this.colorAssigned(groupOf15 + 1))
 		{
 			console.log('alguem ganhou');
-			this.endGame = true;
+			this.roundNumber = 61;
 		}
 	}
-	else if(this.roundNumber == 61)
-			this.endGame = true;
+	
+	if(this.roundNumber == 61 && !this.endGame && !this.animation)
+	{
+		var stringBoard = this.scene.socket.processBoardToString();
+		var requestString = "[checkWinner," + stringBoard + ",_Result]";
+		this.scene.socket.sendRequest(requestString, 'winner');
+		this.endGame = true;
+	}
 };
 
 
@@ -110,7 +142,6 @@ Game.prototype.generatePlayersList = function(){
 
 	this.scene.socket.colorsResponse = null;
 	console.log(this.players);
-	console.log(this.colorAssigned(1));
 };
 
 

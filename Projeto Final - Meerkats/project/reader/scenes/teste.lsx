@@ -87,7 +87,6 @@
 			<file path="./textures/play.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-
 		<TEXTURE id="char">
 			<file path="./textures/char.png" /> 
 			<amplif_factor s="1" t="1" /> 
@@ -96,12 +95,10 @@
 			<file path="./textures/numbers.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-
 		<TEXTURE id="space">
 			<file path="./textures/space.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-
 		<TEXTURE id="engine">
 			<file path="./textures/engine.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
@@ -130,6 +127,26 @@
 			<file path="./textures/landscape.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
+		<TEXTURE id="blueWon">
+			<file path="./textures/blueWon.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="redWon">
+			<file path="./textures/redWon.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="greenWon">
+			<file path="./textures/greenWon.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="yellowWon">
+			<file path="./textures/yellowWon.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="draw">
+			<file path="./textures/draw.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 	</TEXTURES>
 	
 	<MATERIALS>
@@ -146,6 +163,13 @@
 			<diffuse r="0.9" g="0.9" b="0.9" a="1" />
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
+		</MATERIAL>
+		<MATERIAL id="endScreen">                                  
+			<shininess value="5" />
+			<specular r="0" g="0" b="0" a="1" /> 
+			<diffuse r="0.5" g="0.5" b="0.5" a="1" />
+			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<emission r="0.5" g="0.5" b="0.5" a="1" /> 
 		</MATERIAL>
 		<MATERIAL id="red">                                  
 			<shininess value="5" />

@@ -303,13 +303,20 @@ LSXscene.prototype.display = function () {
 
 	if (this.LSXreader.loadedOk)
 	{
-		if(this.stateMachine.currentState == 'Gameplay')
+		if (this.stateMachine.currentState == 'EndScreen')
 		{
 			this.pushMatrix();
 				this.translate(-2.5,2.1,-10);
+				this.stateMachine.endScreen.display();
+			this.popMatrix();
+		}
+		else if (this.stateMachine.currentState == 'Gameplay')
+		{
+			this.pushMatrix();
+				this.translate(-2.5,2.5,-10);
 				this.rotate(Math.PI/6, 0, 1, 0);
 				this.rotate(Math.PI/30, 0, 0, 1);
-				this.scale(0.3, 0.3, 0.3);
+				this.scale(0.5, 0.5, 0.5);
 				this.scoreBoard.display();
 			this.popMatrix();
 		}
