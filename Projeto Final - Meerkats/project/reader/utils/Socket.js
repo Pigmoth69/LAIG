@@ -2,7 +2,8 @@ function Socket(scene) {
 	this.scene = scene;
 	this.boardResponse = null;
 	this.scoreResponse = null;
-	this.colorsResponse = null;
+	this.colorsResponse = null;	
+	this.winnerResponse = null;
 };
 
 var validPositions = null;
@@ -18,6 +19,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 	var request = new XMLHttpRequest();
 	request.open('POST', '../../game', true);
 	var socket = this;
+
 	if(type == 'board')
 		request.onload = function(data){
 									var message = data.target.response.split(";");
@@ -37,13 +39,23 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var message = data.target.response.split(";");
 									var array = JSON.parse(message);
 									socket.colorsResponse = array.slice(',');
-									console.log(socket.colorsResponse);
-								};						
+									//console.log(socket.colorsResponse);
+								};
+	else if(type == 'winner')
+		request.onload = function(data){
+									var message = data.target.response.split(";");
+									var array = JSON.parse(message);
+									socket.winnerResponse = array.slice(',');
+
+									if(socket.winnerResponse.length == 0)
+										socket.scene.stateMachine.game.winner = 0;
+									else socket.scene.stateMachine.game.winner = socket.winnerResponse[0];
+								};					
 
 	request.onerror = function(){console.log("Error waiting for response");};
 
 	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-	request.send('requestString='+encodeURIComponent(requestString));			
+	request.send('requestString='+encodeURIComponent(requestString));		
 };
 
 Socket.prototype.handleReply = function(data){

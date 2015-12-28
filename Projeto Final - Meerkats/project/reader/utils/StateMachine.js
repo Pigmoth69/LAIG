@@ -4,6 +4,7 @@ function StateMachine(scene) {
 	this.game = new Game(this.scene);
 	this.currentState = 'Main Menu';
 	this.currentScenario = null;
+	this.endScreen = null;
 };
 
 
@@ -42,6 +43,10 @@ StateMachine.prototype.displayHandler = function(){
 			this.game.handler();
 			this.game.display();
 			break;
+		case 'EndScreen':
+			//this.scene.interface.close();
+			this.game.display();
+			//this.endScreen.display();
 		default: break;
 
 	}

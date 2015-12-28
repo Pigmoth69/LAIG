@@ -138,7 +138,9 @@ validDragDownRight(_, _, _, Register, Register).
 checkScore(Board, Result):-
 	floodFill(Board, Result),
 	formatAsJSON([Result]).
-
-
+%---------------------------------------------
+checkWinner(Board, Result):-
+	winner(Board, Result, _),
+	formatAsJSON([Result]).
 
 :- server(8081).

@@ -84,19 +84,7 @@ LSXscene.prototype.onGraphLoaded = function () {
 LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfaceLigths();
   	var scene = this;
-  	this.graph.gameStatus['PASS TURN']=function(){
-  		if(scene.stateMachine.game.roundMove == 'pass' && scene.stateMachine.game.pickedStone == null)
-  		{
-  			scene.stateMachine.game.roundNumber++;
-			scene.stateMachine.game.roundMove = 'drop';
-			scene.stateMachine.game.undoRegister = [];
-			scene.stateMachine.game.pickedStone = null;
-			scene.stateMachine.game.animation = false;
-			scene.stateMachine.game.playedStone = null;
-			scene.stateMachine.game.pickedBoardTile = null;	
-			scene.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/scene.stateMachine.game.players.length);
-	 	} 		
-  	}
+  	this.graph.gameStatus['PASS TURN'] = function() { scene.stateMachine.game.passTurn(); };
 
   	this.graph.gameStatus['UNDO']=function(){
   			if(!scene.stateMachine.game.animation){
@@ -315,13 +303,20 @@ LSXscene.prototype.display = function () {
 
 	if (this.LSXreader.loadedOk)
 	{
-		if(this.stateMachine.currentState == 'Gameplay')
+		if (this.stateMachine.currentState == 'EndScreen')
 		{
 			this.pushMatrix();
 				this.translate(-2.5,2.1,-10);
+				this.stateMachine.endScreen.display();
+			this.popMatrix();
+		}
+		else if (this.stateMachine.currentState == 'Gameplay')
+		{
+			this.pushMatrix();
+				this.translate(-2.5,2.5,-10);
 				this.rotate(Math.PI/6, 0, 1, 0);
 				this.rotate(Math.PI/30, 0, 0, 1);
-				this.scale(0.3, 0.3, 0.3);
+				this.scale(0.5, 0.5, 0.5);
 				this.scoreBoard.display();
 			this.popMatrix();
 		}

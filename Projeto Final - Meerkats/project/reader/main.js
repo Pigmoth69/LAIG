@@ -23,6 +23,7 @@ serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parse
                './utils/CameraAnimation.js', './utils/StateMachine.js', './utils/Socket.js',
                './utils/PlayMenu.js', './utils/Game.js', './primitives/MyPannel.js',
                './primitives/MyScoreBoard.js', './utils/PlayMenu.js', './utils/Game.js', './primitives/MyInvertedSphere.js',
+               './primitives/MyScreen.js',
 
 main=function()
 {
