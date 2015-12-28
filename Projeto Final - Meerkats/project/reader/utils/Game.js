@@ -7,6 +7,7 @@ function Game(scene) {
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
 	this.score = [0, 0, 0, 0];
+	this.endGame = false;
 
 	this.animation = false;
 	this.updateScore = false;
@@ -40,16 +41,23 @@ Game.prototype.picking = function(obj){
 
 };
 
+
+
+/** Controla as principais açoes durante a excuçao do jogo
+ *
+ */
 Game.prototype.handler = function(){
+
+	//recolhe a informaçao relativa a cores sorteadas para cada jogador
 	if(this.scene.socket.colorsResponse != null){
 		this.generatePlayersList();
 	}
 
+	//executa a animacao da peça a ser movimentada
 	if(this.animation)
-	{
 		this.pickedStone.movementAnimation();
-	}
 
+	//se o socket contiver informação respetiva ao arrasto de uma peçça, o tabuleiro é alterado
 	if(this.validDragPositions && this.scene.socket.boardResponse != null)
 	{
 		this.board.highlightDragPositions(this.scene.socket.boardResponse);
@@ -57,6 +65,7 @@ Game.prototype.handler = function(){
 		this.scene.socket.boardResponse = null;
 	}
 
+	//se o socket contiver informaçao respetiva a novos valores de score, o array de scores é atualizado
 	if(this.updateScore && this.scene.socket.scoreResponse != null)
 	{
 		this.updateGameScore();
@@ -64,15 +73,23 @@ Game.prototype.handler = function(){
 		this.scene.socket.scoreResponse = null;
 	}
 
-	if(this.roundNumber >= 16 && this.roundNumber <= 60){
-		if(this.score.indexOf(15) != -1)
+	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
+	if(this.roundNumber >= 15 && this.roundNumber <= 60){
+
+		//primeira condiçao de vitoria: um grupo de cores tiver dimensao de 15
+		var groupOf15 = this.score.indexOf(15);
+		if(groupOf15 != -1 && this.colorAssigned(groupOf15))
+		{
 			console.log('alguem ganhou');
-
+			this.endGame = true;
+		}
 	}
-	else if(this.roundNumber == 61){
-
-	}
+	else if(this.roundNumber == 61)
+			this.endGame = true;
 };
+
+
+
 
 Game.prototype.generatePlayersList = function(){
 	var totalPlayers = this.scene.Humans + this.scene.Bots;
@@ -93,6 +110,7 @@ Game.prototype.generatePlayersList = function(){
 
 	this.scene.socket.colorsResponse = null;
 	console.log(this.players);
+	console.log(this.colorAssigned(1));
 };
 
 
@@ -115,7 +133,7 @@ Game.prototype.dropStone = function(tile){
 	}
 
 	this.pickedStone.standByAnimationHeight = 0;
-	this.pickedStone.standByAnimationVelocity = 0.13;
+	this.pickedStone.standByAnimationVelocity = 0.17;
 	this.pickedStone.picked = false;
 	this.pickedStone.dropStone(tile.position);
 	this.board.validDropPositions = false;
@@ -130,7 +148,7 @@ Game.prototype.pickingStone = function(obj){
 		if(this.pickedStone.id && obj[0].id) 
 		{
 			this.pickedStone.standByAnimationHeight = 0;
-			this.pickedStone.standByAnimationVelocity = 0.13;
+			this.pickedStone.standByAnimationVelocity = 0.17;
 			this.pickedStone.picked = false;
 			this.pickedStone = null;
 			this.board.resetHighlight();
@@ -285,7 +303,7 @@ Game.prototype.processUNDO = function(){
 
 		this.undoRegister['drop']['stone'].tile = null;
 		this.undoRegister['drop']['stone'].standByAnimationHeight = 0;
-		this.undoRegister['drop']['stone'].standByAnimationVelocity = 0.13;
+		this.undoRegister['drop']['stone'].standByAnimationVelocity = 0.17;
 		this.animation = true;
 		this.pickedStone = this.undoRegister['drop']['stone'];
 		this.undoRegister['drop']['stone'].dropStone(this.undoRegister['drop']['initialPosition']);
@@ -315,7 +333,7 @@ Game.prototype.processUNDO = function(){
 		this.undoRegister['drag']['stone'].tile.info = 0;
 		this.undoRegister['drag']['stone'].tile = this.undoRegister['drag']['tile'];
 		this.undoRegister['drag']['stone'].standByAnimationHeight = 0;
-		this.undoRegister['drag']['stone'].standByAnimationVelocity = 0.13;
+		this.undoRegister['drag']['stone'].standByAnimationVelocity = 0.17;
 		this.animation = true;
 		this.pickedStone = this.undoRegister['drag']['stone'];
 		this.undoRegister['drag']['stone'].dropStone(this.undoRegister['drag']['initialPosition']);
@@ -340,4 +358,25 @@ Game.prototype.processUNDO = function(){
 };
 
 
+Game.prototype.colorAssigned = function(color){
+	for(var i = 0; i < this.players.length; i++)
+		if(this.players[i][1] == color)
+			return true;
 
+	return false;
+}
+
+
+Game.prototype.passTurn = function(){
+	if(this.roundMove == 'pass' && this.pickedStone == null)
+  		{
+  			this.roundNumber++;
+			this.roundMove = 'drop';
+			this.undoRegister = [];
+			this.pickedStone = null;
+			this.animation = false;
+			this.playedStone = null;
+			this.pickedBoardTile = null;	
+			this.scene.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+	 	} 		
+}

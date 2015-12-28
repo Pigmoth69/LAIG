@@ -15,13 +15,11 @@ withdrawStoneBOT(Stones,RemainingStones,StoneColor):-
 									withdrawStoneBOT(Stones,RemainingStones,StoneColor).
 
 getWinningOnDropBOT(_,_,FinalBoard,_,Players,_,_,2,ID,_,_):-
-											write('caralho1'),
 											winner(FinalBoard, [H|_], 15),
 											getPlayer(Players,H,ID),
 											ID \= 0.
 
 getWinningOnDropBOT(_,RemainingStones1,FinalBoard,_,Players,_,_,2,ID,_,_):-
-			write('caralho2'),
 			getStoneNumber(RemainingStones1,red,Number1),
 			getStoneNumber(RemainingStones1,green,Number2),
 			getStoneNumber(RemainingStones1,blue,Number3),
@@ -34,11 +32,10 @@ getWinningOnDropBOT(_,RemainingStones1,FinalBoard,_,Players,_,_,2,ID,_,_):-
 			drawBoard(B,FinalBoard),
 			getPlayer(Players,H,ID).
 											
-												
 getWinningOnDropBOT(Board,RemainingStones1,FinalBoard,Tail,Players,ResultBoard,RemainingStones,2,Winner,RowIdentifier,RowPos):-		
 												drawBoard(Board, FinalBoard),
-												dragStoneBOT(FinalBoard,RowIdentifier,RowPos,FinalBoard1), 
-												getWinningOnDrag(Board,RemainingStones1,FinalBoard1,Tail,Players,ResultBoard,RemainingStones,2,Winner,RowIdentifier,RowPos).													
+												dragStoneBOT(FinalBoard,RowIdentifier,RowPos,FinalBoard1), !, 
+												getWinningOnDrag(Board,RemainingStones1,FinalBoard1,Tail,Players,ResultBoard,RemainingStones,2,Winner,RowIdentifier,RowPos), !.			
 
 
 dragStoneBOT(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard):-
@@ -46,44 +43,23 @@ dragStoneBOT(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard):-
 										random(1, 7, Direction), 
 										random(1, 5, NumberCells),
 										checkDrag(LogicalBoard,Initial1,Initial2,Direction,NumberCells,Final1,Final2),
-										getInfo(Initial1,Initial2,Stone,LogicalBoard),
-										setInfo(Initial1,Initial2,empty,LogicalBoard,Res),
-										setInfo(Final1,Final2,Stone,Res,ResultBoard);
-										dragStoneBOT(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard).
+										getInfo(Initial1,Initial2,Stone,LogicalBoard),setInfo(Initial1,Initial2,empty,LogicalBoard,Res),setInfo(Final1,Final2,Stone,Res,ResultBoard).
+
+
+dragStoneBOT(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard):-
+										dragStoneBOT(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard), !.	
 
 
 displayGetNumberCellsBOT(NumberCells):-	write('Insert the number of cells you want to drag your stone: '), random(1,10,NumberCells).					
 
 getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):- 
-					getNotEqualCoordsBOT(PlayedStoneCoord1,PlayedStoneCoord2,Temp1,Temp2),
-					getInfo(Temp1,Temp2,Info,Board),
-					atom(Info),
-					Info \= empty -> Row is Temp1,Pos is Temp2;			
-					getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos).
+					getNotEqualCoordsBOT(PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos),
+					getInfo(Row,Pos,Info,Board),
+					Info \= empty.
+getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):-
+					getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos),!.
 					
-notEqual(Initial1,Initial2,Final1,Final2):-
-										Num1 is Initial1-Final1,
-										Num2 is Initial2-Final2,
-										Num1 + Num2 =\=0.
 					
-
-makeTest():-
-			logicalBoardTest(LogicalBoard),
-			displayBoard(Board),
-			drawBoard(Board,LogicalBoard),
-			getStoneCellBOT(LogicalBoard,4,4,X,Y),
-			write('X: '),write(X),nl,
-			write('Y: '),write(Y),nl.
-			
-makeTest2():-
-			logicalBoardTest(LogicalBoard),
-			getInfo(4,2,Info,LogicalBoard),
-			write(Info).
-			
-			
-			
-			
-			
 %getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):-
 %					getColorCells(Board,1, 1, ResultBlues, blue),
 %					getColorCells(Board,1, 1, ResultReds, red),
@@ -97,9 +73,11 @@ makeTest2():-
 				
 getNotEqualCoordsBOT(Initial1,Initial2,ResCoord1,ResCoord2):-
 											getValidCoordsBOT(C1,C2),
-											notEqual(Initial1,Initial2,C1,C2)-> ResCoord1 is C1,ResCoord2 is C2;
+											compCoords(Initial1,Initial2,C1,C2,M),
+											M == notEqual ->ResCoord1 is C1,ResCoord2 is C2;
+											write('Cant move the stone you just played!'),nl,
 											getNotEqualCoordsBOT(Initial1,Initial2,ResCoord1,ResCoord2).
-										
+											
 					
 					
 	

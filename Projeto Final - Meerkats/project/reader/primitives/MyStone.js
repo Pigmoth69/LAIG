@@ -12,7 +12,7 @@ function MyStone(scene, id, colorMaterial, position) {
 	this.tile = null;
 	this.picked = false;
 
-	this.standByAnimationVelocity = 0.13;
+	this.standByAnimationVelocity = 0.17;
 	this.standByAnimationOrientation = 'up';
 	this.standByAnimationHeight = 0;
 
@@ -115,12 +115,12 @@ MyStone.prototype.dropStone = function(destination){
 	this.dropAnimationVector = vec3.create();
 	vec3.sub(this.dropAnimationVector, this.dropAnimationInitial, this.dropAnimationCenter);
 
-	this.dropAnimationTimer = this.scene.milliseconds + 1500;
+	this.dropAnimationTimer = this.scene.milliseconds + 800;
 
 };
 
 MyStone.prototype.movementAnimation = function(){
-	var fraction = Math.cos(((this.dropAnimationTimer-this.scene.milliseconds)/1500) * Math.PI);
+	var fraction = Math.cos(((this.dropAnimationTimer-this.scene.milliseconds)/800) * Math.PI);
 	var inc = vec3.create();
 	vec3.scale(inc, this.dropAnimationVector, fraction);
 	if(this.scene.milliseconds >= this.dropAnimationTimer)

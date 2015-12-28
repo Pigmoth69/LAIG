@@ -1,4 +1,5 @@
-availableColors([blue, red, green, yellow]).
+%availableColors(['blue', 'red', 'green', 'yellow']).
+availableColors([1, 2, 3, 4]).
 availableStones([[15|blue],[15|red],[15|green],[15|yellow]]).
 playerInfo([]).
 
@@ -48,9 +49,7 @@ assignPlayerColor(0,Colors,_,[],Colors).
 
 assignPlayerColor(NumberPlayers, Colors, N, [[N| [Color | []]] | ResultInfo], ResultColors):-
 										N =< NumberPlayers,
-										playerReadyForColorAssignment(N),
 										sortPlayerColor(N, Colors, [N | [Color | []]] , RemainingColors),
-										playerColorScreen(N, Color),
 										N1 is N + 1,
 										assignPlayerColor(NumberPlayers, RemainingColors, N1, ResultInfo, ResultColors).			
 
@@ -146,8 +145,7 @@ startPlaying(Board,Stones,LogicalBoard,Players,Winner,Round):-
 		WinningPlayer == 7 -> Winner is 7;
 		WinningPlayer == 8 -> Winner is 8;
 
-		
-		startPlaying(Board,RemainingStones,ResultBoard,Players,Winner,2)
+		startPlaying(Board,RemainingStones,ResultBoard,Players,Winner,2), !
 	).
 	
 getPlayer([],_,0).
@@ -175,16 +173,21 @@ playRound(_,_,LogicalBoard,[],_,LogicalBoard,_,_,Winner):- nonvar(Winner),(
 																),!.
 		
 playRound(_,Stones,LogicalBoard,[],_,LogicalBoard,Stones,_,_).
-
+/*
+playRound(_,Stones,LogicalBoard,[],_,LogicalBoard,Stones, _,2). 
+playRound(_,Stones,LogicalBoard,[],_,LogicalBoard,Stones, _,3). 
+playRound(_,Stones,LogicalBoard,[],_,LogicalBoard,Stones, _,4).
+playRound(_,Stones,LogicalBoard,[],_,LogicalBoard,Stones, _,_).
+ */
 playRound(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,1,Winner):-	
 											drawBoard(Board, LogicalBoard),
-											format('It is Player ~d turn1!', [H]), nl,
+											format('It is Player ~d turn!', [H]), nl,
 											makePlay(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,1,Winner), !.		
 
 playRound(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,2,Winner):-	
 											drawBoard(Board, LogicalBoard),
-											format('It is Player ~d turn2!', [H]), nl,
-											makePlay(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,2,Winner).
+											format('It is Player ~d turn!', [H]), nl,
+											makePlay(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,2,Winner), !.
 
 
 
@@ -192,7 +195,7 @@ playRound(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingSt
 
 /*Falta a play bot! só com players já funcemina! :D*/
 makePlay(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,N,Winner):-
-		H > 4,write('bot '),write(N),
+		H > 4,
 		playBot(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,N,Winner), !.
 
 makePlay(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,N,Winner):-
@@ -216,14 +219,12 @@ playHuman(Board,Stones,LogicalBoard,[_|Tail],Players,ResultBoard,RemainingStones
 											getWinningOnDrop(Board,RemainingStones1,ResultBoard1,Tail,Players,ResultBoard,RemainingStones,2,Winner,RowIdentifier,RowPos),!.
 																					 						
 playBot(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,1,Winner):-
-											write('playbot1'),
 											dropStoneBOT(H,LogicalBoard,Stones,RemainingStones1,_,_,ResultBoard1),
-											playRound(Board,RemainingStones1,ResultBoard1,Tail,Players,ResultBoard,RemainingStones, 2,Winner).
+											playRound(Board,RemainingStones1,ResultBoard1,Tail,Players,ResultBoard,RemainingStones, 2,Winner),!.
 
 playBot(Board,Stones,LogicalBoard,[[H|_]|Tail],Players,ResultBoard,RemainingStones,2,Winner):-
-											write('playbot2'),
 											dropStoneBOT(H,LogicalBoard,Stones,RemainingStones1,RowIdentifier,RowPos,ResultBoard1),
-											getWinningOnDropBOT(Board,RemainingStones1,ResultBoard1,Tail,Players,ResultBoard,RemainingStones,2,Winner,RowIdentifier,RowPos).										
+											getWinningOnDropBOT(Board,RemainingStones1,ResultBoard1,Tail,Players,ResultBoard,RemainingStones,2,Winner,RowIdentifier,RowPos),!.											
 
 
 
@@ -235,25 +236,6 @@ dropStone(LogicalBoard,Stones,RemainingStones1,RowIdentifier,RowPos,ResultBoard1
 			getEmptyCell(LogicalBoard,RowIdentifier,RowPos),
 			setInfo(RowIdentifier,RowPos,ChoosedStone,LogicalBoard,ResultBoard1).
 
-
-
-	/*		
-checkWinner(_,FinalBoard,Players,ID):-
-			write('entrei1'),nl,
-			winner(FinalBoard, [H|_], 15),
-			getPlayer(Players,H,ID),
-			ID \= 0.*/
-			
-checkWinner(RemainingStones1,FinalBoard,Players,ID):-
-			write('entrei2'),nl,
-			getStoneNumber(RemainingStones1,red,Number1),
-			getStoneNumber(RemainingStones1,green,Number2),
-			getStoneNumber(RemainingStones1,blue,Number3),
-			getStoneNumber(RemainingStones1,yellow,Number4),
-			Number is Number1 + Number2 + Number3 + Number4,
-			Number == 0 -> winner(FinalBoard, [H|_], _),getPlayer(Players,H,ID);
-			write('falhou').
-			
 
 
 getWinningOnDrop(_,_,FinalBoard,_,Players,_,_,2,ID,_,_):-
@@ -285,8 +267,8 @@ getWinningOnDrag(_,_,FinalBoard,_,Players,_,_,2,ID,_,_):-
 			getPlayer(Players,H,ID),
 			ID \= 0.
 
-getWinningOnDrag(Board,RemainingStones1,FinalBoard,Tail,Players,ResultBoard,RemainingStones,2,Winner,_,_):- 
-			playRound(Board,RemainingStones1,FinalBoard,Tail,Players,ResultBoard,RemainingStones,2,Winner).
+getWinningOnDrag(Board,RemainingStones1,FinalBoard,Tail,Players,ResultBoard,RemainingStones,2,Winner,_,_):-
+			playRound(Board,RemainingStones1,FinalBoard,Tail,Players,ResultBoard,RemainingStones,2,Winner), !.
 
 					
 									
@@ -442,9 +424,7 @@ dragStone(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard):-
 										getStoneCell(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,Initial1,Initial2),
 										displayDirectionsList(Direction, NumberCells),
 										checkDrag(LogicalBoard,Initial1,Initial2,Direction,NumberCells,Final1,Final2),
-										getInfo(Initial1,Initial2,Stone,LogicalBoard),
-										setInfo(Initial1,Initial2,empty,LogicalBoard,Res),
-										setInfo(Final1,Final2,Stone,Res,ResultBoard);
+										getInfo(Initial1,Initial2,Stone,LogicalBoard),setInfo(Initial1,Initial2,empty,LogicalBoard,Res),setInfo(Final1,Final2,Stone,Res,ResultBoard);
 										dragStone(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard).
 	
 /********************************************************/
@@ -556,38 +536,15 @@ getNotEqualCoords(Initial1,Initial2,ResCoord1,ResCoord2):-
 
 
 logicalBoard([
-	            [0, 0, 0, 0, 0],
+	            [1, 0, 0, 0, 0],
+	         [1, 0, 0, 0, 0, 0],
+	      [1, 1, 0, 1, 0, 0, 0],
+	   [0, 0, 0, 0, 1, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 2, 0],
+	   [0, 0, 0, 0, 0, 0, 0, 0],
+	      [0, 0, 0, 2, 2, 0, 0],
 	         [0, 0, 0, 0, 0, 0],
-	      [0, 0, 0, 0, 0, 0, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	      [0, 0, 0, 0, 0, 0, 0],
-	         [0, 0, 0, 0, 1, 0],
-	            [0, 0, 0, 0, 0]
-
-	            [empty, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	[empty, empty, empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	            [empty, empty, empty, empty, empty]
-	]).
-	
-logicalBoardTest([
-	            [blue, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, red, green, empty, yellow, empty],
-	[empty, empty, empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	         [empty, empty, blue, empty, empty, empty],
-	            [empty, empty, empty, empty, empty]
->>>>>>> 674678cdbba6426a693d55afa702f26d6d59bd96
+	            [2, 2, 2, 2, 0]
 	]).
 
 displayBoard([
@@ -657,20 +614,22 @@ winner(L, W, A):-
 				floodFill(L, R), nl,
 				calculateWinner(R, W, A).
 
-winner(_, 0, 0).
+winner(_, [0], 0).
 
-calculateWinner(Result, Winner, AreaResult):-	getMainGroups(Result, 16, [Winner|_], AreaResult), !.
-
-
+calculateWinner(Result, Winner, AreaResult):-	getMainGroups(Result, 16, Winner, AreaResult), !.
 
 
-getMainGroups(Result, MaxValue, ColorResult, AreaResult):- 	findMaxAreaValue(Result, MaxValue, AreaResult),	%retorna o valor da maior area ate MaxValue unidades
-												getCorrespondentTeam(Result, FinalResult, AreaResult, X), %retorna lista com as cores com areas da dimensao de AreaResult
+
+
+getMainGroups(Result, MaxValue, ColorResult, Area):- 	findMaxAreaValue(Result, MaxValue, AreaResult),	%retorna o valor da maior area ate MaxValue unidades
+												getCorrespondentTeam(Result, _, AreaResult, X), %retorna lista com as cores com areas da dimensao de AreaResult
+												%nl, nl, write(MaxValue), nl, write(Area), nl, write(FinalResult), nl, write(X), nl, nl,
 												length(X, Length),
+												%write(Length),
 												(
-													Length > 1 -> NewMax is AreaResult, getMainGroups(FinalResult, NewMax, ColorResult, AreaResult);
-													Length = 1 -> append([], X, ColorResult);
-													Length = 0 -> append([], [], ColorResult)
+													Length > 1 -> write('1'),NewMax is AreaResult, getMainGroups(Result, NewMax, ColorResult, Area);
+													Length == 1 ->  write('1'),append([], X, ColorResult), Area is AreaResult;
+													Length == 0 ->  write('1'),append([], [], ColorResult), Area is AreaResult
 												). 
 												
 
@@ -709,22 +668,22 @@ checkMember(Value, [Result | [Tail | _]], Result):- member(Value, Tail).
 
 registBoard([
 	            [0, 0, 0, 0, 0],
-	         [0, 0, 0, 0, 0, 0],
-	      [0, 0, 0, 0, 0, 0, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	   [0, 0, 0, 0, 0, 0, 0, 0],
-	      [0, 0, 0, 0, 0, 0, 0],
-	         [0, 0, 0, 0, 0, 0],
+	          [0, 0, 0, 0, 0, 0],
+	        [0, 0, 0, 0, 0, 0, 0],
+	       [0, 0, 0, 0, 0, 0, 0, 0],
+	     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+	      [0, 0, 0, 0, 0, 0, 0, 0],
+	        [0, 0, 0, 0, 0, 0, 0],
+	          [0, 0, 0, 0, 0, 0],
 	            [0, 0, 0, 0, 0]
 	]).
 
 
 floodFill(L,R):-
-				flood(blue, Rb, L),
-				flood(red, Rr, L),
-				flood(green, Rg, L),
-				flood(yellow, Ry, L),
+				flood(1, Rb, L),
+				flood(2, Rr, L),
+				flood(3, Rg, L),
+				flood(4, Ry, L),
 				append([Rb], [Rr], R1), append([Rg], [Ry], R2), append(R1, R2, R).
 
 flood(Color, Result, LogicalBoard):- 	registBoard(RegistBoard),
