@@ -21,6 +21,8 @@ function Game(scene) {
 
 	this.undo = false;
 	this.undoRegister = [];
+
+	this.currentPlayer = 1;
 };
 
 
@@ -77,11 +79,14 @@ Game.prototype.handler = function(){
 	//recolhe a informaçao relativa a cores sorteadas para cada jogador
 	if(this.scene.socket.colorsResponse != null){
 		this.generatePlayersList();
+		this.currentPlayer = 1; 
 	}
 
 	//executa a animacao da peça a ser movimentada
 	if(this.animation)
 		this.pickedStone.movementAnimation();
+	
+		
 
 	//se o socket contiver informação respetiva ao arrasto de uma peçça, o tabuleiro é alterado
 	if(this.validDragPositions && this.scene.socket.boardResponse != null)
@@ -171,6 +176,7 @@ Game.prototype.dropStone = function(tile){
 }
 
 Game.prototype.pickingStone = function(obj){
+	
 	
 	//se pickedStone ja estiver atribuido a alguma pedra
 	if(this.pickedStone != null)
@@ -399,9 +405,24 @@ Game.prototype.colorAssigned = function(color){
 
 
 Game.prototype.passTurn = function(){
+	//console.warn(this.board.boardRegisterID);
+	//console.warn(this.board.stonesRegisterID);
+	/*var res = this.board.getRegistedStone(60);
+	var res2 = this.board.getRegistedBoard(1,3);
+	var t = this.scene.stateMachine;
+	this.scene.stateMachine.pickingHandler(res);
+	setTimeout(function(){  //Beginning of code that should run AFTER the timeout
+    t.pickingHandler(res2);
+    //lots more code
+		},5000);
+	*/
+	
+
 	if(this.roundMove == 'pass' && this.pickedStone == null)
   		{
+  			console.log("passa de ronda!");
   			this.roundNumber++;
+  			this.nextPlayer();
 			this.roundMove = 'drop';
 			this.undoRegister = [];
 			this.pickedStone = null;
@@ -410,4 +431,12 @@ Game.prototype.passTurn = function(){
 			this.pickedBoardTile = null;	
 			this.scene.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
 	 	} 		
+}
+
+Game.prototype.nextPlayer = function(){
+	this.roundNumber++;
+	if(this.currentPlayer +1 > this.players.length)
+		this.currentPlayer=1;
+	else
+		this.currentPlayer++;
 }

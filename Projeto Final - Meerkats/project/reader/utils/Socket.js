@@ -36,6 +36,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 								};
 	else if(type == 'colors')
 		request.onload = function(data){
+
 									var message = data.target.response.split(";");
 									var array = JSON.parse(message);
 									socket.colorsResponse = array.slice(',');
@@ -104,4 +105,9 @@ Socket.prototype.processBoardToString = function(){
 	}
 
 	return result + "]";
+}
+
+Socket.prototype.processStonesToString = function(){
+	var result = this.scene.stateMachine.game.board.stones;
+	console.warn(result);
 }
