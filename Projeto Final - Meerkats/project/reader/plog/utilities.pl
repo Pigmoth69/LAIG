@@ -75,7 +75,16 @@ getEmptyCells(_,_,_,[]).
 %----------------------------------------------------------------------------%
 %-----Functions to get any info from a certain position of any matrix--------%
 %----------------------------------------------------------------------------%
+%getInfo(X,Y,Info,Board)
+%getLineInfo(X,Row,Info)
 
+
+getLineInfo(Pos,[H|T],Info):-
+						Pos > 1,
+						NewPos is Pos - 1,
+						getLineInfo(NewPos,T,Info);
+						Info = H.
+						
 getInfo(0, 1, Head, [Head | _]).
 
 getInfo(0, Col, Info, [_ | Tail]):-	NewCol is Col - 1,
@@ -89,6 +98,7 @@ getInfo(Row, Col, Info, [_ | Tail]):- 	NextRow is Row - 1,
 %----------------------------------------------------------------------------%
 %-----Functions to set any info into a certain position of any matrix--------%
 %----------------------------------------------------------------------------%
+%setInfo(X,Y,Info,Board,ResultBoard)
 
 setInfo(0, 1, Info, [_ | Tail],  [Info | Tail]).
 

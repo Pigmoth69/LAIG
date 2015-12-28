@@ -53,11 +53,16 @@ dragStoneBOT(LogicalBoard,PlayedStoneCoord1,PlayedStoneCoord2,ResultBoard):-
 displayGetNumberCellsBOT(NumberCells):-	write('Insert the number of cells you want to drag your stone: '), random(1,10,NumberCells).					
 
 getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):- 
-					getNotEqualCoordsBOT(PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos),
-					getInfo(Row,Pos,Info,Board),
-					Info \= empty.
-getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):-
-					getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos),!.
+					getNotEqualCoordsBOT(PlayedStoneCoord1,PlayedStoneCoord2,Temp1,Temp2),
+					getInfo(Temp1,Temp2,Info,Board),
+					atom(Info),
+					Info \= empty -> Row is Temp1,Pos is Temp2;			
+					getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos).
+					
+notEqual(Initial1,Initial2,Final1,Final2):-
+										Num1 is Initial1-Final1,
+										Num2 is Initial2-Final2,
+										Num1 + Num2 =\=0.
 					
 					
 %getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):-
@@ -73,9 +78,7 @@ getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):-
 				
 getNotEqualCoordsBOT(Initial1,Initial2,ResCoord1,ResCoord2):-
 											getValidCoordsBOT(C1,C2),
-											compCoords(Initial1,Initial2,C1,C2,M),
-											M == notEqual ->ResCoord1 is C1,ResCoord2 is C2;
-											write('Cant move the stone you just played!'),nl,
+											notEqual(Initial1,Initial2,C1,C2)-> ResCoord1 is C1,ResCoord2 is C2;
 											getNotEqualCoordsBOT(Initial1,Initial2,ResCoord1,ResCoord2).
 											
 					

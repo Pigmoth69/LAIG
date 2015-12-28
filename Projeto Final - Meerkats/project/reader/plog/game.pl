@@ -547,6 +547,41 @@ logicalBoard([
 	            [0, 0, 0, 0, 0]
 
 	]).
+	logicalBoardTest([
+	            [blue, empty, empty, empty, empty],
+	         [empty, empty, empty, empty, empty, empty],
+	      [empty, empty, empty, empty, empty, empty, empty],
+	   [empty, empty, empty, red, green, empty, yellow, empty],
+	[empty, empty, empty, empty, empty, empty, empty, empty, empty],
+	   [empty, empty, empty, empty, empty, empty, empty, empty],
+	      [empty, empty, empty, empty, empty, empty, empty],
+	         [empty, empty, blue, empty, empty, empty],
+	            [empty, empty, empty, empty, empty]
+	]).
+	
+logicalBoardTest2([
+	            [blue, blue, blue, blue, blue],
+	         [blue, blue, blue, blue, blue, blue],
+	      [blue, blue, blue, blue, blue, blue, blue],
+	   [blue, blue, blue, blue, blue, blue, blue, blue],
+	[blue, blue, blue, blue, blue, blue, blue, blue, blue],
+	   [blue, blue, blue, blue, blue, blue, blue, blue],
+	      [blue, blue, blue, blue, blue, blue, blue],
+	         [blue, blue, blue, blue, blue, blue],
+	            [blue, blue, blue, blue, blue]
+	]).	
+	
+logicalBoardTest3([
+	            [yellow, green, red, blue, blue],
+	         [blue, blue, blue, blue, blue, blue],
+	      [blue, blue, blue, empty, blue, blue, blue],
+	   [blue, blue, blue, blue, blue, blue, blue, blue],
+	[blue, blue, blue, blue, blue, blue, blue, blue, blue],
+	   [blue, blue, blue, blue, blue, blue, blue, blue],
+	      [blue, blue, blue, blue, blue, blue, blue],
+	         [blue, blue, blue, blue, blue, blue],
+	            [blue, blue, blue, blue, blue]
+	]).	
 
 displayBoard([
 	            ['1', '2', '3', '4', '5'],
