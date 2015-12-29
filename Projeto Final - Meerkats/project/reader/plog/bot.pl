@@ -55,8 +55,8 @@ displayGetNumberCellsBOT(NumberCells):-	write('Insert the number of cells you wa
 getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos):- 
 					getNotEqualCoordsBOT(PlayedStoneCoord1,PlayedStoneCoord2,Temp1,Temp2),
 					getInfo(Temp1,Temp2,Info,Board),
-					atom(Info),
-					Info \= empty -> Row is Temp1,Pos is Temp2;			
+					number(Info),
+					Info \= 0 -> Row is Temp1,Pos is Temp2;			
 					getStoneCellBOT(Board,PlayedStoneCoord1,PlayedStoneCoord2,Row,Pos).
 					
 notEqual(Initial1,Initial2,Final1,Final2):-
@@ -98,7 +98,7 @@ getEmptyCellBOT(Board,Row,Pos):-
 					random(1,10,Row),
 					random(1,10,Pos),
 					getInfo(Row,Pos,Info,Board),
-					Info == empty.
+					Info == 0.
 getEmptyCellBOT(Board,Row,Pos):-
 					getEmptyCellBOT(Board,Row,Pos),!.
 

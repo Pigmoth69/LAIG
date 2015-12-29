@@ -4,6 +4,7 @@ function Socket(scene) {
 	this.scoreResponse = null;
 	this.colorsResponse = null;	
 	this.winnerResponse = null;
+	this.botResponse = null;
 };
 
 var validPositions = null;
@@ -51,7 +52,16 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									if(socket.winnerResponse.length == 0)
 										socket.scene.stateMachine.game.winner = 0;
 									else socket.scene.stateMachine.game.winner = socket.winnerResponse[0];
-								};					
+								};
+	else if(type == 'bot')
+		request.onload = function(data){
+									console.warn(data);
+									var message = data.target.response.split(";");
+									console.warn(message);
+									var array = parseInt(message);
+									console.warn(array);
+									socket.botResponse  = array.slice(',');
+								};						
 
 	request.onerror = function(){console.log("Error waiting for response");};
 
@@ -107,7 +117,12 @@ Socket.prototype.processBoardToString = function(){
 	return result + "]";
 }
 
-Socket.prototype.processStonesToString = function(){
-	var result = this.scene.stateMachine.game.board.stones;
-	console.warn(result);
+Socket.prototype.processRemainingStonesToString = function(){
+	var result = this.scene.stateMachine.game.board.remainingStones;
+	return "["+result+"]";
+}
+
+Socket.prototype.processPlayedStonesToString = function(){
+	var result = this.scene.stateMachine.game.board.playedStones;
+	return "["+result+"]";
 }

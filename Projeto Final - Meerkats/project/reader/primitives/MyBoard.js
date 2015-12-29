@@ -10,10 +10,14 @@
 
 	this.stonesRegisterID = []; // registo do picking ID das pedras [pickingID,id] 
 	this.boardRegisterID = [];  // registo do picking ID dos tiles da board [pickingID,Xpos,Ypos]
-	this.playedStones = [];
+
+	this.playedStones = []; //pedras já jogadas e que se encontram no tabuleiro
+	this.remainingStones = []; //pedras disponiveis para jogar
 
 	var registertempID = this.makeBoard();
 	this.prepareStones(registertempID-1); // temp de ser menos 1 para começar no correto em 61 pq no prepare stone somo o id
+
+	
 
 };
 
@@ -116,18 +120,22 @@ MyBoard.prototype.prepareStones = function(tempID){
 			if(i == 0){
 				this.stones.push(new MyStone(this.scene, id, 'blueStone', position));
 				this.stonesRegisterID[id]=tempID+id; // pickID,coordenada Y, coordenada X [1,1,1] por exemplo
+				this.remainingStones.push(id);
 			}
 			else if(i == 1){
 				this.stones.push(new MyStone(this.scene, id, 'redStone', position));
 				this.stonesRegisterID[id]=tempID+id;
+				this.remainingStones.push(id);
 			}
 			else if(i == 2){
 				this.stones.push(new MyStone(this.scene, id, 'yellowStone', position));
 				this.stonesRegisterID[id]=tempID+id;
+				this.remainingStones.push(id);
 			}
 			else if(i == 3){
 				this.stones.push(new MyStone(this.scene, id, 'greenStone', position));
 				this.stonesRegisterID[id]=tempID+id;
+				this.remainingStones.push(id);
 			}
 				
 
@@ -166,6 +174,21 @@ MyBoard.prototype.displayStones = function(){
 		this.stones[i].display();
 		this.scene.popMatrix();
 	}
+}
+
+MyBoard.prototype.updateStones = function(stoneID){
+	this.addPlayedStones(stoneID);
+	this.removeRemainingStones(stoneID);
+}
+
+
+MyBoard.prototype.addPlayedStones = function(stoneID){
+	this.playedStones.push(stoneID);
+}
+MyBoard.prototype.removeRemainingStones = function(stoneID){
+	var index = this.remainingStones.indexOf(stoneID);
+	if(index > -1)
+		this.getRegistedStone.splice(index,1);
 }
 
 

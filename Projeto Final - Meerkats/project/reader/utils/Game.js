@@ -34,7 +34,11 @@ Game.prototype.display = function(){
 	this.board.display();
 	//this.scene.drawNode(this.scene.graph.root['Gameplay'], 'null', 'clear');
 };
-
+/*alterar*/
+/* Como se faz um pedido!
+var requestString = '[sortColors,["' + this.scene.Humans + '"],["' + this.scene.Bots +'"],_Result]';
+			this.scene.socket.sendRequest(requestString, 'colors');
+*/
 Game.prototype.picking = function(obj){
 	if(obj[0] instanceof MyStone)
 		this.pickingStone(obj);
@@ -211,6 +215,7 @@ Game.prototype.pickingStone = function(obj){
 			this.validDragPositions = true;
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[validDragPositions," + this.pickedStone.tile.row + ',' + this.pickedStone.tile.col + ',' + stringBoard + ",_Result" + "]";
+			console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'board');
 		}
 	}
@@ -239,6 +244,7 @@ Game.prototype.pickingTile = function(obj){
 		this.updateScore = true;
 		var stringBoard = this.scene.socket.processBoardToString();
 		var requestString = "[checkScore," + stringBoard + ",_Result]";
+		console.warn(requestString);
 		this.scene.socket.sendRequest(requestString, 'score');
 	}
 };
@@ -416,7 +422,11 @@ Game.prototype.passTurn = function(){
     //lots more code
 		},5000);
 	*/
-	
+	var board = this.scene.socket.processBoardToString();
+	var remainingStones =  this.scene.socket.processRemainingStonesToString();
+	var requestString = "[stoneDropBOT,"+ board+","+ remainingStones + ",_IDstone,_Xpos,_Ypos]";
+	console.warn(requestString);
+	this.scene.socket.sendRequest(requestString, 'bot');
 
 	if(this.roundMove == 'pass' && this.pickedStone == null)
   		{
