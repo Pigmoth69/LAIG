@@ -61,7 +61,6 @@ StateMachine.prototype.pickingHandler = function(obj)
 			this.playMenu.picking(obj);
 			break;
 		case 'Gameplay':
-			console.warn(obj);
 			this.game.picking(obj);
 			break;
 		default: break;

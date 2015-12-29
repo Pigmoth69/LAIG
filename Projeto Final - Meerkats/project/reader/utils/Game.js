@@ -23,6 +23,10 @@ function Game(scene) {
 	this.undoRegister = [];
 
 	this.currentPlayer = 1;
+	//vê se é a vez do bot jogar
+	this.isBotTurn=false;
+	//quando já tem a resposta fica a true para o bot poder jogar
+	this.botCanPlay=false;
 };
 
 
@@ -40,12 +44,14 @@ var requestString = '[sortColors,["' + this.scene.Humans + '"],["' + this.scene.
 			this.scene.socket.sendRequest(requestString, 'colors');
 */
 Game.prototype.picking = function(obj){
-	if(obj[0] instanceof MyStone)
-		this.pickingStone(obj);
-	else if(obj[0] instanceof MyBoardTile)
-		this.pickingTile(obj);
+		if(!this.currentPlayerIsBOT()){
+			if(obj[0] instanceof MyStone)
+				this.pickingStone(obj);
+			else if(obj[0] instanceof MyBoardTile)
+				this.pickingTile(obj);
+		}
 
-};
+	};
 
 
 
@@ -53,6 +59,25 @@ Game.prototype.picking = function(obj){
  *
  */
 Game.prototype.handler = function(){
+
+
+	//caso seja um bot a jogar, é preciso ir fazer um pedido ao prolgo para saber onde se vai jogar
+	if(this.isBotTurn && this.scene.socket.botResponseDROP == null) {
+		this.isBotTurn=false;
+		//fazer o pedido ao prolog para que o bot possa ter a resposta para jogar
+		var board = this.scene.socket.processBoardToString();
+		var remainingStones =  this.scene.socket.processRemainingStonesToString();
+		var requestString = "[stoneDropBOT,"+ board+","+ remainingStones + ",_IDstone,_Xpos,_Ypos]";
+		this.scene.socket.sendRequest(requestString, 'botdrop');
+		this.botCanPlay=true;
+	}
+	if(this.botCanPlay && this.scene.socket.botResponseDROP != null){
+		console.log("merda");
+		this.botCanPlay=false;
+		this.makePlayBOT();
+
+	}
+
 
 	if(this.endGame && this.winner != null)
 	{
@@ -83,7 +108,7 @@ Game.prototype.handler = function(){
 	//recolhe a informaçao relativa a cores sorteadas para cada jogador
 	if(this.scene.socket.colorsResponse != null){
 		this.generatePlayersList();
-		this.currentPlayer = 1; 
+		this.currentPlayer = 1;
 	}
 
 	//executa a animacao da peça a ser movimentada
@@ -151,6 +176,9 @@ Game.prototype.generatePlayersList = function(){
 
 	this.scene.socket.colorsResponse = null;
 	console.log(this.players);
+	//caso seja logo 1 bot a jogar!!
+	if(this.currentPlayerIsBOT())
+		this.isBotTurn=true;
 };
 
 
@@ -187,7 +215,7 @@ Game.prototype.pickingStone = function(obj){
 	{
 		//se a pickedStone for a mesma que a peça selecionada, elimina-se a seleçao e termina se a execuçao da funcao
 		if(this.pickedStone.id && obj[0].id) 
-		{
+		{console.log("selecionada");
 			this.pickedStone.standByAnimationHeight = 0;
 			this.pickedStone.standByAnimationVelocity = 0.17;
 			this.pickedStone.picked = false;
@@ -200,7 +228,6 @@ Game.prototype.pickingStone = function(obj){
 		this.pickedStone.picked = false;
 		this.pickedStone = null;
 	}
-	
 
 	//registando peça selecionada no picking
 	if((this.roundMove == 'drop' && obj[0].tile == null) || (this.roundMove == 'drag' && obj[0].tile != null && obj[0].id != this.playedStone.id))
@@ -220,6 +247,8 @@ Game.prototype.pickingStone = function(obj){
 		}
 	}
 };
+
+
 
 Game.prototype.pickingTile = function(obj){
 	if(this.pickedStone != null && obj[0].highlight)
@@ -248,6 +277,7 @@ Game.prototype.pickingTile = function(obj){
 		this.scene.socket.sendRequest(requestString, 'score');
 	}
 };
+
 
 Game.prototype.updateGameScore = function(){
 	var max = 0;
@@ -413,20 +443,27 @@ Game.prototype.colorAssigned = function(color){
 Game.prototype.passTurn = function(){
 	//console.warn(this.board.boardRegisterID);
 	//console.warn(this.board.stonesRegisterID);
+
+
 	/*var res = this.board.getRegistedStone(60);
 	var res2 = this.board.getRegistedBoard(1,3);
 	var t = this.scene.stateMachine;
-	this.scene.stateMachine.pickingHandler(res);
+	var e = this;
+	this.pickingStone(res);
+
 	setTimeout(function(){  //Beginning of code that should run AFTER the timeout
-    t.pickingHandler(res2);
-    //lots more code
-		},5000);
-	*/
+   		e.pickingTile(res2);
+    	//lots more code
+		},5000);*/
+	
+	
+
+	/* Pedido de DROPSTONE
 	var board = this.scene.socket.processBoardToString();
 	var remainingStones =  this.scene.socket.processRemainingStonesToString();
 	var requestString = "[stoneDropBOT,"+ board+","+ remainingStones + ",_IDstone,_Xpos,_Ypos]";
 	console.warn(requestString);
-	this.scene.socket.sendRequest(requestString, 'bot');
+	this.scene.socket.sendRequest(requestString, 'bot');*/
 
 	if(this.roundMove == 'pass' && this.pickedStone == null)
   		{
@@ -440,7 +477,45 @@ Game.prototype.passTurn = function(){
 			this.playedStone = null;
 			this.pickedBoardTile = null;	
 			this.scene.cameraAnimation.startCameraOrbit(1500, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+			//caso seja a vez do bot
+			if(this.currentPlayerIsBOT())
+				this.isBotTurn=true;
 	 	} 		
+}
+Game.prototype.makePlayBOT = function(){
+	//se é a primeira jogada faz uma merda
+	if(this.roundNumber == 1)
+		this.makeDropBOT();
+	//se é a segunda e as restantes faz outra
+	//update das pedras
+
+	//passar a vez no final da jogada!
+	//this.passTurn();
+}
+
+Game.prototype.makeDropBOT = function(){
+	var response = this.scene.socket.botResponseDROP;
+
+	//resultados da resposta do prolog que vem num array deste genero [2,5,6]
+	var stoneID = response[0];
+	var Xpos = response[1];
+	var Ypos = response[2];
+
+	//funções responsáveis por irem buscar os obj para enviar ao picking
+	var stone = this.board.getRegistedStone(stoneID);
+	var position = this.board.getRegistedBoard(Xpos,Ypos);
+
+	var cena = this;
+	//vai fazer o picking e a animação da pedra selecionada pelo bot
+
+	cena.pickingStone(stone);
+	setTimeout(function(){ 
+		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
+   		cena.pickingTile(position);
+		},5000);
+
+	//no final fazer reset da resposta
+	this.scene.socket.botResponseDROP = null;
 }
 
 Game.prototype.nextPlayer = function(){
@@ -449,4 +524,13 @@ Game.prototype.nextPlayer = function(){
 		this.currentPlayer=1;
 	else
 		this.currentPlayer++;
+}
+/*Vê se o jogador atual é um bot! Se for retorna true senão retorna false*/
+
+Game.prototype.currentPlayerIsBOT = function(){
+	var res = (this.players[this.currentPlayer][0]).search("Bot");
+	if(res == -1)
+		return false;
+	else
+		return true;
 }
