@@ -144,6 +144,8 @@ MyStone.prototype.movementAnimation = function(){
 
 
 		this.scene.stateMachine.game.undo = false;
+		this.scene.stateMachine.game.moveHasFinished = true;
+
 	}
 	
 	this.position = new Coords(this.dropAnimationCenter[0] - inc[0], 1-Math.abs(fraction), this.dropAnimationCenter[2] - inc[2]);

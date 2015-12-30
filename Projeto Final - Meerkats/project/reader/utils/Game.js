@@ -28,6 +28,8 @@ function Game(scene) {
 	//quando já tem a resposta fica a true para o bot poder jogar
 	this.botCanPlay=false;
 	this.botCanDrag=false;
+	this.moveHasFinished=false;
+	this.canPass = false;
 };
 
 
@@ -55,7 +57,27 @@ Game.prototype.picking = function(obj){
 /** Controla as principais açoes durante a excuçao do jogo
  *
  */
+
+
+
+
 Game.prototype.handler = function(){
+
+	//se for o bot a jogar, passar a vez dele para o próximo
+
+	if(this.players.length != 0)
+		if(this.currentPlayerIsBOT()){
+			if(this.roundNumber== 1 && this.canPass==true && this.moveHasFinished == true){
+				this.canPass=false;
+				this.moveHasFinished = false;
+				this.passTurn();
+			}else if(this.roundNumber>1 && this.canPass==true  && this.moveHasFinished == true){
+				this.canPass=false;
+				this.moveHasFinished = false;
+				this.passTurn();
+			}
+		}
+		
 
 
 	//caso seja um bot a jogar, é preciso ir fazer um pedido ao prolgo para saber onde se vai jogar
@@ -72,20 +94,35 @@ Game.prototype.handler = function(){
 	}
 	if(this.botCanPlay && this.scene.socket.botResponseDROP != null){
 		this.botCanPlay=false;
+		this.moveHasFinished=false;
 		//se não for a primeira ronda fazer o pedido de drag
+		//console.log("buscar o draag!1");
+		this.makeDropBOT();
 		if(this.roundNumber !=1){
+		//console.log("buscar o draag!2");
 		var board = this.scene.socket.processBoardToString();
 		var XplayedStone = this.scene.socket.botResponseDROP[1];
 		var YplayedStone = this.scene.socket.botResponseDROP[2];
 		var requestString = "[stoneDragBOT,"+ board+",[\""+ XplayedStone +"\"],[\""+YplayedStone+ "\"],_Xinicial,_Yinicial,_Xfinal,_Yfinal]";
 		this.scene.socket.sendRequest(requestString, 'botdrag');
+	//	console.log("buscar o draag!3");
 		}
 		this.botCanDrag=true;
 	}
-	if(this.botCanDrag && this.scene.socket.botResponseDRAG!= null){
-		this.botCanDrag=false;
-		this.makePlayBOT();
+	if(this.roundNumber == 1 && this.botCanDrag && this.moveHasFinished==true){
+		this.botCanDrag = false;
+		this.canPass = true;
 	}
+	else if(this.botCanDrag && this.scene.socket.botResponseDRAG!= null && this.moveHasFinished==true){
+		console.warn("era suposto o movimento acabar!!");
+		this.moveHasFinished = false;
+		this.botCanDrag=false;
+		console.warn("entrei");
+		this.makeDragBOT();
+		this.canPass=true;
+	}
+
+
 
 
 	if(this.endGame && this.winner != null)
@@ -133,7 +170,6 @@ Game.prototype.handler = function(){
 		this.validDragPositions = false;
 		this.scene.socket.boardResponse = null;
 	}
-
 	//se o socket contiver informaçao respetiva a novos valores de score, o array de scores é atualizado
 	if(this.updateScore && this.scene.socket.scoreResponse != null)
 	{
@@ -489,12 +525,14 @@ Game.prototype.passTurn = function(){
 
 
 
-
+console.log("pressed!");
 
 
 	if(this.roundMove == 'pass' && this.pickedStone == null)
   		{
   			console.log("passa de ronda!");
+  			this.scene.socket.botResponseDROP = null;
+			this.scene.socket.botResponseDRAG = null;
   			this.roundNumber++;
   			this.nextPlayer();
 			this.roundMove = 'drop';
@@ -509,22 +547,7 @@ Game.prototype.passTurn = function(){
 				this.isBotTurn=true;
 	 	} 		
 }
-Game.prototype.makePlayBOT = function(){
-	//se é a primeira jogada faz uma merda
-	if(this.roundNumber == 1){
-		this.makeDropBOT();
-		this.passTurn();
-	}
-	else{
-		this.makeDropBOT();
-		this.makeDragBOT();
-		this.passTurn();
-	}
 
-	//no final fazer reset das respostas
-	this.scene.socket.botResponseDROP = null;
-	this.scene.socket.botResponseDRAG = null;
-}
 
 Game.prototype.makeDragBOT = function(){
 	var response = this.scene.socket.botResponseDRAG;
@@ -533,7 +556,6 @@ Game.prototype.makeDragBOT = function(){
 	var Yinicial = response[1];
 	var Xfinal = response[2];
 	var Yfinal = response[3];
-
 	//pedra que se vai mover
 	var movingStone = this.board.getRegistedStoneFromPos(Xinicial,Yinicial);
 	var tileToMove = this.board.getRegistedBoard(Xfinal,Yfinal);
@@ -541,10 +563,11 @@ Game.prototype.makeDragBOT = function(){
 	var cena = this;
 
 	cena.pickingStone(movingStone);
+	//cena.pickingTile(tileToMove);
 	setTimeout(function(){ 
 		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
    		cena.pickingTile(tileToMove);
-		},1000);
+		},500);
 }
 
 Game.prototype.makeDropBOT = function(){
@@ -554,7 +577,6 @@ Game.prototype.makeDropBOT = function(){
 	var stoneID = response[0];
 	var Xpos = response[1];
 	var Ypos = response[2];
-
 	//funções responsáveis por irem buscar os obj para enviar ao picking
 	var stone = this.board.getRegistedStone(stoneID);
 	var position = this.board.getRegistedBoard(Xpos,Ypos);
@@ -563,10 +585,11 @@ Game.prototype.makeDropBOT = function(){
 	//vai fazer o picking e a animação da pedra selecionada pelo bot
 
 	cena.pickingStone(stone);
+	// cena.pickingTile(position);
 	setTimeout(function(){ 
 		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
    		cena.pickingTile(position);
-		},1000);
+		},500);
 	this.board.updateStones(stoneID);
 }
 

@@ -27,7 +27,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var message = data.target.response.split(";");
 									var board = JSON.parse(message);
 									socket.boardResponse = board.slice(',');
-									//console.log(socket.boardResponse);
+									console.log(socket.boardResponse);
 								};
 	else if(type == 'score')
 		request.onload = function(data){
