@@ -188,7 +188,7 @@ MyBoard.prototype.addPlayedStones = function(stoneID){
 MyBoard.prototype.removeRemainingStones = function(stoneID){
 	var index = this.remainingStones.indexOf(stoneID);
 	if(index > -1)
-		this.getRegistedStone.splice(index,1);
+		this.remainingStones.splice(index,1);
 }
 
 
@@ -225,3 +225,15 @@ MyBoard.prototype.resetHighlight = function(){
 		for(var x = 1; x < this.board[y].length;x++)
 				this.board[y][x].highlight = false;
 };
+
+//função que através das coordenadas X, Y vao buscar a pedra que se encontra na posição X Y do tabuleiro
+MyBoard.prototype.getRegistedStoneFromPos = function(Xpos,Ypos){
+	for(var i = 0 ; i < this.stones.length;i++){
+		if(this.stones[i].settledTile!=null){
+			if(this.board[Xpos][Ypos] == this.stones[i].settledTile[0]){
+				var stone = this.getRegistedStone(this.stones[i].id);
+				return stone;
+			}
+		}
+	}
+}

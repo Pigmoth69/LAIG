@@ -5,6 +5,7 @@ function Socket(scene) {
 	this.colorsResponse = null;	
 	this.winnerResponse = null;
 	this.botResponseDROP = null;
+	this.botResponseDRAG = null;
 };
 
 var validPositions = null;
@@ -55,7 +56,6 @@ Socket.prototype.postGameRequest = function(requestString, type){
 								};
 	else if(type == 'botdrop')
 		request.onload = function(data){
-									console.warn(data);
 									var message = data.target.response.split(";");
 									console.warn(message);
 									socket.botResponseDROP = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2])];
@@ -63,12 +63,9 @@ Socket.prototype.postGameRequest = function(requestString, type){
 								};
 	else if(type == 'botdrag')
 		request.onload = function(data){
-									//aranjar o drag
-									console.warn(data);
 									var message = data.target.response.split(";");
-									console.warn(message);
-									socket.botResponse = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2])];
-									console.warn(socket.botResponse);
+									socket.botResponseDRAG = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2]),parseInt(message[3])];
+									console.warn(socket.botResponseDRAG);
 								};						
 
 	request.onerror = function(){console.log("Error waiting for response");};

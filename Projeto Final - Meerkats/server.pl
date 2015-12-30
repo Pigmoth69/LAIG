@@ -50,7 +50,14 @@ sortColors([Players], [Bots], Result):-
 	assignPlayerColor(NumberPlayers, ResultColors, 1, FinalPlayersInfo,_),
 	append(FinalBOTsInfo, FinalPlayersInfo, Result),
 	formatAsJSON([Result]).
+
 %---------------------------------------------	
+makeTest0([Number]):-
+					atom_number(Number,Numberr),
+					open('hogwarts2.txt',write,Stream), 
+					write(Stream,Numberr),  nl(Stream),														
+					close(Stream).
+				
 
 %INICIO->TESTES------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -145,20 +152,21 @@ getRandomStone(RemainingStones,Stone):-
 /*@brief esta função é responsável por arrastar uma pedra aleatória do board
   @param Board tabuleiro actual onde se quer arrastar a peça
   @param Xpos posição X do local para onde vai ser arrastada
+  @param [Xplayed] posição x para onde o jogador jogou inicialmente
+  @param [Yplayed] posição y para onde o jogador jogou inicialmente
   @param Ypos posição Y do local para onde vai ser arrastada
-  @param ResultBoard board resultante do drag da stone 
 */															
-stoneDragBOT(Board,XplayedStone,YplayedStone,Xinicial,Yinicial,Xfinal,Yfinal,ResultBoard):-
+stoneDragBOT(Board,[Xplayed],[Yplayed],Xinicial,Yinicial,Xfinal,Yfinal):-
+																	atom_number(Xplayed,XplayedStone),
+																	atom_number(Yplayed,YplayedStone),
 																	getStoneCellBOT(Board,XplayedStone,YplayedStone,Xtemp,Ytemp),
 																	random(1, 7, Direction), 
-																	random(1, 5, NumberCells),write("ola3"),
+																	random(1, 5, NumberCells),
 																	checkDrag(Board,Xtemp,Ytemp,Direction,NumberCells,Final1,Final2),
 																	Xfinal is Final1,Yfinal is Final2,
 																	Xinicial is Xtemp, Yinicial is Ytemp,
-																	getInfo(Xtemp,Ytemp,Stone,Board),
-																	setInfo(Xtemp,Ytemp,0,Board,Res),
-																	setInfo(Final1,Final2,Stone,Res,ResultBoard);
-																	stoneDragBOT(Board,XplayedStone,YplayedStone,Xinicial,Yinicial,Xfinal,Yfinal,ResultBoard).
+																	formatAsJSON([Xinicial,Yinicial,Xfinal,Yfinal]);
+																	stoneDragBOT(Board,[Xplayed],[Yplayed],Xinicial,Yinicial,Xfinal,Yfinal).
 validDragPositions(Row, Col, Board, Result):-
 	registBoard(R),
 	validDragLeft(Row, Col, Board, R, R1),
