@@ -50,7 +50,14 @@ sortColors([Players], [Bots], Result):-
 	assignPlayerColor(NumberPlayers, ResultColors, 1, FinalPlayersInfo,_),
 	append(FinalBOTsInfo, FinalPlayersInfo, Result),
 	formatAsJSON([Result]).
+
 %---------------------------------------------	
+makeTest0([Number]):-
+					atom_number(Number,Numberr),
+					open('hogwarts2.txt',write,Stream), 
+					write(Stream,Numberr),  nl(Stream),														
+					close(Stream).
+				
 
 %INICIO->TESTES------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -86,29 +93,26 @@ makeTest5():-
 			write("Stones: "),write(Stones),nl,
 			write("Stones2: "),write(Stones2),nl.
 makeTest6():-
-			Stones = [[1,red],[2,blue],[3,yellow],[4,green],[5,yellow],[6,red],[7,blue]],
-			logicalBoardTest3(LogicalBoard),
-			displayBoard(Board),
-			drawBoard(Board,LogicalBoard),
-			stoneDropBOT(LogicalBoard,Stones,IDstone,Xpos,Ypos,ResultBoard,ResultRemainingStones),
+			Stones = [1,2,3,4,5,6,7,8,9],
+			logicalBoardTest(LogicalBoard),
+			write(LogicalBoard),nl,
+			stoneDropBOT(LogicalBoard,Stones,IDstone,Xpos,Ypos),
 			write("Stones: "),write(Stones),nl,
 			write("StoneID: "),write(IDstone),nl,
 			write("Xpos: "),write(Xpos),nl,
-			write("Ypos: "),write(Ypos),nl,
-			write("ResultRemainingStones: "),write(ResultRemainingStones),nl,
-			write("Result board: "),nl,
-			drawBoard(Board,ResultBoard).
+			write("Ypos: "),write(Ypos),nl.
 			
 makeTest7():-
-			logicalBoardTest3(LogicalBoard),
-			displayBoard(Board),
-			drawBoard(Board,LogicalBoard),
+			logicalBoardTest2(LogicalBoard),
+			write("Initial board: "),nl,
+			write(LogicalBoard),nl,
 			stoneDragBOT(LogicalBoard,1,1,Xinicial,Yinicial,Xfinal,Yfinal,ResultBoard),
 			write("Xinitial: "),write(Xinicial),nl,
 			write("Yinicial: "),write(Yinicial),nl,
 			write("Xfinal: "),write(Xfinal),nl,
 			write("Yfinal: "),write(Yfinal),nl,
-			drawBoard(Board,ResultBoard).
+			write("Final board: "),nl,
+			write(ResultBoard).
 			
 			
 
@@ -116,16 +120,19 @@ makeTest7():-
 %funciona!!
 /*@brief esta função é responsável por selecionar um sitio para colocar uma peça aleatória no tabuleiro
   @param Board tabuleiro actual onde se quer colocar a peça
-  @param RemainingStones array com os ID´s das pedra que faltam ainda colocar no tabuleiro [[1,red],[2,blue]...] neste formato
+  @param RemainingStones array com os ID´s das pedra que faltam ainda colocar no tabuleiro [1,2,3,4,5,...] neste formato
   @param IDstone pedra que foi seleccionada pelo BOT para colocar no tabuleiro 
   @param Xpos posição X da nova peça no tabuleiro
   @param Ypos posição Y da nova peça no tabuleiro
-  @param ResultBoard board resultante do drop da stone 
 */
-stoneDropBOT(Board,RemainingStones,IDstone,Xpos,Ypos,ResultBoard,ResultRemainingStones):-
-																	getEmptyCellBOT(Board,Xpos,Ypos),
-																	getRandomStone(RemainingStones,ResultRemainingStones,[IDstone|[H|_]]),
-																	setInfo(Xpos,Ypos,H,Board,ResultBoard).
+stoneDropBOT(Board,RemainingStones,IDstone,Xpos,Ypos):-
+														/*open('hogwarts.txt',write,Stream), 
+														write(Stream,Board),  nl(Stream),
+														write(Stream,RemainingStones),  nl(Stream), 														
+														close(Stream),*/
+														getEmptyCellBOT(Board,Xpos,Ypos),
+														getRandomStone(RemainingStones,IDstone),
+														formatAsJSON([IDstone,Xpos,Ypos]).
 
 
 
@@ -135,31 +142,31 @@ stoneDropBOT(Board,RemainingStones,IDstone,Xpos,Ypos,ResultBoard,ResultRemaining
   @param ResultRemainingStones array com as pedra resultantes
   @param Stone pedra que foi seleccionada pelo BOT para colocar no tabuleiro [1,red] neste formato
 */
-getRandomStone(RemainingStones,ResultRemainingStones,Stone):-
+getRandomStone(RemainingStones,Stone):-
 															length(RemainingStones,Length),
 															random(1,Length,StonePos),
-															getLineInfo(StonePos,RemainingStones,Stone),
-															delete(RemainingStones,Stone,ResultRemainingStones).
+															getLineInfo(StonePos,RemainingStones,Stone).
 
 															
 
 /*@brief esta função é responsável por arrastar uma pedra aleatória do board
   @param Board tabuleiro actual onde se quer arrastar a peça
   @param Xpos posição X do local para onde vai ser arrastada
+  @param [Xplayed] posição x para onde o jogador jogou inicialmente
+  @param [Yplayed] posição y para onde o jogador jogou inicialmente
   @param Ypos posição Y do local para onde vai ser arrastada
-  @param ResultBoard board resultante do drag da stone 
 */															
-stoneDragBOT(Board,XplayedStone,YplayedStone,Xinicial,Yinicial,Xfinal,Yfinal,ResultBoard):-
+stoneDragBOT(Board,[Xplayed],[Yplayed],Xinicial,Yinicial,Xfinal,Yfinal):-
+																	atom_number(Xplayed,XplayedStone),
+																	atom_number(Yplayed,YplayedStone),
 																	getStoneCellBOT(Board,XplayedStone,YplayedStone,Xtemp,Ytemp),
 																	random(1, 7, Direction), 
 																	random(1, 5, NumberCells),
 																	checkDrag(Board,Xtemp,Ytemp,Direction,NumberCells,Final1,Final2),
 																	Xfinal is Final1,Yfinal is Final2,
 																	Xinicial is Xtemp, Yinicial is Ytemp,
-																	getInfo(Xtemp,Ytemp,Stone,Board),
-																	setInfo(Xtemp,Ytemp,empty,Board,Res),
-																	setInfo(Final1,Final2,Stone,Res,ResultBoard);
-																	stoneDragBOT(Board,XplayedStone,YplayedStone,Xinicial,Yinicial,Xfinal,Yfinal,ResultBoard).
+																	formatAsJSON([Xinicial,Yinicial,Xfinal,Yfinal]);
+																	stoneDragBOT(Board,[Xplayed],[Yplayed],Xinicial,Yinicial,Xfinal,Yfinal).
 validDragPositions(Row, Col, Board, Result):-
 	registBoard(R),
 	validDragLeft(Row, Col, Board, R, R1),

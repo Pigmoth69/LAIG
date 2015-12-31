@@ -311,7 +311,7 @@ checkDragDiagonalUpLeft(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,Fin
 																									NewCol is InitialCoord2 - 1,
 																									validCell(NewRow,NewCol), !,
 																									getInfo(NewRow, NewCol, Info, LogicalBoard),
-																									Info == empty, !,
+																									Info == 0, !,
 																									NewNumberCells is NumberCells - 1,
 																									checkDragDiagonalUpLeft(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -320,7 +320,7 @@ checkDragDiagonalUpLeft(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,Fin
 																									NewCol is InitialCoord2,
 																									validCell(NewRow,NewCol), !,
 																									getInfo(NewRow, NewCol, Info, LogicalBoard),
-																									Info == empty, !,
+																									Info == 0, !,
 																									NewNumberCells is NumberCells - 1,
 																									checkDragDiagonalUpLeft(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -331,7 +331,7 @@ checkDragDiagonalUpRight(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,Fi
 																									NewCol is InitialCoord2 + 1,
 																								 	validCell(NewRow,NewCol), !,
 																								 	getInfo(NewRow,NewCol,Info,LogicalBoard),
-																								 	Info == empty, !,
+																								 	Info == 0, !,
 																								 	NewNumberCells is NumberCells - 1,
 																								 	checkDragDiagonalUpRight(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -340,7 +340,7 @@ checkDragDiagonalUpRight(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,Fi
 																									NewCol is InitialCoord2,
 																								 	validCell(NewRow,NewCol), !,
 																								 	getInfo(NewRow,NewCol,Info,LogicalBoard),
-																								 	Info == empty, !,
+																								 	Info == 0, !,
 																								 	NewNumberCells is NumberCells - 1,
 																								 	checkDragDiagonalUpRight(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -349,7 +349,7 @@ checkDragRight(_,InitialCoord1,InitialCoord2,0,InitialCoord1,InitialCoord2).
 checkDragRight(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,FinalRow,FinalCol):-	NewCol is InitialCoord2 + 1,
 																				validCell(InitialCoord1,NewCol), !,
 																				getInfo(InitialCoord1,NewCol,Info,LogicalBoard),
-																				Info == empty, !,
+																				Info == 0, !,
 																				NewNumberCells is NumberCells - 1,
 																				checkDragRight(LogicalBoard,InitialCoord1,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -360,7 +360,7 @@ checkDragDiagonalDownRight(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,
 																										NewCol is InitialCoord2+1,
 																				 						validCell(NewRow,InitialCoord2), !,
 																					 					getInfo(NewRow,NewCol,Info,LogicalBoard),
-																					 					Info == empty, !,
+																					 					Info == 0, !,
 																				 						NewNumberCells is NumberCells - 1,
 																				 						checkDragDiagonalDownRight(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -370,7 +370,7 @@ checkDragDiagonalDownRight(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,
 																										NewCol is InitialCoord2,
 																				 						validCell(NewRow,InitialCoord2), !,
 																					 					getInfo(NewRow,NewCol,Info,LogicalBoard),
-																					 					Info == empty, !,
+																					 					Info == 0, !,
 																				 						NewNumberCells is NumberCells - 1,
 																				 						checkDragDiagonalDownRight(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -380,7 +380,7 @@ checkDragDiagonalDownLeft(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,F
 																									NewCol is InitialCoord2 - 1,
 																									validCell(NewRow,NewCol), !,
 																									getInfo(NewRow, NewCol, Info, LogicalBoard),
-																									Info == empty, !,
+																									Info == 0, !,
 																									NewNumberCells is NumberCells - 1,
 																									checkDragDiagonalDownLeft(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -389,7 +389,7 @@ checkDragDiagonalDownLeft(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,F
 																									NewCol is InitialCoord2,
 																									validCell(NewRow,NewCol), !,
 																									getInfo(NewRow, NewCol, Info, LogicalBoard),
-																									Info == empty, !,
+																									Info == 0, !,
 																									NewNumberCells is NumberCells - 1,
 																									checkDragDiagonalDownLeft(LogicalBoard,NewRow,NewCol,NewNumberCells,FinalRow,FinalCol).
 
@@ -398,7 +398,7 @@ checkDragLeft(_,InitialCoord1,InitialCoord2,0,InitialCoord1,InitialCoord2).
 checkDragLeft(LogicalBoard,InitialCoord1,InitialCoord2,NumberCells,FinalRow,FinalCol):-	NewCol is InitialCoord2 - 1,
 																				validCell(InitialCoord1,NewCol), !,
 																				getInfo(InitialCoord1,NewCol,Info,LogicalBoard),
-																				Info == empty, !,
+																				Info == 0, !,
 																				NewNumberCells is NumberCells - 1,
 																				checkDragLeft(LogicalBoard,InitialCoord1,NewCol,NewNumberCells,FinalRow,FinalCol).
 																				
@@ -547,41 +547,33 @@ logicalBoard([
 	            [0, 0, 0, 0, 0]
 
 	]).
-	logicalBoardTest([
-	            [blue, empty, empty, empty, empty],
-	         [empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, red, green, empty, yellow, empty],
-	[empty, empty, empty, empty, empty, empty, empty, empty, empty],
-	   [empty, empty, empty, empty, empty, empty, empty, empty],
-	      [empty, empty, empty, empty, empty, empty, empty],
-	         [empty, empty, blue, empty, empty, empty],
-	            [empty, empty, empty, empty, empty]
+
+logicalBoardTest([
+	            [1, 1, 1, 1, 1],
+	         [1, 1, 1, 1, 1, 1],
+	      [1, 1, 1, 1, 1, 1, 1],
+	   [1, 1, 1, 1, 1, 1, 1, 1],
+	[1, 1, 1, 1, 1, 1, 1, 1, 1],
+	   [1, 1, 1, 1, 1, 0, 1, 1],
+	      [1, 1, 1, 1, 1, 1, 1],
+	         [1, 1, 1, 1, 1, 1],
+	            [1, 1, 1, 1, 1]
+
 	]).
 	
 logicalBoardTest2([
-	            [blue, blue, blue, blue, blue],
-	         [blue, blue, blue, blue, blue, blue],
-	      [blue, blue, blue, blue, blue, blue, blue],
-	   [blue, blue, blue, blue, blue, blue, blue, blue],
-	[blue, blue, blue, blue, blue, blue, blue, blue, blue],
-	   [blue, blue, blue, blue, blue, blue, blue, blue],
-	      [blue, blue, blue, blue, blue, blue, blue],
-	         [blue, blue, blue, blue, blue, blue],
-	            [blue, blue, blue, blue, blue]
-	]).	
-	
-logicalBoardTest3([
-	            [yellow, green, red, blue, blue],
-	         [blue, blue, blue, blue, blue, blue],
-	      [blue, blue, blue, empty, blue, blue, blue],
-	   [blue, blue, blue, blue, blue, blue, blue, blue],
-	[blue, blue, blue, blue, blue, blue, blue, blue, blue],
-	   [blue, blue, blue, blue, blue, blue, blue, blue],
-	      [blue, blue, blue, blue, blue, blue, blue],
-	         [blue, blue, blue, blue, blue, blue],
-	            [blue, blue, blue, blue, blue]
-	]).	
+	            [1, 0, 0, 0, 0],
+	         [0, 0, 0, 0, 0, 0],
+	      [0, 0, 0, 0, 0, 0, 0],
+	   [0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   [0, 0, 0, 0, 0, 0, 0, 0],
+	      [0, 0, 0, 0, 0, 0, 0],
+	         [0, 0, 0, 0, 1, 0],
+	            [0, 0, 0, 0, 0]
+
+	]).
+
 
 displayBoard([
 	            ['1', '2', '3', '4', '5'],

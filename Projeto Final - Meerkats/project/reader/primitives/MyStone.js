@@ -8,7 +8,7 @@ function MyStone(scene, id, colorMaterial, position) {
 	this.position = position;
 	this.colorMaterial = colorMaterial;
 	this.makeStone();
-	this.tile = null;
+	this.settledTile = null;
 	this.picked = false;
 	this.moving = false;
 	this.roundNumberAction = 0;
@@ -25,6 +25,11 @@ function MyStone(scene, id, colorMaterial, position) {
 MyStone.prototype = Object.create(CGFobject.prototype);
 MyStone.prototype.constructor = MyStone;
 
+//onde a peça está localizada, ou seja, o tile onde ela está pousada no formato [MyBoardTile,55] 55 por exemplo, que é o picking ID do tile do tabuleiro
+MyStone.prototype.setSettledTile = function(tile){
+	this.settledTile = tile;
+
+}
 MyStone.prototype.makeStone = function() {
 
 	topControlPoints= 
@@ -139,10 +144,9 @@ MyStone.prototype.movementAnimation = function(){
 				this.scene.stateMachine.game.nextMove(this);
 			else
 				this.scene.stateMachine.game.previousMove(this);
+		this.scene.stateMachine.game.moveHasFinished = true;
 
-	console.log(this.scene.stateMachine.game.roundMove);
 	}
-
 };
 
 	

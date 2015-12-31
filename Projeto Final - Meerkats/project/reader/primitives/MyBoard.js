@@ -27,6 +27,7 @@ MyBoard.prototype.constructor = MyBoard;
 */
 MyBoard.prototype.makeBoard = function() {
 	var side = -1;
+	var tempID = 1;
 	for(var y=1; y<=9; y++) {
 		this.board[y] = [];
 		for(var x=1; x<=9; x++) {
@@ -68,6 +69,12 @@ MyBoard.prototype.makeBoard = function() {
 	}
 };
 
+//a alterar por causa do ID!!
+MyBoard.prototype.getRegistedBoard = function(Xpos,Ypos){
+	var res = [this.board[Xpos][Ypos],/*this.boardRegisterID[Xpos][Ypos]*/];
+	return res;
+}
+
 
 MyBoard.prototype.displayBoard = function(){
 	for(var y = 1 ; y <= 9; y++){
@@ -76,12 +83,12 @@ MyBoard.prototype.displayBoard = function(){
 			this.scene.translate(this.board[y][x].position.x,this.board[y][x].position.y,this.board[y][x].position.z);
 			this.scene.register(this.board[y][x]);
 			this.board[y][x].display();
-			this.scene.graph.pickID++;
 			this.scene.popMatrix();
 		}
 	}
 
 }
+
 
 
 
@@ -111,3 +118,5 @@ MyBoard.prototype.resetHighlight = function(){
 		for(var x = 1; x < this.board[y].length;x++)
 				this.board[y][x].highlight = false;
 };
+
+

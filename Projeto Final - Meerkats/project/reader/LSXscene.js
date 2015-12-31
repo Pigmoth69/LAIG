@@ -339,6 +339,7 @@ LSXscene.prototype.register = function (obj) {
 	
 	if(!this.stateMachine.game.animation && this.cameraAnimation.span == 0 && this.stateMachine.game.roundMove != 'pass')
 	{
+		//console.warn(this.graph.pickID);
 		this.registerForPick(this.graph.pickID,obj);
 		this.graph.pickID++;
 	}
