@@ -13,7 +13,10 @@ PlayMenu.prototype.constructor = PlayMenu;
 
 PlayMenu.prototype.display = function(){
 	this.scene.register(this.scene.graph.nodes['button']);
+	this.scene.pushMatrix();
+	this.scene.applyViewMatrix();
 	this.scene.drawNode(this.scene.graph.root['Main Menu'], 'null', 'clear');
+	this.scene.popMatrix();
 };
 
 PlayMenu.prototype.picking = function(obj){

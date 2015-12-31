@@ -27,6 +27,9 @@ CameraAnimation.prototype.handler = function(){
 			case 'Main Menu to Gameplay':
 				this.scene.stateMachine.currentState = 'Gameplay';
 				break;
+			case 'Gameplay to Main Menu':
+				this.scene.stateMachine.currentState = 'Main Menu';
+				this.scene.stateMachine.game = new Game(this.scene);
 			default: break;
 		}
 	

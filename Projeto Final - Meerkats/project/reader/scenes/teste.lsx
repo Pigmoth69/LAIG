@@ -43,14 +43,6 @@
 	</LIGHTS>
 	
 	<TEXTURES>
-		<TEXTURE id="grass">
-			<file path="./textures/grass.png" /> 
-			<amplif_factor s="1" t="1" /> 
-		</TEXTURE>
-		<TEXTURE id="grassHeight">
-			<file path="./textures/grassHeight2.png" /> 
-			<amplif_factor s="1" t="1" /> 
-		</TEXTURE>
 		<TEXTURE id="red">
 			<file path="./textures/red.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
@@ -77,10 +69,6 @@
 		</TEXTURE>
 		<TEXTURE id="botTile">
 			<file path="./textures/botTheme.jpg" /> 
-			<amplif_factor s="1" t="1" /> 
-		</TEXTURE>
-		<TEXTURE id="linnen">
-			<file path="./textures/bag.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="play">
@@ -127,24 +115,84 @@
 			<file path="./textures/landscape.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-		<TEXTURE id="blueWon">
-			<file path="./textures/blueWon.png" /> 
+		<TEXTURE id="Player1Won">
+			<file path="./textures/player1Won.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-		<TEXTURE id="redWon">
-			<file path="./textures/redWon.png" /> 
+		<TEXTURE id="Player2Won">
+			<file path="./textures/player2Won.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-		<TEXTURE id="greenWon">
-			<file path="./textures/greenWon.png" /> 
+		<TEXTURE id="Player3Won">
+			<file path="./textures/player3Won.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
-		<TEXTURE id="yellowWon">
-			<file path="./textures/yellowWon.png" /> 
+		<TEXTURE id="Player4Won">
+			<file path="./textures/player4Won.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="draw">
 			<file path="./textures/draw.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot1Won">
+			<file path="./textures/bot1Won.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot2Won">
+			<file path="./textures/bot2Won.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot3Won">
+			<file path="./textures/bot3Won.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot4Won">
+			<file path="./textures/bot4Won.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="drop">
+			<file path="./textures/drop.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="drag">
+			<file path="./textures/drag.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="pass">
+			<file path="./textures/pass.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Player1">
+			<file path="./textures/player1.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Player2">
+			<file path="./textures/player2.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Player3">
+			<file path="./textures/player3.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Player4">
+			<file path="./textures/player4.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot1">
+			<file path="./textures/bot1.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot2">
+			<file path="./textures/bot2.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot3">
+			<file path="./textures/bot3.png" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="Bot4">
+			<file path="./textures/bot4.png" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 	</TEXTURES>
@@ -195,7 +243,7 @@
 		<MATERIAL id="yellowStone">                                  
 			<shininess value="120" />
 			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
-			<diffuse r="0.9" g="0.9" b="0.05" a="1" />
+			<diffuse r="0.8" g="0.8" b="0.05" a="1" />
 			<ambient r="0.2" g="0.2" b="0.2" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
@@ -314,13 +362,8 @@
 			<controlpoint x="-1" y="0" z="2" />
 			<controlpoint x="0" y="0" z="3" />
 	    </LEAF>
-		<LEAF id="grass" type="terrain" texture="grass" heightmap="grassHeight" />
 	</LEAVES>
 
-	<STONES>
-		<STONE id="redStone" />
-	</STONES>
-	
 	<NODES>
 	    <ROOT id="Main Menu"/> 
 	    <ROOT id="Space"/> 
@@ -397,8 +440,6 @@
 			</DESCENDANTS>
 		</NODE>
 
-
-		
 		<NODE id="MainMenu">
 			<MATERIAL id="default" />
 			<TEXTURE id="null" />

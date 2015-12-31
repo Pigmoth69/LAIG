@@ -48,37 +48,16 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									socket.winnerResponse = array.slice(',');
 
 									if(socket.winnerResponse.length == 0)
-										socket.scene.stateMachine.game.winner = 0;
-									else socket.scene.stateMachine.game.winner = socket.winnerResponse[0];
+										socket.scene.stateMachine.game.winner = 'Draw';
+									else socket.scene.stateMachine.game.saveWinner(socket.winnerResponse[0]);
+
+									console.log(socket.scene.stateMachine.game.winner);
 								};					
 
 	request.onerror = function(){console.log("Error waiting for response");};
 
 	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 	request.send('requestString='+encodeURIComponent(requestString));		
-};
-
-Socket.prototype.handleReply = function(data){
-	console.log('reply');
-
-	var message = data.target.response.split(";");
-
-	console.log(message);
-};
-
-Socket.prototype.handleBoardReply = function(data){
-	var message = data.target.response.split(";");
-	var board = JSON.parse(message);
-	return board.slice(',');
-
-};
-
-Socket.prototype.handleColorsReply = function(data){
-
-	var message = data.target.response.split(";");
-	var board = JSON.parse(message);
-	this.colorsResponse = board.slice();
-	console.log(this.colorsResponse);
 };
 
 Socket.prototype.processBoardToString = function(){
