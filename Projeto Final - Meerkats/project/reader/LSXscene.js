@@ -38,7 +38,6 @@ LSXscene.prototype.init = function (application) {
 
 	this.setPickEnabled(true);
 
-	this.scoreBoard = new MyScoreBoard(this);
 
 };
 
@@ -87,17 +86,18 @@ LSXscene.prototype.loadInterface = function () {
   	this.graph.gameStatus['PASS TURN'] = function() { scene.stateMachine.game.passTurn(); };
 
   	this.graph.gameStatus['UNDO']=function(){
-  			if(!scene.stateMachine.game.animation){
+  			if(!scene.stateMachine.game.animation && scene.stateMachine.game.roundMove != 'drop'){
   			if(scene.stateMachine.game.pickedStone != null)
   				scene.stateMachine.game.pickedStone.picked = false;
-  			scene.stateMachine.game.pickedStone = null;
-  			scene.stateMachine.game.board.resetHighlight();
-  			scene.stateMachine.game.processUNDO();
+	  			scene.stateMachine.game.pickedStone = null;
+	  			scene.stateMachine.game.board.resetHighlight();
+	  			scene.stateMachine.game.processUNDO();
   		}
   	}
 
   	this.graph.gameStatus['EXIT']=function(){
-  		console.log("EXIT!");
+  		scene.stateMachine.currentState = 'Gameplay to Main Menu';
+  		scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0,50,0));
   	}
 
   	this.Humans = 2;
@@ -306,22 +306,11 @@ LSXscene.prototype.display = function () {
 		if (this.stateMachine.currentState == 'EndScreen')
 		{
 			this.pushMatrix();
-				this.translate(-2.5,2.1,-10);
+				this.translate(-5,0,-10);
+				this.scale(2, 2, 2);
 				this.stateMachine.endScreen.display();
 			this.popMatrix();
 		}
-		else if (this.stateMachine.currentState == 'Gameplay')
-		{
-			this.pushMatrix();
-				this.translate(-2.5,2.5,-10);
-				this.rotate(Math.PI/6, 0, 1, 0);
-				this.rotate(Math.PI/30, 0, 0, 1);
-				this.scale(0.5, 0.5, 0.5);
-				this.scoreBoard.display();
-			this.popMatrix();
-		}
-
-		this.applyViewMatrix();
 
 		var currTime = new Date();
 		this.milliseconds = currTime.getTime() - this.startingTime.getTime();
