@@ -27,7 +27,7 @@ MyBoard.prototype.constructor = MyBoard;
 */
 MyBoard.prototype.makeBoard = function() {
 	var side = -1;
-	var tempID = 1;
+	var boardID = 1;
 	for(var y=1; y<=9; y++) {
 		this.board[y] = [];
 		for(var x=1; x<=9; x++) {
@@ -37,34 +37,36 @@ MyBoard.prototype.makeBoard = function() {
 				case 9:
 				case 1:
 				if(x <=5){
-					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x+1)*2  - 8,0,side*6.8), y, x);
+					this.board[y][x] = new MyBoardTile(this.scene, boardID, new Coords((x+1)*2  - 8,0,side*6.8), y, x);
 				}
 				break;
 				case 8:
 				case 2:
 				if(x <=6){
-					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x+0.5)*2  - 8,0,side*5.1), y, x);
+					this.board[y][x] = new MyBoardTile(this.scene, boardID, new Coords((x+0.5)*2  - 8,0,side*5.1), y, x);
 				}
 				break;
 				case 7:
 				case 3:
 				if(x <=7){
-					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x)*2  - 8,0,side*3.4), y, x);
+					this.board[y][x] = new MyBoardTile(this.scene, boardID, new Coords((x)*2  - 8,0,side*3.4), y, x);
 				}
 				break;
 				case 6:
 				case 4:
 				if(x <=8){
-					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x-0.5)*2  - 8,0,side*1.7), y, x);
+					this.board[y][x] = new MyBoardTile(this.scene, boardID, new Coords((x-0.5)*2  - 8,0,side*1.7), y, x);
 				}
 				break;
 				case 5:
 				if(x <=9){
-					this.board[y][x] = new MyBoardTile(this.scene, new Coords((x-1)*2  - 8,0,side*0), y, x);
+					this.board[y][x] = new MyBoardTile(this.scene, boardID, new Coords((x-1)*2  - 8,0,side*0), y, x);
 				}
 				break;
 				default:
 			}
+
+			boardID++;
 		}
 	}
 };

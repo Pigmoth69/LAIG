@@ -48,7 +48,6 @@ Game.prototype.constructor = Game;
 
 
 Game.prototype.picking = function(obj){
-	console.warn(obj);
 		if(!this.currentPlayerIsBOT()){
 			if(obj[0] instanceof MyStone)
 				this.pickingStone(obj);
@@ -703,7 +702,7 @@ Game.prototype.makeDragBOT = function(){
 	var Xfinal = response[2];
 	var Yfinal = response[3];
 	//pedra que se vai mover
-	var movingStone = this.board.getRegistedStoneFromPos(Xinicial,Yinicial);
+	var movingStone = this.getRegistedStoneFromPos(Xinicial,Yinicial);
 	var tileToMove = this.board.getRegistedBoard(Xfinal,Yfinal);
 
 	var cena = this;
@@ -724,7 +723,7 @@ Game.prototype.makeDropBOT = function(){
 	var Xpos = response[1];
 	var Ypos = response[2];
 	//funções responsáveis por irem buscar os obj para enviar ao picking
-	var stone = this.board.getRegistedStone(stoneID);
+	var stone = this.getRegistedStone(stoneID);
 	var position = this.board.getRegistedBoard(Xpos,Ypos);
 
 	var cena = this;
@@ -736,7 +735,7 @@ Game.prototype.makeDropBOT = function(){
 		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
    		cena.pickingTile(position);
 		},500);
-	this.board.updateStones(stoneID);
+	this.updateStones(stoneID);
 }
 
 /*Vê se o jogador atual é um bot! Se for retorna true senão retorna false*/
@@ -774,7 +773,7 @@ Game.prototype.removeRemainingStones = function(stoneID){
 Game.prototype.getRegistedStoneFromPos = function(Xpos,Ypos){
 	for(var i = 0 ; i < this.stones.length;i++){
 		if(this.stones[i].settledTile!=null){
-			if(this.board[Xpos][Ypos] == this.stones[i].settledTile[0]){
+			if(this.board.board[Xpos][Ypos].id == this.stones[i].settledTile.id){
 				var stone = this.getRegistedStone(this.stones[i].id);
 				return stone;
 			}

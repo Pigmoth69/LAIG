@@ -2,8 +2,9 @@
  * MyBoardTile
  * @constructor
  */
-function MyBoardTile(scene,position, row, col) {
+function MyBoardTile(scene, id, position, row, col) {
 	CGFobject.call(this,scene);
+	this.id = id;
 	this.scene = scene;
 	this.row = row;
 	this.col = col;
