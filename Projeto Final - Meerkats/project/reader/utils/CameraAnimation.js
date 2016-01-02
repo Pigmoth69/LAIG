@@ -32,12 +32,10 @@ CameraAnimation.prototype.handler = function(){
 				this.scene.stateMachine.game = new Game(this.scene);
 			default: break;
 		}
-	
 };
 
 
-CameraAnimation.prototype.startCameraAnimation = function(time, finalPosition, finalTarget)
-{
+CameraAnimation.prototype.startCameraAnimation = function(time, finalPosition, finalTarget){
 	this.startTime = this.scene.milliseconds;
 	this.span = time;
 	this.animationType = 'translate';
@@ -52,12 +50,10 @@ CameraAnimation.prototype.startCameraAnimation = function(time, finalPosition, f
 	this.startTarget = vec3.fromValues(this.scene.camera.target[0], this.scene.camera.target[1], this.scene.camera.target[2]);
 	vec3.sub(delta, finalTarget, this.startTarget);
 	this.vectorTarget = delta;
-
 };
 
 
-CameraAnimation.prototype.startCameraOrbit = function(time, axis, angle)
-{
+CameraAnimation.prototype.startCameraOrbit = function(time, axis, angle){
 	this.startTime = this.scene.milliseconds;
 	this.span = time;
 	this.animationType = 'orbit';
@@ -65,6 +61,7 @@ CameraAnimation.prototype.startCameraOrbit = function(time, axis, angle)
 	this.orbitationAngle = angle;
 	this.orbitationAxis = axis;
 };
+
 
 CameraAnimation.prototype.animateCamera = function(){
 	var ratio = (this.scene.milliseconds - this.startTime) / this.span;

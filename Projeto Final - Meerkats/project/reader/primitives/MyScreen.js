@@ -7,8 +7,6 @@ function MyScreen(scene, material, texture, animation) {
 	this.texture = texture;
 	this.animation = animation;
 
-
-	console.log(this.texture);
 };
 
 MyScreen.prototype = Object.create(CGFobject.prototype);
@@ -24,10 +22,4 @@ MyScreen.prototype.display = function() {
 	this.scene.graph.textures[this.texture].unbind();
 
 	this.scene.popMatrix();
-
-};
-
-
-MyScreen.prototype.updateTextCoords = function(ampS,ampT){
-	//this.updateTexCoordsGLBuffers();
 };

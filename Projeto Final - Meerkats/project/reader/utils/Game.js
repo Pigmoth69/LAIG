@@ -1,4 +1,5 @@
 var ROUND_TIME = 60000;
+var MAX_COLOR_AREA = 5;
 
 function Game(scene) {
 
@@ -6,6 +7,7 @@ function Game(scene) {
 	this.players = [];
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
+	this.playedStones = 0;
 	this.score = [0, 0, 0, 0];
 	this.winner = null;
 
@@ -29,6 +31,8 @@ function Game(scene) {
 	this.playedStone = null;
 	this.pickedBoardTile = null;
 
+	this.replays = 0;
+	this.rewinds = 0;
 	this.undo = false;
 	this.undoRegister = [];
 
@@ -47,26 +51,77 @@ Game.prototype = Object.create(Object.prototype);
 Game.prototype.constructor = Game;
 
 
-Game.prototype.picking = function(obj){
-		if(!this.currentPlayerIsBOT()){
-			if(obj[0] instanceof MyStone)
-				this.pickingStone(obj);
-			else if(obj[0] instanceof MyBoardTile)
-				this.pickingTile(obj);
-		}
-
-	};
-
-
 
 /** Controla as principais açoes durante a excuçao do jogo
  *
  */
-
-
-
-
 Game.prototype.handler = function(){
+
+	if(this.rewinds > 0 && !this.animation){
+		this.processUNDO();
+		this.rewinds--;
+	}
+	else if(this.replays > 0 && !this.animation){
+		this.processREPLAY();
+		this.replays--;
+	}
+
+	if(this.endGame && this.winner != null && !this.animation)
+	{
+		var screenTexture = null;
+		var screenMaterial = null;
+
+		if(this.winner.length == 0)
+		{
+			screenTexture = 'draw';
+			screenMaterial = 'orange';
+		}
+		else{
+			screenTexture = this.winner[0] + "Won";
+			switch(this.winner[1]){
+				case 1:
+					screenMaterial = 'blueMarker';
+					this.animateStones('blueStone');
+					break;
+				case 2:
+					screenMaterial = 'redMarker';
+					this.animateStones('redStone');
+					break;
+				case 3:
+					screenMaterial = 'greenMarker';
+					this.animateStones('greenStone');
+					break;
+				case 4:
+					screenMaterial = 'yellowMarker';
+					this.animateStones('yellowStone');
+					break;
+				default: break;
+			}
+		}
+
+		this.scene.stateMachine.endScreen = new MyScreen(this.scene, screenMaterial, screenTexture, true);
+		this.scene.stateMachine.currentState = 'EndScreen';
+		return;
+	}
+
+	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
+	var groupOf15 = this.score.indexOf(MAX_COLOR_AREA) + 1;
+	if(groupOf15 != 0)
+		if((this.colorAssigned(groupOf15) || this.playedStones == 60) && !this.endGame)
+		{
+			this.endGame = true;
+
+			var stringBoard = this.scene.socket.processBoardToString();
+			var requestString = "[checkWinner," + stringBoard + ",_Result]";
+			this.scene.socket.sendRequest(requestString, 'winner');
+			return;
+		}
+
+	this.updateTimer();
+
+	//recolhe a informaçao relativa a cores sorteadas para cada jogador
+	if(this.scene.socket.colorsResponse != null)
+		this.generatePlayersList();
 
 	//se for o bot a jogar, passar a vez dele para o próximo
 
@@ -119,71 +174,16 @@ Game.prototype.handler = function(){
 		this.canPass = true;
 	}
 	else if(this.botCanDrag && this.scene.socket.botResponseDRAG!= null && this.moveHasFinished==true){
-		console.warn("era suposto o movimento acabar!!");
+		//console.warn("era suposto o movimento acabar!!");
 		this.moveHasFinished = false;
 		this.botCanDrag=false;
-		console.warn("entrei");
+		//console.warn("entrei");
 		this.makeDragBOT();
 		this.canPass=true;
 	}
 
 
-if(this.endGame && this.winner != null && !this.animation)
-	{
-		var screenTexture = null;
-		var screenMaterial = null;
 
-		if(this.winner.length == 0)
-		{
-			screenTexture = 'draw';
-			screenMaterial = 'orange';
-		}
-		else{
-			screenTexture = this.winner[0] + "Won";
-			switch(this.winner[1]){
-				case 1:
-					screenMaterial = 'blueMarker';
-					this.animateStones('blueStone');
-					break;
-				case 2:
-					screenMaterial = 'redMarker';
-					this.animateStones('redStone');
-					break;
-				case 3:
-					screenMaterial = 'greenMarker';
-					this.animateStones('greenStone');
-					break;
-				case 4:
-					screenMaterial = 'yellowMarker';
-					this.animateStones('yellowStone');
-					break;
-				default: break;
-			}
-		}
-
-		this.scene.stateMachine.endScreen = new MyScreen(this.scene, screenMaterial, screenTexture, true);
-		this.scene.stateMachine.currentState = 'EndScreen';
-		return;
-	}
-
-	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
-	var groupOf15 = this.score.indexOf(5) + 1;
-	if(groupOf15 != 0)
-		if((this.colorAssigned(groupOf15) || this.roundNumber == 61) && !this.endGame)
-		{
-			this.endGame = true;
-
-			var stringBoard = this.scene.socket.processBoardToString();
-			var requestString = "[checkWinner," + stringBoard + ",_Result]";
-			this.scene.socket.sendRequest(requestString, 'winner');
-			return;
-		}
-
-	this.updateTimer();
-
-	//recolhe a informaçao relativa a cores sorteadas para cada jogador
-	if(this.scene.socket.colorsResponse != null)
-		this.generatePlayersList();
 
 	//se o socket contiver informação respetiva ao arrasto de uma peça, o tabuleiro é alterado
 	if(this.validDragPositions && this.scene.socket.boardResponse != null)
@@ -201,6 +201,50 @@ if(this.endGame && this.winner != null && !this.animation)
 	}
 };
 
+
+Game.prototype.prepareStones = function(){
+	var id = 1;
+	var radius = 12;
+	var angleStep = 2*Math.PI/60;
+	var angle = 0;
+	for(var i = 0; i < 4; i++)
+	{
+		for(var j = 0; j < 15; j++)
+		{
+			var position = new Coords(radius*Math.sin(angle), 0, radius*Math.cos(angle));
+
+			if(i == 0){
+				this.stones.push(new MyStone(this.scene, id, 'blueStone', position));
+				this.remainingStones.push(id);
+			}
+			else if(i == 1){
+				this.stones.push(new MyStone(this.scene, id, 'redStone', position));
+				this.remainingStones.push(id);
+			}		
+			else if(i == 2){
+				this.stones.push(new MyStone(this.scene, id, 'yellowStone', position));
+				this.remainingStones.push(id);
+			}
+			else if(i == 3){
+				this.stones.push(new MyStone(this.scene, id, 'greenStone', position));
+				this.remainingStones.push(id);
+			}
+
+			angle += angleStep;
+			id++;
+		}
+	}
+};
+
+
+Game.prototype.picking = function(obj){
+	if(!this.currentPlayerIsBOT()){
+		if(obj[0] instanceof MyStone)
+			this.pickingStone(obj);
+		else if(obj[0] instanceof MyBoardTile)
+			this.pickingTile(obj);
+	}
+};
 
 
 Game.prototype.pickingStone = function(obj){
@@ -236,12 +280,11 @@ Game.prototype.pickingStone = function(obj){
 
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[validDragPositions," + this.pickedStone.settledTile.row + ',' + this.pickedStone.settledTile.col + ',' + stringBoard + ",_Result" + "]";
-			console.warn(requestString);
+			//console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'board');
 		}
 	}
 };
-
 
 
 Game.prototype.pickingTile = function(obj){
@@ -250,6 +293,7 @@ Game.prototype.pickingTile = function(obj){
 		if(this.roundMove == 'drag')
 			this.pickedStone.settledTile.info = 0;
 
+		this.pickedBoardTile = obj[0];
 		this.saveUNDO();
 		//guardar na stone o tile onde ela vai ficar
 		this.pickedStone.settledTile = obj[0];
@@ -260,183 +304,10 @@ Game.prototype.pickingTile = function(obj){
 		this.updateScore = true;
 		var stringBoard = this.scene.socket.processBoardToString();
 		var requestString = "[checkScore," + stringBoard + ",_Result]";
-		console.warn(requestString);
+		//console.warn(requestString);
 		this.scene.socket.sendRequest(requestString, 'score');
 	}
 };
-
-
-
-//updategamescore
-Game.prototype.updateGameScore = function(){
-    var max = 0;
-    if(this.scene.socket.scoreResponse[0][1].length > 0)
-    {
-        max = Math.max.apply(null, this.scene.socket.scoreResponse[0][1]);
-        this.score[0] = max;
-    }
-
-    if(this.scene.socket.scoreResponse[1][1].length > 0)
-    {
-        max = Math.max.apply(null, this.scene.socket.scoreResponse[1][1]);
-        this.score[1] = max;
-    }
-
-    if(this.scene.socket.scoreResponse[2][1].length > 0)
-    {
-        max = Math.max.apply(null, this.scene.socket.scoreResponse[2][1]);
-        this.score[2] = max;
-
-    }
-
-    if(this.scene.socket.scoreResponse[3][1].length > 0)
-    {
-        max = Math.max.apply(null, this.scene.socket.scoreResponse[3][1]);
-        this.score[3] = max;
-    }
-
-    this.updateMarkers();
-};
-//updategamemarkers
-Game.prototype.updateMarkers = function(){
-    if(this.score[0] > 9)
-            this.scoreBoard.blueMarker.first = 1;
-        else this.scoreBoard.blueMarker.first = 0;
-
-        this.scoreBoard.blueMarker.second = this.score[0] % 10;
-
-    if(this.score[1] > 9)
-            this.scoreBoard.redMarker.first = 1;
-        else this.scoreBoard.redMarker.first = 0;
-
-        this.scoreBoard.redMarker.second = this.score[1] % 10;
-
-    if(this.score[2] > 9)
-            this.scoreBoard.greenMarker.first = 1;
-        else this.scoreBoard.greenMarker.first = 0;
-
-        this.scoreBoard.greenMarker.second = this.score[2] % 10;
-
-    if(this.score[3] > 9)
-            this.scoreBoard.yellowMarker.first = 1;
-        else this.scoreBoard.yellowMarker.first = 0;
-
-        this.scoreBoard.yellowMarker.second = this.score[3] % 10;
-};
-
-
-Game.prototype.saveUNDO = function(){
-	if(this.roundMove == 'drop')
-	{
-		this.undoRegister['drop'] = [];
-		this.undoRegister['drop']['stone'] = this.pickedStone;
-		this.undoRegister['drop']['initialPosition'] = this.pickedStone.position;
-		
-		this.undoRegister['drop']['score'] = [];
-		this.undoRegister['drop']['score'][0] = this.score[0];this.undoRegister['drop']['score'][1] = this.score[1];
-		this.undoRegister['drop']['score'][2] = this.score[2];this.undoRegister['drop']['score'][3] = this.score[3];
-	}
-	else if(this.roundMove == 'drag')
-	{
-		this.undoRegister['drag'] = [];
-		this.undoRegister['drag']['stone'] = this.pickedStone;
-		this.undoRegister['drag']['playedStone'] = this.playedStone;
-		this.undoRegister['drag']['tile'] = this.pickedStone.settledTile;
-		this.undoRegister['drag']['initialPosition'] = this.pickedStone.position;
-
-		this.undoRegister['drag']['score'] = [];
-		this.undoRegister['drag']['score'][0] = this.score[0];this.undoRegister['drag']['score'][1] = this.score[1];
-		this.undoRegister['drag']['score'][2] = this.score[2];this.undoRegister['drag']['score'][3] = this.score[3];
-	}
-};
-
-
-Game.prototype.processUNDO = function(){
-	this.undo = true;
-
-
-	if(this.roundMove == 'drag' || (this.roundMove == 'pass' && this.roundNumber == 1))
-	{
-		this.undoRegister['drop']['stone'].settledTile.info = 0;
-		this.undoRegister['drop']['stone'].settledTile = null;
-		this.playedStone = null;
-		this.pickedStone = this.undoRegister['drop']['stone'];
-		this.animation = true;
-		this.undoRegister['drop']['stone'].moveStone(this.undoRegister['drop']['initialPosition']);
-
-		this.score[0] = this.undoRegister['drop']['score'][0];this.score[1] = this.undoRegister['drop']['score'][1];
-		this.score[2] = this.undoRegister['drop']['score'][2];this.score[3] = this.undoRegister['drop']['score'][3];
-	}
-	else if(this.roundMove == 'pass'){
-
-		switch(this.undoRegister['drag']['stone'].colorMaterial){
-			case 'blueStone':
-				this.undoRegister['drag']['tile'].info = 1;
-				break;
-			case 'redStone':
-				this.undoRegister['drag']['tile'].info = 2;
-				break;
-			case 'greenStone':
-				this.undoRegister['drag']['tile'].info = 3;
-				break;
-			case 'yellowStone':
-				this.undoRegister['drag']['tile'].info = 4;
-				break;
-			default: break;
-		}
-
-		this.playedStone = this.undoRegister['drag']['playedStone'];
-		this.undoRegister['drag']['stone'].settledTile.info = 0;
-		this.undoRegister['drag']['stone'].settledTile = this.undoRegister['drag']['tile'];
-		this.undoRegister['drag']['stone'].standByAnimationHeight = 0;
-		this.undoRegister['drag']['stone'].standByAnimationVelocity = 0.17;
-		this.animation = true;
-		this.pickedStone = this.undoRegister['drag']['stone'];
-		this.undoRegister['drag']['stone'].moveStone(this.undoRegister['drag']['initialPosition']);
-
-		this.score[0] = this.undoRegister['drag']['score'][0];this.score[1] = this.undoRegister['drag']['score'][1];
-		this.score[2] = this.undoRegister['drag']['score'][2];this.score[3] = this.undoRegister['drag']['score'][3];
-	}
-
-	this.updateMarkers();
-};
-
-
-Game.prototype.passTurn = function(){
-	if(this.roundMove == 'pass' && this.animation == false)
-	{
-		console.log("passa de ronda!");
-  		this.scene.socket.botResponseDROP = null;
-		this.scene.socket.botResponseDRAG = null;
-  		this.roundNumber++;
-		this.roundMove = 'drop';
-		this.roundTime = this.scene.milliseconds + ROUND_TIME;
-		this.movePannel.texture = this.roundMove;
-		this.undoRegister = [];
-		if(this.pickedStone != null)
-			this.pickedStone.picked = false;
-		this.board.resetHighlight();
-		this.pickedStone = null;
-		this.playedStone = null;
-		this.pickedBoardTile = null;
-
-		var playerIndex = (this.roundNumber - 1) % this.players.length;
-		this.currentPlayer.texture = this.players[playerIndex][0];
-
-		this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
-
-		if(this.currentPlayerIsBOT())
-			this.isBotTurn=true;
- 	} 		
-};
-
-
-
-
-
-  //////////////////////////////////////////////////
- //////			FUNCTION 100% CHECKED		///////
-//////////////////////////////////////////////////
 
 
 Game.prototype.display = function(){
@@ -480,53 +351,6 @@ Game.prototype.display = function(){
 };
 
 
-
-Game.prototype.saveWinner = function(color){
-
-	this.winner = [];
-	for(var i = 0; i < this.players.length; i++)
-		if(this.players[i][1] == color){
-			this.winner = this.players[i];
-			return;
-		}
-}
-
-
-Game.prototype.prepareStones = function(){
-	var id = 1;
-	var radius = 12;
-	var angleStep = 2*Math.PI/60;
-	var angle = 0;
-	for(var i = 0; i < 4; i++)
-	{
-		for(var j = 0; j < 15; j++)
-		{
-			var position = new Coords(radius*Math.sin(angle), 0, radius*Math.cos(angle));
-
-			if(i == 0){
-				this.stones.push(new MyStone(this.scene, id, 'blueStone', position));
-				this.remainingStones.push(id);
-			}
-			else if(i == 1){
-				this.stones.push(new MyStone(this.scene, id, 'redStone', position));
-				this.remainingStones.push(id);
-			}		
-			else if(i == 2){
-				this.stones.push(new MyStone(this.scene, id, 'yellowStone', position));
-				this.remainingStones.push(id);
-			}
-			else if(i == 3){
-				this.stones.push(new MyStone(this.scene, id, 'greenStone', position));
-				this.remainingStones.push(id);
-			}
-
-			angle += angleStep;
-			id++;
-		}
-	}
-};
-
-
 Game.prototype.displayStones = function(){
 	for(var i = 0; i < this.stones.length; i++)
 	{
@@ -540,6 +364,205 @@ Game.prototype.displayStones = function(){
 };
 
 
+Game.prototype.updateGameScore = function(){
+    var max = 0;
+    if(this.scene.socket.scoreResponse[0][1].length > 0)
+    {
+        max = Math.max.apply(null, this.scene.socket.scoreResponse[0][1]);
+        this.score[0] = max;
+    }
+
+    if(this.scene.socket.scoreResponse[1][1].length > 0)
+    {
+        max = Math.max.apply(null, this.scene.socket.scoreResponse[1][1]);
+        this.score[1] = max;
+    }
+
+    if(this.scene.socket.scoreResponse[2][1].length > 0)
+    {
+        max = Math.max.apply(null, this.scene.socket.scoreResponse[2][1]);
+        this.score[2] = max;
+
+    }
+
+    if(this.scene.socket.scoreResponse[3][1].length > 0)
+    {
+        max = Math.max.apply(null, this.scene.socket.scoreResponse[3][1]);
+        this.score[3] = max;
+    }
+
+    this.updateMarkers();
+};
+
+
+Game.prototype.updateMarkers = function(){
+    if(this.score[0] > 9)
+            this.scoreBoard.blueMarker.first = 1;
+        else this.scoreBoard.blueMarker.first = 0;
+
+        this.scoreBoard.blueMarker.second = this.score[0] % 10;
+
+    if(this.score[1] > 9)
+            this.scoreBoard.redMarker.first = 1;
+        else this.scoreBoard.redMarker.first = 0;
+
+        this.scoreBoard.redMarker.second = this.score[1] % 10;
+
+    if(this.score[2] > 9)
+            this.scoreBoard.greenMarker.first = 1;
+        else this.scoreBoard.greenMarker.first = 0;
+
+        this.scoreBoard.greenMarker.second = this.score[2] % 10;
+
+    if(this.score[3] > 9)
+            this.scoreBoard.yellowMarker.first = 1;
+        else this.scoreBoard.yellowMarker.first = 0;
+
+        this.scoreBoard.yellowMarker.second = this.score[3] % 10;
+};
+
+
+Game.prototype.saveUNDO = function(){
+	if(this.roundMove == 'drop')
+	{
+		this.undoRegister['drop'] = [];
+		this.undoRegister['drop']['stone'] = this.pickedStone;
+		this.undoRegister['drop']['initialPosition'] = this.pickedStone.position;
+		this.undoRegister['drop']['tile'] = this.pickedBoardTile;
+		
+		this.undoRegister['drop']['score'] = [];
+		this.undoRegister['drop']['score'][0] = this.score[0];this.undoRegister['drop']['score'][1] = this.score[1];
+		this.undoRegister['drop']['score'][2] = this.score[2];this.undoRegister['drop']['score'][3] = this.score[3];
+	}
+	else if(this.roundMove == 'drag')
+	{
+		this.undoRegister['drag'] = [];
+		this.undoRegister['drag']['stone'] = this.pickedStone;
+		this.undoRegister['drag']['playedStone'] = this.playedStone;
+		this.undoRegister['drag']['initialTile'] = this.pickedStone.settledTile;
+		this.undoRegister['drag']['finalTile'] = this.pickedBoardTile;
+		this.undoRegister['drag']['initialPosition'] = this.pickedStone.position;
+
+		this.undoRegister['drag']['score'] = [];
+		this.undoRegister['drag']['score'][0] = this.score[0];this.undoRegister['drag']['score'][1] = this.score[1];
+		this.undoRegister['drag']['score'][2] = this.score[2];this.undoRegister['drag']['score'][3] = this.score[3];
+	}
+};
+
+
+Game.prototype.processUNDO = function(){
+	this.undo = true;
+
+
+	if(this.roundMove == 'drag' || (this.roundMove == 'pass' && this.roundNumber == 1))
+	{
+		this.undoRegister['drop']['tile'].info = 0;
+		this.undoRegister['drop']['stone'].settledTile = null;
+		this.playedStone = null;
+		this.pickedStone = this.undoRegister['drop']['stone'];
+		this.animation = true;
+		this.undoRegister['drop']['stone'].moveStone(this.undoRegister['drop']['initialPosition']);
+
+		this.score[0] = this.undoRegister['drop']['score'][0];this.score[1] = this.undoRegister['drop']['score'][1];
+		this.score[2] = this.undoRegister['drop']['score'][2];this.score[3] = this.undoRegister['drop']['score'][3];
+	}
+	else if(this.roundMove == 'pass'){
+
+		switch(this.undoRegister['drag']['stone'].colorMaterial){
+			case 'blueStone':
+				this.undoRegister['drag']['initialTile'].info = 1;
+				break;
+			case 'redStone':
+				this.undoRegister['drag']['initialTile'].info = 2;
+				break;
+			case 'greenStone':
+				this.undoRegister['drag']['initialTile'].info = 3;
+				break;
+			case 'yellowStone':
+				this.undoRegister['drag']['initialTile'].info = 4;
+				break;
+			default: break;
+		}
+
+		this.playedStone = this.undoRegister['drag']['playedStone'];
+		this.undoRegister['drag']['finalTile'].info = 0;
+		this.undoRegister['drag']['stone'].settledTile = this.undoRegister['drag']['initialTile'];
+		this.animation = true;
+		this.pickedStone = this.undoRegister['drag']['stone'];
+		this.undoRegister['drag']['stone'].moveStone(this.undoRegister['drag']['initialPosition']);
+
+		this.score[0] = this.undoRegister['drag']['score'][0];this.score[1] = this.undoRegister['drag']['score'][1];
+		this.score[2] = this.undoRegister['drag']['score'][2];this.score[3] = this.undoRegister['drag']['score'][3];
+	}
+
+	this.updateMarkers();
+};
+
+
+Game.prototype.processREPLAY = function(){
+	if(this.roundMove == 'drop')
+	{
+		this.animation = true;
+		//console.log('teste');
+		this.pickedStone = this.undoRegister['drop']['stone'];
+		this.moveStone(this.undoRegister['drop']['tile']);
+	}
+	else if(this.roundMove == 'drag'){
+		this.animation = true;
+		this.pickedStone = this.undoRegister['drag']['stone'];
+		this.moveStone(this.undoRegister['drag']['finalTile']);
+	}
+};
+
+
+Game.prototype.prepareREPLAY = function(){
+	if(this.roundMove == 'drag' || (this.roundMove == 'pass' && this.roundNumber == 1))
+		{this.rewinds = 1;}
+	else this.rewinds = 2;
+
+	this.replays = this.rewinds;
+};
+
+
+Game.prototype.passTurn = function(){
+	if(this.roundMove == 'pass' && this.animation == false)
+	{
+		//console.log("passa de ronda!");
+  		this.scene.socket.botResponseDROP = null;
+		this.scene.socket.botResponseDRAG = null;
+  		this.roundNumber++;
+		this.roundMove = 'drop';
+		this.roundTime = this.scene.milliseconds + ROUND_TIME;
+		this.movePannel.texture = this.roundMove;
+		this.undoRegister = [];
+		if(this.pickedStone != null)
+			this.pickedStone.picked = false;
+		this.board.resetHighlight();
+		this.pickedStone = null;
+		this.playedStone = null;
+		this.pickedBoardTile = null;
+
+		var playerIndex = (this.roundNumber - 1) % this.players.length;
+		this.currentPlayer.texture = this.players[playerIndex][0];
+
+		this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+
+		if(this.currentPlayerIsBOT())
+			this.isBotTurn=true;
+ 	} 		
+};
+
+
+Game.prototype.saveWinner = function(color){
+
+	this.winner = [];
+	for(var i = 0; i < this.players.length; i++)
+		if(this.players[i][1] == color){
+			this.winner = this.players[i];
+			return;
+		}
+};
+
 
 
 Game.prototype.colorAssigned = function(color){
@@ -549,8 +572,6 @@ Game.prototype.colorAssigned = function(color){
 
 	return false;
 };
-
-
 
 
 Game.prototype.generatePlayersList = function(){
@@ -607,13 +628,13 @@ Game.prototype.nextMove = function(stone){
 	{
 		this.playedStone = stone;
 		this.roundMove = 'pass';
-		console.log(stone);
+		this.playedStones++;
 	}
 	else if(this.roundMove == 'drop')
 	{
 		this.playedStone = stone;
 		this.roundMove = 'drag';
-		console.log(stone);
+		this.playedStones++;
 	}
 	else this.roundMove = 'pass';
 
@@ -622,15 +643,17 @@ Game.prototype.nextMove = function(stone){
 
 
 Game.prototype.previousMove = function(stone){
-	if(this.roundNumber == 1)
+	if(this.roundNumber == 1 || this.roundMove == 'drag')
+	{
 		this.roundMove = 'drop';
-	else if(this.roundMove == 'drag')
-		this.roundMove = 'drop';
+		this.playedStones--;
+	}
 	else if(this.roundMove == 'pass')
 		this.roundMove = 'drag';
 
 	this.undo = false;
 	this.pickedStone = null;
+
 
 	this.movePannel.texture = this.roundMove;
 };
@@ -642,12 +665,12 @@ Game.prototype.updateTimer = function(){
 	this.timer.first = Math.floor(time/10);
 	this.timer.second = time % 10;
 
-	if(this.timer.first == 0 && this.timer.second == 0)
-		{
-			this.roundMove = 'pass';
-			this.animation = false;
-			this.passTurn();
-		}
+	if(time <= 0)
+	{
+		this.roundMove = 'pass';
+		this.animation = false;
+		this.passTurn();
+	}
 };
 
 
@@ -693,7 +716,6 @@ Game.prototype.animateStones = function(material){
 		this.scene.socket.sendRequest(requestString, 'botdrag');*/
 
 
-
 Game.prototype.makeDragBOT = function(){
 	var response = this.scene.socket.botResponseDRAG;
 
@@ -713,7 +735,8 @@ Game.prototype.makeDragBOT = function(){
 		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
    		cena.pickingTile(tileToMove);
 		},500);
-}
+};
+
 
 Game.prototype.makeDropBOT = function(){
 	var response = this.scene.socket.botResponseDROP;
@@ -736,9 +759,8 @@ Game.prototype.makeDropBOT = function(){
    		cena.pickingTile(position);
 		},500);
 	this.updateStones(stoneID);
-}
+};
 
-/*Vê se o jogador atual é um bot! Se for retorna true senão retorna false*/
 
 Game.prototype.currentPlayerIsBOT = function(){
 	var playerIndex = (this.roundNumber - 1) % this.players.length;
@@ -747,8 +769,7 @@ Game.prototype.currentPlayerIsBOT = function(){
 		return false;
 	else
 		return true;
-}
-
+};
 
 
 Game.prototype.getRegistedStone = function(stoneID){
@@ -756,18 +777,20 @@ Game.prototype.getRegistedStone = function(stoneID){
 		if(this.stones[i].id == stoneID)
 			return [this.stones[i],this.stones[i].id];
 	}
-}
+};
+
 
 Game.prototype.updateStones = function(stoneID){
 	this.removeRemainingStones(stoneID);
-}
+};
 
 
 Game.prototype.removeRemainingStones = function(stoneID){
 	var index = this.remainingStones.indexOf(stoneID);
 	if(index > -1)
 		this.remainingStones.splice(index,1);
-}
+};
+
 
 //função que através das coordenadas X, Y vao buscar a pedra que se encontra na posição X Y do tabuleiro
 Game.prototype.getRegistedStoneFromPos = function(Xpos,Ypos){
@@ -779,4 +802,4 @@ Game.prototype.getRegistedStoneFromPos = function(Xpos,Ypos){
 			}
 		}
 	}
-}
+};

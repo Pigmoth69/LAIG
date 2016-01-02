@@ -144,6 +144,7 @@ MyStone.prototype.movementAnimation = function(){
 				this.scene.stateMachine.game.nextMove(this);
 			else
 				this.scene.stateMachine.game.previousMove(this);
+			
 		this.scene.stateMachine.game.moveHasFinished = true;
 
 	}

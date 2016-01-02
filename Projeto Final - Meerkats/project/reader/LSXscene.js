@@ -37,8 +37,6 @@ LSXscene.prototype.init = function (application) {
   	this.BackgroundRGB = [76.5, 76.5, 76.5];
 
 	this.setPickEnabled(true);
-
-
 };
 
 
@@ -95,6 +93,16 @@ LSXscene.prototype.loadInterface = function () {
   		}
   	}
 
+  	this.graph.gameStatus['REPLAY']=function(){
+  		if(!scene.stateMachine.game.animation && scene.stateMachine.game.roundMove != 'drop'){
+  			if(scene.stateMachine.game.pickedStone != null)
+  				scene.stateMachine.game.pickedStone.picked = false;
+	  			scene.stateMachine.game.pickedStone = null;
+	  			scene.stateMachine.game.board.resetHighlight();
+	  			scene.stateMachine.game.prepareREPLAY();
+  		}
+  	}
+
   	this.graph.gameStatus['EXIT']=function(){
   		scene.stateMachine.currentState = 'Gameplay to Main Menu';
   		scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0,50,0));
@@ -108,15 +116,14 @@ LSXscene.prototype.loadInterface = function () {
   	this.interface.loadInterfaceGameCameras();
   	this.interface.loadInterfaceGameFunctions();
   	this.interface.loadInterfaceScenes();
+};
 
- }
 
- /*@brief Altera a cena para a cena pretendida pelo utilizador*/
- LSXscene.prototype.changeScene = function(cena){
+/*@brief Altera a cena para a cena pretendida pelo utilizador*/
+LSXscene.prototype.changeScene = function(cena){
  	var scene = this;
  	scene.stateMachine.currentScenario = cena;
- 
- }
+};
 
 
 /** @brief Altera valores de frustum da camara e cria a estrutura de eixos com as dimensoes obtidas do ficheiro .lsx

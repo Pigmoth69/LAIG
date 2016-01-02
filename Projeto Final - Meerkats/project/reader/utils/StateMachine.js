@@ -57,13 +57,10 @@ StateMachine.prototype.displayHandler = function(){
 			this.currentScenario = null;
 			console.warn("Nodes for that current scenario does not exist!");
 		}
-			
-	
 };
 
 
-StateMachine.prototype.pickingHandler = function(obj)
-{
+StateMachine.prototype.pickingHandler = function(obj){
 	switch(this.currentState){
 		case 'Main Menu':
 			this.playMenu.picking(obj);
@@ -73,8 +70,4 @@ StateMachine.prototype.pickingHandler = function(obj)
 			break;
 		default: break;
 	}
-
 };
-
-
-

@@ -71,11 +71,11 @@ MyBoard.prototype.makeBoard = function() {
 	}
 };
 
-//a alterar por causa do ID!!
+
 MyBoard.prototype.getRegistedBoard = function(Xpos,Ypos){
 	var res = [this.board[Xpos][Ypos],/*this.boardRegisterID[Xpos][Ypos]*/];
 	return res;
-}
+};
 
 
 MyBoard.prototype.displayBoard = function(){
@@ -88,16 +88,12 @@ MyBoard.prototype.displayBoard = function(){
 			this.scene.popMatrix();
 		}
 	}
-
-}
-
-
-
+};
 
 
 MyBoard.prototype.display = function(){
 	this.displayBoard();
-}
+};
 
 
 MyBoard.prototype.highlightDragPositions = function(boardResponse){
@@ -108,6 +104,7 @@ MyBoard.prototype.highlightDragPositions = function(boardResponse){
 		}
 };
 
+
 MyBoard.prototype.highlightDropPositions = function(){
 	for(var y = 1 ; y <= 9; y++)
 		for(var x = 1; x < this.board[y].length;x++)
@@ -115,10 +112,9 @@ MyBoard.prototype.highlightDropPositions = function(){
 				this.board[y][x].highlight = true;
 };
 
+
 MyBoard.prototype.resetHighlight = function(){
 	for(var y = 1 ; y <= 9; y++)
 		for(var x = 1; x < this.board[y].length;x++)
 				this.board[y][x].highlight = false;
 };
-
-

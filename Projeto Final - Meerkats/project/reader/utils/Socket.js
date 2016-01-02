@@ -27,7 +27,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var message = data.target.response.split(";");
 									var board = JSON.parse(message);
 									socket.boardResponse = board.slice(',');
-									console.log(socket.boardResponse);
+									//console.log(socket.boardResponse);
 								};
 	else if(type == 'score')
 		request.onload = function(data){
@@ -42,7 +42,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var message = data.target.response.split(";");
 									var array = JSON.parse(message);
 									socket.colorsResponse = array.slice(',');
-									console.warn(socket.colorsResponse);
+									//console.warn(socket.colorsResponse);
 								};
 	else if(type == 'winner')
 		request.onload = function(data){
@@ -53,20 +53,20 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									if(socket.winnerResponse.length == 0)
 										socket.scene.stateMachine.game.winner = 'Draw';
 									else socket.scene.stateMachine.game.saveWinner(socket.winnerResponse[0]);
-									console.log(socket.scene.stateMachine.game.winner);
+									//console.log(socket.scene.stateMachine.game.winner);
 								};					
 	else if(type == 'botdrop')
 		request.onload = function(data){
 									var message = data.target.response.split(";");
 									console.warn(message);
 									socket.botResponseDROP = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2])];
-									console.warn(socket.botResponseDROP);
+									//console.warn(socket.botResponseDROP);
 								};
 	else if(type == 'botdrag')
 		request.onload = function(data){
 									var message = data.target.response.split(";");
 									socket.botResponseDRAG = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2]),parseInt(message[3])];
-									console.warn(socket.botResponseDRAG);
+									//console.warn(socket.botResponseDRAG);
 								};						
 
 	request.onerror = function(){console.log("Error waiting for response");};
