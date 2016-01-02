@@ -24,7 +24,7 @@ PlayMenu.prototype.picking = function(obj){
 	switch(ID){
 		case 1:
 			var requestString = '[sortColors,["' + this.scene.Humans + '"],["' + this.scene.Bots +'"],_Result]';
-			console.warn(requestString);
+			//console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'colors');
 			this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 30, 33), vec3.fromValues(0,0,0));
 			this.scene.stateMachine.currentState = 'Main Menu to Gameplay';

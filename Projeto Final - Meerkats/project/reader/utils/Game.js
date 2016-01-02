@@ -110,6 +110,7 @@ Game.prototype.handler = function(){
 		if((this.colorAssigned(groupOf15) || this.playedStones == 60) && !this.endGame)
 		{
 			this.endGame = true;
+			console.alert(this.playedStones);
 
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[checkWinner," + stringBoard + ",_Result]";
@@ -267,8 +268,10 @@ Game.prototype.pickingStone = function(obj){
 			{
 				this.pickedStone.picked = false;
 				this.pickedStone = null;
+				this.board.resetHighlight();
 			}
 		}
+
 		obj[0].picked = true;
 		this.pickedStone = obj[0];
 
@@ -527,6 +530,7 @@ Game.prototype.prepareREPLAY = function(){
 Game.prototype.passTurn = function(){
 	if(this.roundMove == 'pass' && this.animation == false)
 	{
+		//console.log(this.roundNumber);
 		//console.log("passa de ronda!");
   		this.scene.socket.botResponseDROP = null;
 		this.scene.socket.botResponseDRAG = null;
@@ -564,7 +568,6 @@ Game.prototype.saveWinner = function(color){
 };
 
 
-
 Game.prototype.colorAssigned = function(color){
 	for(var i = 0; i < this.players.length; i++)
 		if(this.players[i][1] == color)
@@ -594,6 +597,7 @@ Game.prototype.generatePlayersList = function(){
 	this.scene.socket.colorsResponse = null;
 
 	this.currentPlayer = new MyScreen(this.scene, 'iluminated', 'Player1', false);
+	console.log(this.players);
 	//caso seja logo 1 bot a jogar!!
 	if(this.currentPlayerIsBOT())
 		this.isBotTurn=true;

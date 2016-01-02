@@ -32,11 +32,17 @@ MyBoardTile.prototype.display = function(){
 	this.scene.rotate(-Math.PI/2,1,0,0);
 	this.scene.rotate(-Math.PI/2,0,0,1);
 	
-	this.scene.defaultAppearance.apply();
+	
 	if(this.highlight)
-		this.scene.graph.textures[this.topTextureHighlight].bind();
+		{
+			this.scene.graph.materials['iluminated'].apply();
+			this.scene.graph.textures[this.topTextureHighlight].bind();
+		}
 	else	
-		this.scene.graph.textures[this.topTexture].bind();
+		{
+			this.scene.defaultAppearance.apply();
+			this.scene.graph.textures[this.topTexture].bind();
+		}
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,0.31);
 	this.topHexagon.display();

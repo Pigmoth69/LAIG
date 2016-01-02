@@ -12,34 +12,57 @@
 	
 	
 	<ILLUMINATION>
-	   <!-- <ambient r="0.3" g="0.3" b="0.3" a="1" />-->
-	   <ambient r="0.5" g="0.5" b="0.5" a="1" />
+	   	<ambient r="0.3" g="0.3" b="0.3" a="1" />
 	    <background r="0.3" g="0.3" b="0.3" a="1" />
 	</ILLUMINATION>
 	
 	
 	<LIGHTS>
-	    <LIGHT id="board1">
+	    <LIGHT id="menu1">
 	        <enable value="1" />
-	        <position x="0" y="15" z="0" w="1" />
-	        <ambient r="0" g="0" b="0" a="1" />
-	        <diffuse r="0" g="0" b="0" a="1" />
-	        <specular r="1" g="1" b="1" a="1" />
-	    </LIGHT>
-	    <LIGHT id="board2">
-	        <enable value="1" />
-	        <position x="0" y="30" z="0" w="1" />
-	        <ambient r="0" g="0" b="0" a="1" />
+	        <position x="0" y="5" z="5" w="1" />
+	        <ambient r="0.5" g="0.5" b="0.5" a="1" />
 	        <diffuse r="1" g="1" b="1" a="1" />
 	        <specular r="0" g="0" b="0" a="1" />
 	    </LIGHT>
-	    <LIGHT id="menu">
+	    <LIGHT id="menu2">
 	        <enable value="1" />
-	        <position x="0" y="50" z="5" w="1" />
-	        <ambient r="0.5" g="0.5" b="0.5" a="1" />
-	        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
-	        <specular r="0.5" g="0.5" b="0.5" a="1" />
+	        <position x="10" y="15" z="0" w="1" />
+	        <ambient r="0.1" g="0.1" b="0.1" a="1" />
+	        <diffuse r="1" g="1" b="1" a="1" />
+	        <specular r="0" g="0" b="0" a="1" />
 	    </LIGHT>
+
+	    <LIGHT id="board1">
+	        <enable value="1" />
+	        <position x="13" y="5" z="13" w="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+	        <specular r="0.8" g="0.8" b="0.8" a="1" />
+	    </LIGHT>
+	    <LIGHT id="board2">
+	        <enable value="1" />
+	        <position x="-13" y="5" z="13" w="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+	        <specular r="0.8" g="0.8" b="0.8" a="1" />
+	    </LIGHT>
+	    <LIGHT id="board3">
+	        <enable value="1" />
+	        <position x="13" y="5" z="-13" w="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+	        <specular r="0.8" g="0.8" b="0.8" a="1" />
+	    </LIGHT>
+	    <LIGHT id="board4">
+	        <enable value="1" />
+	        <position x="-13" y="5" z="-13" w="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+	        <specular r="0.8" g="0.8" b="0.8" a="1" />
+	    </LIGHT>
+
+
 	</LIGHTS>
 	
 	<TEXTURES>
@@ -227,59 +250,59 @@
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
 		<MATERIAL id="redStone">                                  
-			<shininess value="120" />
-			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
-			<diffuse r="0.9" g="0.1" b="0.1" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<shininess value="240" />                    
+			<specular r="1" g="1" b="1" a="1" />
+			<diffuse r="0.7" g="0.05" b="0.05" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
 		<MATERIAL id="blueStone">                                  
-			<shininess value="120" />
-			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
-			<diffuse r="0.2" g="0.6" b="0.9" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<shininess value="240" />                    
+			<specular r="1" g="1" b="1" a="1" />
+			<diffuse r="0.1" g="0.4" b="0.7" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
 		<MATERIAL id="yellowStone">                                  
-			<shininess value="120" />
-			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
-			<diffuse r="0.8" g="0.8" b="0.05" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<shininess value="240" />                    
+			<specular r="1" g="1" b="1" a="1" />
+			<diffuse r="0.55" g="0.55" b="0.025" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
 		<MATERIAL id="greenStone">                               
-			<shininess value="120" />                    
-			<specular r="0.9" g="0.9" b="0.9" a="1" /> 
-			<diffuse r="0.4" g="0.8" b="0.1" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<shininess value="240" />                    
+			<specular r="1" g="1" b="1" a="1" /> 
+			<diffuse r="0.2" g="0.6" b="0.05" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0" g="0" b="0" a="1" /> 
 		</MATERIAL>
 		<MATERIAL id="redMarker">                                  
 			<shininess value="120" />
 			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
 			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0.9" g="0.1" b="0.1" a="1" />
 		</MATERIAL>
 		<MATERIAL id="blueMarker">                                  
 			<shininess value="120" />
 			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
 			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0.2" g="0.6" b="0.9" a="1" />
 		</MATERIAL>
 		<MATERIAL id="yellowMarker">                                  
 			<shininess value="120" />
 			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
 			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0.9" g="0.9" b="0.05" a="1" />
 		</MATERIAL>
 		<MATERIAL id="greenMarker">                               
 			<shininess value="120" />                    
 			<specular r="0.2" g="0.2" b="0.2" a="1" /> 
 			<diffuse r="0.2" g="0.2" b="0.2" a="1" />
-			<ambient r="0.2" g="0.2" b="0.2" a="1" />
+			<ambient r="0" g="0" b="0" a="1" />
 			<emission r="0.4" g="0.8" b="0.1" a="1" />
 		</MATERIAL>
 		<MATERIAL id="orange">                                  
