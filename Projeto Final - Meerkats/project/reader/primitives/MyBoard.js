@@ -99,9 +99,10 @@ MyBoard.prototype.display = function(){
 MyBoard.prototype.highlightDragPositions = function(boardResponse){
 	for(var y = 1 ; y <= 9; y++)
 		for(var x = 1; x < this.board[y].length;x++){
-			if(boardResponse[y-1][x-1] == 1)
-				this.board[y][x].highlight = true;
+			if(boardResponse[y-1][x-1] == 1){
+				this.board[y][x].highlight = true;	
 		}
+	}
 };
 
 

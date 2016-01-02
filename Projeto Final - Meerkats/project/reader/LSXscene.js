@@ -322,6 +322,7 @@ LSXscene.prototype.display = function () {
 		var currTime = new Date();
 		this.milliseconds = currTime.getTime() - this.startingTime.getTime();
 
+
 		//aplica noca matriz de transformacoes a scene
 		this.multMatrix(this.graph.initials.transMatrix);	
 		

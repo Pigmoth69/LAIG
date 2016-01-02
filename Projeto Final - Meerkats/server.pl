@@ -106,13 +106,11 @@ makeTest7():-
 			logicalBoardTest2(LogicalBoard),
 			write("Initial board: "),nl,
 			write(LogicalBoard),nl,
-			stoneDragBOT(LogicalBoard,1,1,Xinicial,Yinicial,Xfinal,Yfinal,ResultBoard),
+			stoneDragBOT(LogicalBoard,["1"],["1"],Xinicial,Yinicial,Xfinal,Yfinal),
 			write("Xinitial: "),write(Xinicial),nl,
 			write("Yinicial: "),write(Yinicial),nl,
 			write("Xfinal: "),write(Xfinal),nl,
-			write("Yfinal: "),write(Yfinal),nl,
-			write("Final board: "),nl,
-			write(ResultBoard).
+			write("Yfinal: "),write(Yfinal),nl.
 			
 			
 
@@ -144,7 +142,8 @@ stoneDropBOT(Board,RemainingStones,IDstone,Xpos,Ypos):-
 */
 getRandomStone(RemainingStones,Stone):-
 															length(RemainingStones,Length),
-															random(1,Length,StonePos),
+															NewLength is Length + 1,
+															random(1,NewLength,StonePos),
 															getLineInfo(StonePos,RemainingStones,Stone).
 
 															
