@@ -17,8 +17,10 @@ StateMachine.prototype.displayHandler = function(){
 
 	switch(this.currentState){
 		case 'Main Menu':
+			this.scene.interface.players.open();
 			this.scene.interface.camera.close();
 			this.scene.interface.game.close();
+			this.scene.interface.scenes.close();
 			this.playMenu.display();
 			break;
 		case 'Main Menu to How To':
@@ -28,12 +30,14 @@ StateMachine.prototype.displayHandler = function(){
 			this.scene.interface.scenes.close();
 			this.playMenu.display();
 			this.howto.display();
+			break;
 		case 'How To':
 			this.scene.interface.camera.close();
 			this.scene.interface.game.close();
 			this.scene.interface.players.close();
 			this.scene.interface.scenes.close();
 			this.howto.display();
+			break;
 		case 'How To to Main Menu':
 			this.scene.interface.camera.close();
 			this.scene.interface.game.close();
@@ -41,25 +45,35 @@ StateMachine.prototype.displayHandler = function(){
 			this.scene.interface.scenes.close();
 			this.playMenu.display();
 			this.howto.display();
+			break;
 		case 'Main Menu to Gameplay':
 			this.scene.interface.game.open();
 			this.scene.interface.camera.open();
 			this.scene.interface.players.close();
+			this.scene.interface.scenes.open();
 			this.playMenu.display();
 			this.game.display();
 			this.game.roundTime = this.scene.milliseconds + ROUND_TIME;
 			break;
 		case 'Gameplay':
+			this.scene.interface.game.open();
+			this.scene.interface.camera.open();
 			this.scene.interface.players.close();
+			this.scene.interface.scenes.open();
 			this.game.handler();
 			this.game.display();
 			break;
 		case 'EndScreen':
-			//this.scene.interface.close();
+			this.scene.interface.game.close();
+			this.scene.interface.camera.close();
+			this.scene.interface.players.close();
+			this.scene.interface.scenes.close();
 			this.game.display();
 		case 'Gameplay to Main Menu':
+			this.scene.interface.game.close();
 			this.scene.interface.camera.close();
 			this.scene.interface.players.open();
+			this.scene.interface.scenes.close();
 			this.playMenu.display();			
 			this.game.display();
 			break;
@@ -89,4 +103,10 @@ StateMachine.prototype.pickingHandler = function(obj){
 			break;
 		default: break;
 	}
+};
+
+
+StateMachine.prototype.exit = function(){
+	this.currentState = 'Gameplay to Main Menu';
+	this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0,50,0));
 };

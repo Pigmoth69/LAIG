@@ -614,12 +614,13 @@ Game.prototype.passTurn = function(){
 
 		var playerIndex = (this.roundNumber - 1) % this.players.length;
 		this.currentPlayer.texture = this.players[playerIndex][0];
+		this.currentPlayer.setMaterial(this.players[playerIndex][1])
 
-		//this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+		this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
 
 		if(this.currentPlayerIsBOT())
 			this.isBotTurn=true;
- 	} 		
+ 	} 
 };
 
 
@@ -663,6 +664,7 @@ Game.prototype.generatePlayersList = function(){
 	this.scene.socket.colorsResponse = null;
 
 	this.currentPlayer = new MyScreen(this.scene, 'iluminated', 'Player1', false);
+	this.currentPlayer.setMaterial(this.players[0][1]);
 
 	if(this.currentPlayerIsBOT())
 		this.isBotTurn=true;
@@ -788,5 +790,4 @@ Game.prototype.getRegistedStoneFromPos = function(Xpos,Ypos){
 		}
 	}
 };
-
 

@@ -135,7 +135,7 @@ Interface.prototype.processKeyDown = function(event) {
                 this.scene.stateMachine.currentState = 'How To to Main Menu';
              }
              else if(this.scene.stateMachine.currentState == 'Gameplay') 
-                this.scene.graph.gameStatus['EXIT'];
+                this.scene.stateMachine.exit();
         default: break;
     }
 }

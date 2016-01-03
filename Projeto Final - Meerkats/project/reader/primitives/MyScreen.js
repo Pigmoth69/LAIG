@@ -23,3 +23,22 @@ MyScreen.prototype.display = function() {
 
 	this.scene.popMatrix();
 };
+
+
+MyScreen.prototype.setMaterial = function(number){
+	switch(number){
+		case 1:
+			this.material = 'blueMarker';
+			break;
+		case 2:
+			this.material = 'redMarker';
+			break;
+		case 3:
+			this.material = 'greenMarker';
+			break;
+		case 4:
+			this.material = 'yellowMarker';
+			break;
+		default: break;
+	}
+};
