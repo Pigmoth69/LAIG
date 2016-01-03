@@ -67,11 +67,11 @@
 	
 	<TEXTURES>
 		<TEXTURE id="terrain">
-			<file path="./textures/1.jpg" /> 
+			<file path="./textures/2.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="heightmap">
-			<file path="./textures/2.jpg" /> 
+			<file path="./textures/1.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="red">
@@ -396,6 +396,7 @@
 	    <ROOT id="Space"/> 
 	    <ROOT id="Camp"/>
 
+
 		<NODE id="Space">
 			<MATERIAL id="default" />
 			<TEXTURE id="space" />
@@ -427,17 +428,17 @@
 		<NODE id="ambient">
 			<MATERIAL id="iluminated" />
 			<TEXTURE id="landscape" />
-			<ROTATION axis="x" angle="65" />
+			<TRANSLATION x="0" y="-4" z="0"/>
+			<SCALE sx="60" sy="1" sz="60"/>
 			<DESCENDANTS>
-				<DESCENDANT id="InvertedSphere"/>
+				<DESCENDANT id="terrain"/>
 			</DESCENDANTS>
 		</NODE>
 		<NODE id="spaceambient">
 			<MATERIAL id="iluminated" />
 			<TEXTURE id="space" />
 			<DESCENDANTS>
-				<DESCENDANT id="terrain"r/>
-				<!--<DESCENDANT id="InvetedSphere"/>-->
+				<DESCENDANT id="InvertedSphere"/>
 			</DESCENDANTS>
 		</NODE>
 
@@ -459,7 +460,6 @@
 				<DESCENDANT id="base"/>
 			</DESCENDANTS>
 		</NODE>
-
 
 
 	</NODES>

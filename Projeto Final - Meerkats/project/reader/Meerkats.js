@@ -222,11 +222,11 @@ LSXscene.prototype.drawLeaf = function (leaf, materialID, textureID) {
 	{
     	this.terrainShader.setUniformsValues({heightmap: 1});
 		this.terrainShader.setUniformsValues({normScale: 50.0});
-		this.setActiveShader(this.terrainShader);
+		this.setActiveShaderSimple(this.terrainShader);
 		this.graph.textures[this.graph.leaves[leaf].texture].bind();
 		this.graph.textures[this.graph.leaves[leaf].heightmap].bind(1);
 		this.graph.leaves[leaf].display();
-		this.setActiveShader(this.defaultShader);
+		this.setActiveShaderSimple(this.defaultShader);
 		return;
 	}
 	if(this.graph.leaves[leaf] instanceof MyVehicle){
@@ -276,11 +276,6 @@ LSXscene.prototype.logPicking = function (){
 
 					this.stateMachine.pickingHandler(this.pickResults[0]);
 
-					//this.graph.leaves['Board'].playStone(customId,2);
-					
-
-					//console.log(this.pickResults[i]);					
-					//console.log("Picked object: " + obj + ", with pick id " + selectedID);
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
