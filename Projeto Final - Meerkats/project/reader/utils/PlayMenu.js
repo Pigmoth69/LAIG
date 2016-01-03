@@ -1,9 +1,8 @@
 function PlayMenu(scene) {
 	this.scene = scene;
 	this.playerNumber = 0;
-	//this.dice = new MyDice(this.scene);
-	//this.playButton = new MyButton(this.scene);
-	//this.sortButton = new Button(this.scene);
+	this.block = new MyBlock(this.scene, 6, 4, 1, 'red');
+	this.playButton = new MyBlock(this.scene, 4, 2, 0.3, 'orange');
 };
 
 
@@ -12,10 +11,46 @@ PlayMenu.prototype.constructor = PlayMenu;
 
 
 PlayMenu.prototype.display = function(){
-	this.scene.register(this.scene.graph.nodes['button']);
+	if(this.playButton.texture == null)
+		this.playButton.texture = 'play';
+
 	this.scene.pushMatrix();
 	this.scene.applyViewMatrix();
-	this.scene.drawNode(this.scene.graph.root['Main Menu'], 'null', 'clear');
+
+	//how to
+		this.scene.pushMatrix();
+		this.scene.translate(-5,50,0);
+		this.scene.rotate(Math.PI/9, 1, 0, 0);
+		this.scene.rotate(Math.PI/4, 0, 1, 0);
+		this.block.display();
+		this.scene.popMatrix();
+
+		this.scene.pushMatrix();
+		this.scene.translate(-5+0.2,49.9,0.5);
+		this.scene.rotate(Math.PI/9, 1, 0, 0);
+		this.scene.rotate(Math.PI/4, 0, 1, 0);
+		this.scene.register(this.playButton);
+		this.playButton.display();
+		this.scene.popMatrix();
+
+
+	//play
+		this.scene.pushMatrix();
+		this.scene.translate(5,50,0);
+		this.scene.rotate(Math.PI/9, 1, 0, 0);
+		this.scene.rotate(-Math.PI/4, 0, 1, 0);
+		this.block.display();
+		this.scene.popMatrix();
+
+		this.scene.pushMatrix();
+		this.scene.translate(5-0.2,49.9,0.5);
+		this.scene.rotate(Math.PI/9, 1, 0, 0);
+		this.scene.rotate(-Math.PI/4, 0, 1, 0);
+		this.scene.register(this.playButton);
+		this.playButton.display();
+		this.scene.popMatrix();
+
+
 	this.scene.popMatrix();
 };
 
@@ -24,7 +59,6 @@ PlayMenu.prototype.picking = function(obj){
 	switch(ID){
 		case 1:
 			var requestString = '[sortColors,["' + this.scene.Humans + '"],["' + this.scene.Bots +'"],_Result]';
-			//console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'colors');
 			this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 30, 33), vec3.fromValues(0,0,0));
 			this.scene.stateMachine.currentState = 'Main Menu to Gameplay';

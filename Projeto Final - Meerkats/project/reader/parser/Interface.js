@@ -122,7 +122,7 @@ Interface.prototype.setScene = function(scene) {
 };
 
 Interface.prototype.processKeyDown = function(event) {
-        console.log(event);
+    //console.log(event);
     switch(event.keyIdentifier){
         case 'Enter':
             if(this.scene.stateMachine.currentState == 'Gameplay')

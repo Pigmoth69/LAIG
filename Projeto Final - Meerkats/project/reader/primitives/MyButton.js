@@ -6,8 +6,7 @@ function MyBlock(scene, width, height, depth, material) {
 	this.width = width;
 	this.depth = depth;
 	this.material = material;
-	this.texture = null;
-	this.quad = new MyRectangle(this.scene, [-0.5, 0.5, 0.5, -0.5]);
+	this.quad = new MyQuad(this.scene);
 };
 
 MyBlock.prototype = Object.create(CGFobject.prototype);
@@ -20,13 +19,9 @@ MyBlock.prototype.display =function(){
 	this.scene.graph.materials[this.material].apply();
 	//front
 	this.scene.pushMatrix();
-	if(this.texture != null)
-		this.scene.graph.textures[this.texture].bind();
 	this.scene.translate(0, 0, this.depth/2);
 	this.scene.scale(this.width, this.height, 1);
 	this.quad.display();
-	if(this.texture != null)
-		this.scene.graph.textures[this.texture].unbind();
 	this.scene.popMatrix();
 
 	//back

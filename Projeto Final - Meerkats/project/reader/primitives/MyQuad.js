@@ -34,7 +34,5 @@ MyQuad.prototype.initBuffers = function() {
 };
 
 MyQuad.prototype.updateTextCoords = function(ampS,ampT){
-
-
 	//this.updateTexCoordsGLBuffers();
 };

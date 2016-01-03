@@ -7,7 +7,6 @@ function Game(scene) {
 	this.players = [];
 	this.roundMove = 'drop';
 	this.roundNumber = 1;
-	this.playedStones = 0;
 	this.score = [0, 0, 0, 0];
 	this.winner = null;
 
@@ -37,20 +36,18 @@ function Game(scene) {
 	this.undoRegister = [];
 
 	this.currentPlayer = null;
-	//vê se é a vez do bot jogar
-	this.isBotTurn=false;
-	//quando já tem a resposta fica a true para o bot poder jogar
+	this.isBotTurn = false;
 
-	this.botCanPlay=false;
-	this.botCanDrag=false;
-	this.moveHasFinished=false;
+	this.botCanPlay = false;
+	this.botCanDrag = false;
+	this.moveHasFinished = false;
 
-	//Ver se pode fazer o pcikstone e pickTile no DROP
-	this.botCanPickStoneDROP=false;
-	this.botCanPickTileDROP=false;
-	//Ver se pode fazer o pcikstone e pickTile no DRAG
-	this.botCanPickStoneDRAG=false;
-	this.botCanPickTileDRAG=false;
+	//Ver se pode fazer o pickstone e pickTile no DROP
+	this.botCanPickStoneDROP = false;
+	this.botCanPickTileDROP = false;
+	//Ver se pode fazer o pickstone e pickTile no DRAG
+	this.botCanPickStoneDRAG = false;
+	this.botCanPickTileDRAG = false;
 
 };
 
@@ -60,8 +57,8 @@ Game.prototype.constructor = Game;
 
 
 
-/** Controla as principais açoes durante a excuçao do jogo
- *
+/** Controla as principais açoes durante a execuçao do jogo
+ *	
  */
 Game.prototype.handler = function(){
 
@@ -115,9 +112,9 @@ Game.prototype.handler = function(){
 
 	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
 	var groupOf15 = this.score.indexOf(MAX_COLOR_AREA) + 1;
-	if(groupOf15 != 0)
-		if((this.colorAssigned(groupOf15) || this.remainingStones == 0) && !this.endGame)
+		if((this.colorAssigned(groupOf15) || this.remainingStones.length == 0) && !this.endGame)
 		{
+			console.log('ola mpt');
 			this.endGame = true;
 
 			var stringBoard = this.scene.socket.processBoardToString();
@@ -208,7 +205,7 @@ Game.prototype.handler = function(){
 		}
 		this.botCanPickStoneDRAG=true;
 	}
-	if(this.botCanPickStoneDRAG == true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.playedStone !=null){
+	if(this.botCanPickStoneDRAG == true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.playedStone != null){
 		this.botCanPickStoneDRAG =false;
 		//console.warn("Fazer o picking STONE para o DRAG!");
 		//console.warn("--------------------IMPORTANTE--------------------");
@@ -306,19 +303,7 @@ Game.prototype.picking = function(obj){
 
 
 Game.prototype.pickingStone = function(obj){
-	//console.warn("--------------------COMEÇA--------------------");
-	//console.warn("setled: ");
-	//if(obj[0].settledTile == null)
-		//console.warn("É NULL");
-//	else
-		//console.warn("Não é NULL");
-	//console.warn(this.roundMove);
-//	console.warn(obj[0]);
-	//console.warn(obj[0].settledTile);
-	//registando peça selecionada no picking dependendo da jogada
-	//if(this.playedStone !=null)
-//	console.warn("played: "+this.playedStone.id);
-	//console.warn("--------------------COMEÇA--------------------");
+
 	if((this.roundMove == 'drop' && obj[0].settledTile == null) || (this.roundMove == 'drag' && obj[0].settledTile != null && obj[0].id != this.playedStone.id))
 	{
 		//console.warn("Entrou!!!");
@@ -352,7 +337,6 @@ Game.prototype.pickingStone = function(obj){
 
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[validDragPositions," + this.pickedStone.settledTile.row + ',' + this.pickedStone.settledTile.col + ',' + stringBoard + ",_Result" + "]";
-			//console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'board');
 		}
 	}
@@ -387,8 +371,9 @@ Game.prototype.pickingTile = function(obj){
 
 Game.prototype.display = function(){
 
-	if(this.scene.stateMachine.currentState == 'Gameplay')
+	if(this.scene.stateMachine.currentState != 'Main Menu to Gameplay' && this.scene.stateMachine.currentState != 'Gameplay to Main Menu')
 	{
+
 		this.scene.pushMatrix();
 		this.scene.translate(-4.5,-2.5,-10);
 		this.scene.rotate(Math.PI/6, 0, 1, 0);
@@ -406,18 +391,21 @@ Game.prototype.display = function(){
 		this.scene.popMatrix();
 
 		if(this.currentPlayer instanceof MyScreen)
-		{this.scene.pushMatrix();
-		this.scene.translate(4,2.5,-10);
-		this.scene.scale(2, 1, 1);
-		this.currentPlayer.display();
-		this.scene.popMatrix();}
+		{
+			this.scene.pushMatrix();
+			this.scene.translate(4,2.5,-10);
+			this.scene.scale(2, 1, 1);
+			this.currentPlayer.display();
+			this.scene.popMatrix();
+		}
 
 		this.scene.pushMatrix();
 		this.scene.translate(4,-2.5,-10);
 		this.scene.scale(2, 1, 1);
 		this.movePannel.display();
 		this.scene.popMatrix();
-	}	
+	}
+
 	this.scene.pushMatrix();
 	this.scene.applyViewMatrix();
 	this.board.display();
@@ -629,7 +617,7 @@ Game.prototype.passTurn = function(){
 		this.currentPlayer.texture = this.players[playerIndex][0];
 		console.log(this.players[playerIndex][0]);
 
-		this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+		//this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
 
 		if(this.currentPlayerIsBOT())
 			this.isBotTurn=true;
@@ -703,7 +691,7 @@ Game.prototype.moveStone = function(tile){
 	}
 
 	this.pickedStone.picked = false;
-	this.pickedStone.moveStone(tile.position, 'forward');
+	this.pickedStone.moveStone(tile.position);
 };
 
 
@@ -712,17 +700,16 @@ Game.prototype.nextMove = function(stone){
 	{
 		this.playedStone = stone;
 		this.roundMove = 'pass';
-		this.playedStones++;
 	}
 	else if(this.roundMove == 'drop')
 	{
 		this.playedStone = stone;
 		this.roundMove = 'drag';
-		this.playedStones++;
 	}
 	else this.roundMove = 'pass';
 
 	this.movePannel.texture = this.roundMove;
+	console.log(this.remainingStones);
 };
 
 
@@ -730,7 +717,6 @@ Game.prototype.previousMove = function(stone){
 	if(this.roundNumber == 1 || this.roundMove == 'drag')
 	{
 		this.roundMove = 'drop';
-		this.playedStones--;
 	}
 	else if(this.roundMove == 'pass')
 		this.roundMove = 'drag';
@@ -756,8 +742,6 @@ Game.prototype.updateTimer = function(){
 		this.passTurn();
 	}
 };
-
-
 
 
 Game.prototype.animateStones = function(material){

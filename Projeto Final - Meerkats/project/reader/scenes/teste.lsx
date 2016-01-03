@@ -7,7 +7,7 @@
 	    <rotation axis="y" angle="0.0" />                 		<!-- initial rotation 2 -->
 	    <rotation axis="z" angle="0.0" />                  		<!-- initial rotation 1 -->
 	    <scale sx="1" sy="1" sz="1" />                  	<!-- initial scaling -->
-	    <reference length="0" />                          		<!-- axis length; "0" means no axis-->
+	    <reference length="10" />                          		<!-- axis length; "0" means no axis-->
 	</INITIALS>
 	
 	
@@ -366,17 +366,8 @@
 	</LEAVES>
 
 	<NODES>
-	    <ROOT id="Main Menu"/> 
 	    <ROOT id="Space"/> 
 	    <ROOT id="Camp"/>
-		
-		<NODE id="Main Menu">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="MainMenu"/>
-			</DESCENDANTS>
-		</NODE>
 
 		<NODE id="Space">
 			<MATERIAL id="default" />
@@ -441,139 +432,6 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="MainMenu">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="50" z="0"/>
-			<ROTATION axis="y" angle="-20"/>
-			<ROTATION axis="x" angle="20"/>
-			<DESCENDANTS>
-				<DESCENDANT id="pannel" />
-				<DESCENDANT id="button" />
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="pannel">
-			<MATERIAL id="red" />
-			<TEXTURE id="null" />
-			<SCALE sx="6" sy="4" sz="1"/>
-			<DESCENDANTS>
-				<DESCENDANT id="block" />
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="button">
-			<MATERIAL id="orange" />
-			<TEXTURE id="play" />
-			<PICKABLE check="1" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<SCALE sx="4" sy="2" sz="0.3"/>
-			<DESCENDANTS>
-				<DESCENDANT id="block" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="first">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<!--<SCALE sx="4" sy="1" sz="4" />-->
-			<DESCENDANTS>
-				<DESCENDANT id="blueStone" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="second">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="1.5" y="0" z="0" />
-			<DESCENDANTS>
-				<DESCENDANT id="greenStone" />
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="third">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="3" y="0" z="0" />
-			<!--<SCALE sx="4" sy="1" sz="4" />-->
-			<DESCENDANTS>
-				<DESCENDANT id="redStone" />
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="fourth">
-			<MATERIAL id="default" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="4.5" y="0" z="0" />
-			<!--<SCALE sx="4" sy="1" sz="4" />-->
-			<DESCENDANTS>
-				<DESCENDANT id="yellowStone" />
-			</DESCENDANTS>
-
-		<!--
-			primitivas
-		-->
-		<NODE id="block">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<DESCENDANTS>
-				<DESCENDANT id="front" />
-				<DESCENDANT id="back" />
-				<DESCENDANT id="top" />
-				<DESCENDANT id="bot" />
-				<DESCENDANT id="right" />
-				<DESCENDANT id="left" />				
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="front">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="rectangle" />			
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="back">
-			<MATERIAL id="null" />
-			<TEXTURE id="clear" />
-			<ROTATION axis="x" angle="180" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="rectangle" />			
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="top">
-			<MATERIAL id="null" />
-			<TEXTURE id="clear" />
-			<ROTATION axis="x" angle="-90" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="rectangle" />			
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="bot">
-			<MATERIAL id="null" />
-			<TEXTURE id="clear" />
-			<ROTATION axis="x" angle="90" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="rectangle" />			
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="right">
-			<MATERIAL id="null" />
-			<TEXTURE id="clear" />
-			<ROTATION axis="y" angle="90" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="rectangle" />			
-			</DESCENDANTS>
-		</NODE>
-		<NODE id="left">
-			<MATERIAL id="null" />
-			<TEXTURE id="clear" />
-			<ROTATION axis="y" angle="-90" />
-			<TRANSLATION x="0" y="0" z="0.5" />
-			<DESCENDANTS>
-				<DESCENDANT id="rectangle" />			
-			</DESCENDANTS>
-		</NODE>
 
 
 	</NODES>
