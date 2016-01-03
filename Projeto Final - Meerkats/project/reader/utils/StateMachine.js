@@ -1,6 +1,7 @@
 function StateMachine(scene) {
 	this.scene = scene;
 	this.playMenu = new PlayMenu(this.scene);
+	this.howto = new HowTo(this.scene);
 	this.game = new Game(this.scene);
 	this.currentState = 'Main Menu';
 	this.currentScenario = null;
@@ -20,6 +21,26 @@ StateMachine.prototype.displayHandler = function(){
 			this.scene.interface.game.close();
 			this.playMenu.display();
 			break;
+		case 'Main Menu to How To':
+			this.scene.interface.camera.close();
+			this.scene.interface.game.close();
+			this.scene.interface.players.close();
+			this.scene.interface.scenes.close();
+			this.playMenu.display();
+			this.howto.display();
+		case 'How To':
+			this.scene.interface.camera.close();
+			this.scene.interface.game.close();
+			this.scene.interface.players.close();
+			this.scene.interface.scenes.close();
+			this.howto.display();
+		case 'How To to Main Menu':
+			this.scene.interface.camera.close();
+			this.scene.interface.game.close();
+			this.scene.interface.players.close();
+			this.scene.interface.scenes.close();
+			this.playMenu.display();
+			this.howto.display();
 		case 'Main Menu to Gameplay':
 			this.scene.interface.game.open();
 			this.scene.interface.camera.open();
