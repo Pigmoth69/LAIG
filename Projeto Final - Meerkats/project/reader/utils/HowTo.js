@@ -19,8 +19,8 @@ HowTo.prototype.display = function(){
 
 		this.scene.pushMatrix();
 		this.scene.translate(-5,90,-5);
-		this.scene.rotate(Math.PI/9, 1, 0, 0);
-		this.scene.rotate(Math.PI/8, 0, 1, 0);
+		this.scene.rotate(Math.PI/8, 1, 0, 0);
+		this.scene.rotate(Math.PI/6, 0, 1, 0);
 		this.instruction.display();
 		this.scene.popMatrix();
 

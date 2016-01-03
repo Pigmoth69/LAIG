@@ -62,7 +62,7 @@ PlayMenu.prototype.picking = function(obj){
 	var ID = obj[1];
 	switch(ID){
 		case 1:
-			this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 80, 5), vec3.fromValues(-5,90,-5));
+			this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 85, 1), vec3.fromValues(-5,90,-5));
 			this.scene.stateMachine.currentState = 'Main Menu to How To';
 			break;
 		case 2:
