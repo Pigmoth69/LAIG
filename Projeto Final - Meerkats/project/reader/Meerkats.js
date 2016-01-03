@@ -80,7 +80,6 @@ LSXscene.prototype.onGraphLoaded = function () {
 /** @brief Funcao responsavel pelo load da interface da cena
   */
 LSXscene.prototype.loadInterface = function () {
-  	this.interface.loadInterfaceLigths();
   	var scene = this;
   	this.graph.gameStatus['PASS TURN'] = function() { scene.stateMachine.game.passTurn(); };
 

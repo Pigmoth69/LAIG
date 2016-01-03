@@ -11,7 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parser/Interface.js',
+serialInclude(['../lib/CGF.js', './Meerkats.js','./parser/LSXreader.js','./parser/Interface.js',
                './parser/LinearAnimation.js', './parser/CircularAnimation.js', './parser/ControlPoint.js',
                './parser/Light.js','./parser/Texture.js','./parser/Node.js','./parser/Material.js',
                './parser/Initials.js', './parser/Illumination.js','./parser/Graph.js',

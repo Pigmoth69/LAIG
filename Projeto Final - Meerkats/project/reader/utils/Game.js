@@ -1,5 +1,5 @@
 var ROUND_TIME = 60000;
-var MAX_COLOR_AREA = 15;
+var MAX_COLOR_AREA = 2;
 
 function Game(scene) {
 
@@ -58,10 +58,10 @@ Game.prototype.constructor = Game;
 
 
 /** Controla as principais açoes durante a execuçao do jogo
- *	
  */
 Game.prototype.handler = function(){
 
+	//controlo da execuçao do replay, calculando quandos retrocessos deve realizar e quantos replays deverá apresentar
 	if(this.rewinds > 0 && !this.animation){
 		this.processUNDO();
 		this.rewinds--;
@@ -71,6 +71,7 @@ Game.prototype.handler = function(){
 		this.replays--;
 	}
 
+	//termina a execução do jogo e apresenta o vencedor
 	if(this.endGame && this.winner != null && !this.animation)
 	{
 		var screenTexture = null;
@@ -111,15 +112,15 @@ Game.prototype.handler = function(){
 
 	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
 	var groupOf15 = this.score.indexOf(MAX_COLOR_AREA) + 1;
-		if((this.colorAssigned(groupOf15) || this.remainingStones.length == 0) && !this.endGame)
-		{
-			this.endGame = true;
+	if((this.colorAssigned(groupOf15) || this.remainingStones.length == 0) && !this.endGame)
+	{
+		this.endGame = true;
 
-			var stringBoard = this.scene.socket.processBoardToString();
-			var requestString = "[checkWinner," + stringBoard + ",_Result]";
-			this.scene.socket.sendRequest(requestString, 'winner');
-			return;
-		}
+		var stringBoard = this.scene.socket.processBoardToString();
+		var requestString = "[checkWinner," + stringBoard + ",_Result]";
+		this.scene.socket.sendRequest(requestString, 'winner');
+		return;
+	}
 
 	this.updateTimer();
 
@@ -254,7 +255,8 @@ Game.prototype.handler = function(){
 	}
 };
 
-
+/**	Inicializa o array de pedras respetivas ao jogo
+ */
 Game.prototype.prepareStones = function(){
 	var id = 1;
 	var radius = 12;
@@ -289,7 +291,8 @@ Game.prototype.prepareStones = function(){
 	}
 };
 
-
+/** Handler de controlo do picking dos objectos do jogo, diferenciando Pedras das Peças do tabuleiro
+ */
 Game.prototype.picking = function(obj){
 	if(!this.currentPlayerIsBOT()){
 		if(obj[0] instanceof MyStone)
@@ -299,15 +302,15 @@ Game.prototype.picking = function(obj){
 	}
 };
 
-
+/** Handler responsavel pelo controlo de Pedras selecionadas pelo picking
+ */
 Game.prototype.pickingStone = function(obj){
-
+	//restrição para picking das peças, dependendo do movimento esperado (DROP ou DRAG)
 	if((this.roundMove == 'drop' && obj[0].settledTile == null) || (this.roundMove == 'drag' && obj[0].settledTile != null && obj[0].id != this.playedStone.id))
 	{
 
 		if(this.pickedStone != null)
 		{
-			//se a pickedStone for a mesma que a peça selecionada, elimina-se a seleçao e termina se a execuçao da funcao
 			if(this.pickedStone.id == obj[0].id)
 			{
 				this.pickedStone.picked = false;
@@ -315,12 +318,15 @@ Game.prototype.pickingStone = function(obj){
 				this.board.resetHighlight();
 				return;
 			}
-			else
-			{
+			else {
 				this.pickedStone.picked = false;
 				this.pickedStone = null;
 				this.board.resetHighlight();
 			}
+			
+
+			//se a pickedStone for a mesma que a peça selecionada, elimina-se a seleçao e termina se a execuçao da funcao
+			
 		}
 
 		obj[0].picked = true;
@@ -331,7 +337,7 @@ Game.prototype.pickingStone = function(obj){
 		else if(this.roundMove == 'drag')
 		{
 			this.validDragPositions = true;
-
+			//realiza pedido ao ProLog para identificação de possiveis destinos de movimento da pedra selecionada
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[validDragPositions," + this.pickedStone.settledTile.row + ',' + this.pickedStone.settledTile.col + ',' + stringBoard + ",_Result" + "]";
 			this.scene.socket.sendRequest(requestString, 'board');
@@ -339,8 +345,10 @@ Game.prototype.pickingStone = function(obj){
 	}
 };
 
-
+/** Hendler responsavel pelo controlo das Peças do tabuleiro selecionadas
+ */
 Game.prototype.pickingTile = function(obj){
+	//um tile so pode ser selecionado se estiver marcado com 'highlight' e se uma Pedra ja tiver sido selecionada
 	if(this.pickedStone != null && obj[0].highlight)
 	{
 
@@ -357,20 +365,19 @@ Game.prototype.pickingTile = function(obj){
 		this.moveStone(obj[0]);
 		this.board.resetHighlight();
 
+		//com a movimentação de uma pedra, o score é atualizado
 		this.updateScore = true;
 		var stringBoard = this.scene.socket.processBoardToString();
 		var requestString = "[checkScore," + stringBoard + ",_Result]";
-		//console.warn(requestString);
 		this.scene.socket.sendRequest(requestString, 'score');
 	}
 };
 
-
+/** função de desenho da cena de jogo
+ */
 Game.prototype.display = function(){
 
-	if(this.scene.stateMachine.currentState != 'Main Menu to Gameplay' && this.scene.stateMachine.currentState != 'Gameplay to Main Menu'
-		&& this.scene.stateMachine.currentState != 'How To' && this.scene.stateMachine.currentState != 'Main Menu to How To'
-		&& this.scene.stateMachine.currentState != 'How To to Main Menu')
+	if(this.scene.stateMachine.currentState == 'Gameplay' || this.scene.stateMachine.currentState == 'EndScreen')
 	{
 
 		this.scene.pushMatrix();
@@ -412,7 +419,8 @@ Game.prototype.display = function(){
 	this.scene.popMatrix();
 };
 
-
+/** função de display e registo das peças do jogo
+ */
 Game.prototype.displayStones = function(){
 	for(var i = 0; i < this.stones.length; i++)
 	{
@@ -425,7 +433,8 @@ Game.prototype.displayStones = function(){
 	}
 };
 
-
+/** função responsavel pela atualização do score nos marcadores de jogo
+ */
 Game.prototype.updateGameScore = function(){
     var max = 0;
     if(this.scene.socket.scoreResponse[0][1].length > 0)
@@ -456,7 +465,8 @@ Game.prototype.updateGameScore = function(){
     this.updateMarkers();
 };
 
-
+/** função responsavel pela atualização dos valores nos marcadores de jogo
+ */
 Game.prototype.updateMarkers = function(){
     if(this.score[0] > 9)
             this.scoreBoard.blueMarker.first = 1;
@@ -483,15 +493,20 @@ Game.prototype.updateMarkers = function(){
         this.scoreBoard.yellowMarker.second = this.score[3] % 10;
 };
 
-
+/** função de registo de cada jogada executada pelo jogador
+ */
 Game.prototype.saveUNDO = function(){
 	if(this.roundMove == 'drop')
 	{
 		this.undoRegister['drop'] = [];
+		//pedra movida
 		this.undoRegister['drop']['stone'] = this.pickedStone;
+		//posição inicial da pedra
 		this.undoRegister['drop']['initialPosition'] = this.pickedStone.position;
+		//peça do tabuleiro selecionada
 		this.undoRegister['drop']['tile'] = this.pickedBoardTile;
 		
+		//valores do score
 		this.undoRegister['drop']['score'] = [];
 		this.undoRegister['drop']['score'][0] = this.score[0];this.undoRegister['drop']['score'][1] = this.score[1];
 		this.undoRegister['drop']['score'][2] = this.score[2];this.undoRegister['drop']['score'][3] = this.score[3];
@@ -499,19 +514,26 @@ Game.prototype.saveUNDO = function(){
 	else if(this.roundMove == 'drag')
 	{
 		this.undoRegister['drag'] = [];
+		//pedra arrastada
 		this.undoRegister['drag']['stone'] = this.pickedStone;
+		//pedra jogada no momento de DROP
 		this.undoRegister['drag']['playedStone'] = this.playedStone;
+		//posicão inicial da pedra arrastada
 		this.undoRegister['drag']['initialTile'] = this.pickedStone.settledTile;
+		//peça de destino no tabuleira
 		this.undoRegister['drag']['finalTile'] = this.pickedBoardTile;
+		//posiçao inicial da pedra
 		this.undoRegister['drag']['initialPosition'] = this.pickedStone.position;
 
+		//valores do score
 		this.undoRegister['drag']['score'] = [];
 		this.undoRegister['drag']['score'][0] = this.score[0];this.undoRegister['drag']['score'][1] = this.score[1];
 		this.undoRegister['drag']['score'][2] = this.score[2];this.undoRegister['drag']['score'][3] = this.score[3];
 	}
 };
 
-
+/** execução de cancelamento da jogada anterior realizada pelo jogador
+ */
 Game.prototype.processUNDO = function(){
 	this.undo = true;
 
@@ -643,7 +665,8 @@ Game.prototype.colorAssigned = function(color){
 	return false;
 };
 
-
+/**
+ */
 Game.prototype.generatePlayersList = function(){
 	var totalPlayers = this.scene.Humans + this.scene.Bots;
 	var index = this.scene.socket.colorsResponse.length -1;
@@ -670,9 +693,9 @@ Game.prototype.generatePlayersList = function(){
 		this.isBotTurn=true;
 };
 
-
+//função responsavel pelo movimento de cada pedra
 Game.prototype.moveStone = function(tile){
-
+	//alteração da informação do tile a ser ocupado
 	switch(this.pickedStone.colorMaterial){
 		case 'blueStone':
 			tile.info = 1;
@@ -693,7 +716,7 @@ Game.prototype.moveStone = function(tile){
 	this.pickedStone.moveStone(tile.position);
 };
 
-
+//calculo do movimento seguinte
 Game.prototype.nextMove = function(stone){
 	if(this.roundNumber == 1)
 	{
@@ -710,7 +733,7 @@ Game.prototype.nextMove = function(stone){
 	this.movePannel.texture = this.roundMove;
 };
 
-
+//calculo do movimento anterior, para undo
 Game.prototype.previousMove = function(stone){
 	if(this.roundNumber == 1 || this.roundMove == 'drag')
 	{
@@ -726,7 +749,7 @@ Game.prototype.previousMove = function(stone){
 	this.movePannel.texture = this.roundMove;
 };
 
-
+//funçao de atualização do timer de cada ronda
 Game.prototype.updateTimer = function(){
 
 	var time = Math.floor((this.roundTime - this.scene.milliseconds) / 1000);
@@ -741,7 +764,7 @@ Game.prototype.updateTimer = function(){
 	}
 };
 
-
+//função para animação das pedras correspondentes à cor vencedora
 Game.prototype.animateStones = function(material){
 	for(var i = 0; i < this.stones.length; i++)
 		if(this.stones[i].colorMaterial == material)

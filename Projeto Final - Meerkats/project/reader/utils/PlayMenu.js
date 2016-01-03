@@ -22,7 +22,7 @@ PlayMenu.prototype.display = function(){
 	this.scene.pushMatrix();
 	this.scene.applyViewMatrix();
 
-	//how to
+
 		this.scene.pushMatrix();
 		this.scene.translate(-5,50,0);
 		this.scene.rotate(Math.PI/9, 1, 0, 0);
@@ -31,20 +31,19 @@ PlayMenu.prototype.display = function(){
 		this.scene.popMatrix();
 
 		this.scene.pushMatrix();
+		this.scene.translate(5,50,0);
+		this.scene.rotate(Math.PI/9, 1, 0, 0);
+		this.scene.rotate(-Math.PI/4, 0, 1, 0);
+		this.block2.display();
+		this.scene.popMatrix();
+
+
+		this.scene.pushMatrix();
 		this.scene.translate(-5+0.2,49.9,0.5);
 		this.scene.rotate(Math.PI/9, 1, 0, 0);
 		this.scene.rotate(Math.PI/4, 0, 1, 0);
 		this.scene.register(this.howtoButton);
 		this.howtoButton.display();
-		this.scene.popMatrix();
-
-
-	//play
-		this.scene.pushMatrix();
-		this.scene.translate(5,50,0);
-		this.scene.rotate(Math.PI/9, 1, 0, 0);
-		this.scene.rotate(-Math.PI/4, 0, 1, 0);
-		this.block2.display();
 		this.scene.popMatrix();
 
 		this.scene.pushMatrix();

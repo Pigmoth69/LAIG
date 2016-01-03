@@ -1,6 +1,6 @@
 function HowTo(scene) {
 	this.scene = scene;
-	this.instruction = new MyBlock(this.scene, 6, 4, 1, 'lightBlue');
+	this.instruction = new MyBlock(this.scene, 6, 4, 1, 'lightGreen');
 };
 
 

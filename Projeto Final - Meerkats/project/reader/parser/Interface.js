@@ -22,26 +22,6 @@ Interface.prototype.init = function(application) {
 };
 
 
-/**	@brief Carrega a GUI com os parametros a interagir, criando um handler para controlar o estado das luzes
-  */
-Interface.prototype.loadInterfaceLigths = function(){
-	this.lights = this.gui.addFolder('Lights');
-    this.lights.open();
-
-    var scene = this.scene;
-
-	for(id in this.scene.graph.lightsStateValue)
-	{
-		//adiciona as opcoes com o id das luzes da scene
-	    var listener = this.lights.add(this.scene.graph.lightsStateValue, id);
-	    
-	    //handler que le a acao do utilizador e atualiza a informaçao das luzes na scene
-	    listener.onChange(function(bool) 
-	    {
-	    	scene.updateLightsState(this.property, bool);
-	    });
-	}
-};
 
 
 Interface.prototype.loadInterfaceBackgroundColor = function(){
@@ -127,6 +107,13 @@ Interface.prototype.processKeyDown = function(event) {
         case 'Enter':
             if(this.scene.stateMachine.currentState == 'Gameplay')
                 this.scene.stateMachine.game.passTurn();
+            else if(this.scene.stateMachine.currentState == 'EndScreen')
+                this.scene.stateMachine.exit();
+            else if(this.scene.stateMachine.currentState == 'How To')
+             {
+                this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
+                this.scene.stateMachine.currentState = 'How To to Main Menu';
+             }
             break;
         case 'U+001B':
              if(this.scene.stateMachine.currentState == 'How To')
@@ -134,7 +121,7 @@ Interface.prototype.processKeyDown = function(event) {
                 this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
                 this.scene.stateMachine.currentState = 'How To to Main Menu';
              }
-             else if(this.scene.stateMachine.currentState == 'Gameplay') 
+             else if(this.scene.stateMachine.currentState == 'Gameplay' || this.scene.stateMachine.currentState == 'EndScreen') 
                 this.scene.stateMachine.exit();
         default: break;
     }
