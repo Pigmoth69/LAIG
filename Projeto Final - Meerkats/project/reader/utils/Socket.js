@@ -56,7 +56,6 @@ Socket.prototype.postGameRequest = function(requestString, type){
 	else if(type == 'botdrop')
 		request.onload = function(data){
 									var message = data.target.response.split(";");
-									console.warn(message);
 									socket.botResponseDROP = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2])];
 									//console.warn(socket.botResponseDROP);
 								};

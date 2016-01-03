@@ -141,8 +141,6 @@ MyStone.prototype.movementAnimation = function(){
 
 		if(this.roundNumberAction == this.scene.stateMachine.game.roundNumber)
 			if(!this.scene.stateMachine.game.undo){
-				console.warn("Vai fazer o nextMove!!");
-				console.warn(this);
 				this.scene.stateMachine.game.nextMove(this);
 			}
 				
