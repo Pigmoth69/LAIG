@@ -50,9 +50,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 									var array = JSON.parse(message);
 									socket.winnerResponse = array.slice(',');
 
-									if(socket.winnerResponse.length == 0)
-										socket.scene.stateMachine.game.winner = 'Draw';
-									else socket.scene.stateMachine.game.saveWinner(socket.winnerResponse[0]);
+									socket.scene.stateMachine.game.saveWinner(socket.winnerResponse[0]);
 									//console.log(socket.scene.stateMachine.game.winner);
 								};					
 	else if(type == 'botdrop')

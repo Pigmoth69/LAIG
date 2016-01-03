@@ -85,6 +85,7 @@ Game.prototype.handler = function(){
 			screenMaterial = 'orange';
 		}
 		else{
+			console.log(this.winner[0]);
 			screenTexture = this.winner[0] + "Won";
 			switch(this.winner[1]){
 				case 1:
@@ -160,7 +161,7 @@ Game.prototype.handler = function(){
 	}
 	if(this.botCanPickStoneDROP == true && this.scene.socket.botResponseDROP !=null){
 		this.botCanPickStoneDROP=false;
-		console.warn("Fazer o picking STONE para o DROP!");
+		//console.warn("Fazer o picking STONE para o DROP!");
 		var response = this.scene.socket.botResponseDROP;
 
 		//resultados da resposta do prolog que vem num array deste genero [2,5,6]
@@ -176,7 +177,7 @@ Game.prototype.handler = function(){
 	}
 	if(this.botCanPickTileDROP == true && this.scene.socket.botResponseDROP !=null){
 		this.botCanPickTileDROP = false;
-		console.warn("Fazer o picking TILE para o DROP!");
+		//console.warn("Fazer o picking TILE para o DROP!");
 		var response = this.scene.socket.botResponseDROP;
 
 		//resultados da resposta do prolog que vem num array deste genero [2,5,6]
@@ -192,9 +193,9 @@ Game.prototype.handler = function(){
 
 	if(this.botCanDrag==true && this.scene.socket.botResponseDROP!=null && this.moveHasFinished == true){
 		this.botCanDrag=false;
-		console.warn("Fazer o DRAG!");
+		//console.warn("Fazer o DRAG!");
 		if(this.roundNumber !=1){
-			console.warn("NÃO é a round 1");
+			//console.warn("NÃO é a round 1");
 			this.moveHasFinished=false;
 			var board = this.scene.socket.processBoardToString();
 			var XplayedStone = this.scene.socket.botResponseDROP[1];
@@ -202,38 +203,38 @@ Game.prototype.handler = function(){
 			var requestString = "[stoneDragBOT,"+ board+",[\""+ XplayedStone +"\"],[\""+YplayedStone+ "\"],_Xinicial,_Yinicial,_Xfinal,_Yfinal]";
 			this.scene.socket.sendRequest(requestString, 'botdrag');
 		}else{
-			console.warn("É a round 1");
+			//console.warn("É a round 1");
 			return;
 		}
 		this.botCanPickStoneDRAG=true;
 	}
 	if(this.botCanPickStoneDRAG == true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.playedStone !=null){
 		this.botCanPickStoneDRAG =false;
-		console.warn("Fazer o picking STONE para o DRAG!");
-		console.warn("--------------------IMPORTANTE--------------------");
+		//console.warn("Fazer o picking STONE para o DRAG!");
+		//console.warn("--------------------IMPORTANTE--------------------");
 		var response = this.scene.socket.botResponseDRAG;
 		var Xinicial = response[0];
 		var Yinicial = response[1];
 		//pedra que se vai mover
 		var movingStone = this.getRegistedStoneFromPos(Xinicial,Yinicial);
-		console.warn("Pedra a mover: ");
-		console.warn(movingStone);
+		//console.warn("Pedra a mover: ");
+		//console.warn(movingStone);
 		this.roundMove = "drag";
 		this.pickingStone(movingStone);
-		console.warn("saiu!");
+		//console.warn("saiu!");
 		this.botCanPickTileDRAG = true;
 	}
 
 	if(this.botCanPickTileDRAG==true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.scene.socket.boardResponse!=null ){
 		this.botCanPickTileDRAG=false;
-		console.warn("Fazer o picking TILE para o DRAG!");
+		//console.warn("Fazer o picking TILE para o DRAG!");
 		var response = this.scene.socket.botResponseDRAG;
 		this.board.highlightDragPositions(this.scene.socket.boardResponse);
 		var Xfinal = response[2];
 		var Yfinal = response[3];
 		//pedra que se vai mover
 		var tileToMove = this.board.getRegistedBoard(Xfinal,Yfinal);
-		console.warn(tileToMove);
+		//console.warn(tileToMove);
 		this.pickingTile(tileToMove);
 		this.canPass=true;
 	}
@@ -305,19 +306,19 @@ Game.prototype.picking = function(obj){
 
 
 Game.prototype.pickingStone = function(obj){
-	console.warn("--------------------COMEÇA--------------------");
-	console.warn("setled: ");
-	if(obj[0].settledTile == null)
-		console.warn("É NULL");
-	else
-		console.warn("Não é NULL");
-	console.warn(this.roundMove);
-	console.warn(obj[0]);
-	console.warn(obj[0].settledTile);
+	//console.warn("--------------------COMEÇA--------------------");
+	//console.warn("setled: ");
+	//if(obj[0].settledTile == null)
+		//console.warn("É NULL");
+//	else
+		//console.warn("Não é NULL");
+	//console.warn(this.roundMove);
+//	console.warn(obj[0]);
+	//console.warn(obj[0].settledTile);
 	//registando peça selecionada no picking dependendo da jogada
-	if(this.playedStone !=null)
-	console.warn("played: "+this.playedStone.id);
-	console.warn("--------------------COMEÇA--------------------");
+	//if(this.playedStone !=null)
+//	console.warn("played: "+this.playedStone.id);
+	//console.warn("--------------------COMEÇA--------------------");
 	if((this.roundMove == 'drop' && obj[0].settledTile == null) || (this.roundMove == 'drag' && obj[0].settledTile != null && obj[0].id != this.playedStone.id))
 	{
 		//console.warn("Entrou!!!");
@@ -351,7 +352,7 @@ Game.prototype.pickingStone = function(obj){
 
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[validDragPositions," + this.pickedStone.settledTile.row + ',' + this.pickedStone.settledTile.col + ',' + stringBoard + ",_Result" + "]";
-			console.warn(requestString);
+			//console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'board');
 		}
 	}
@@ -626,6 +627,7 @@ Game.prototype.passTurn = function(){
 
 		var playerIndex = (this.roundNumber - 1) % this.players.length;
 		this.currentPlayer.texture = this.players[playerIndex][0];
+		console.log(this.players[playerIndex][0]);
 
 		//this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
 
@@ -676,7 +678,7 @@ Game.prototype.generatePlayersList = function(){
 
 	this.currentPlayer = new MyScreen(this.scene, 'iluminated', 'Player1', false);
 	console.log(this.players);
-	//caso seja logo 1 bot a jogar!!
+
 	if(this.currentPlayerIsBOT())
 		this.isBotTurn=true;
 };

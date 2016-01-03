@@ -315,6 +315,7 @@ LSXscene.prototype.display = function () {
 			this.pushMatrix();
 				this.translate(-5,0,-10);
 				this.scale(2, 2, 2);
+				console.log(this.stateMachine.endScreen.texture);
 				this.stateMachine.endScreen.display();
 			this.popMatrix();
 		}
