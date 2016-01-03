@@ -39,9 +39,8 @@ main=function()
   myScene.setInterface(myInterface);
   myInterface.setScene(myScene);
 
- // myInterface.setActiveCamera(myScene.camera);
 
-	var filename=getUrlVars()['file'] || "teste.lsx";
+	var filename=getUrlVars()['file'] || "meerkats.lsx";
 
 	var myGraph = new LSXreader(filename, myScene);
 	

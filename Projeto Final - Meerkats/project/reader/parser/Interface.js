@@ -42,9 +42,8 @@ Interface.prototype.loadInterfacePlayers = function(){
     this.players.open();
 
     var scene = this.scene;
-    var humansListener = this.players.add(this.scene, 'Humans', 0, 4).step(1);
-    var botsListener = this.players.add(this.scene, 'Bots', 0, 4).step(1);
-
+    this.humansListener = this.players.add(this.scene, 'Humans', 0, 4).step(1);
+    this.botsListener = this.players.add(this.scene, 'Bots', 0, 4).step(1);
 };
 
 

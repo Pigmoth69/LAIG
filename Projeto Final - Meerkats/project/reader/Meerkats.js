@@ -28,8 +28,9 @@ LSXscene.prototype.init = function (application) {
     this.cameraAnimation = new CameraAnimation(this);
     this.socket = new Socket(this);
 
-
-	this.terrainShader=new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+    this.terrainShader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+    this.terrainShader.setUniformsValues({heightmap: 1});
+	this.terrainShader.setUniformsValues({normScale: 50.0});
 
 
 	this.startingTime = new Date();
@@ -103,7 +104,11 @@ LSXscene.prototype.loadInterface = function () {
   		}
   	}
 
-  	this.graph.gameStatus['EXIT']=function(){scene.stateMachine.exit();};
+  	this.graph.gameStatus['EXIT']=function(){
+          scene.stateMachine.exit();
+          scene.interface.humansListener.setValue(2);
+          scene.interface.botsListener.setValue(0);
+      };
 
   	this.Humans = 2;
   	this.Bots = 0;

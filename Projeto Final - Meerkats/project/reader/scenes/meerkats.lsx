@@ -66,6 +66,14 @@
 	</LIGHTS>
 	
 	<TEXTURES>
+		<TEXTURE id="terrain">
+			<file path="./textures/1.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
+		<TEXTURE id="heightmap">
+			<file path="./textures/2.jpg" /> 
+			<amplif_factor s="1" t="1" /> 
+		</TEXTURE>
 		<TEXTURE id="red">
 			<file path="./textures/red.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
@@ -136,10 +144,6 @@
 		</TEXTURE>
 		<TEXTURE id="spaceship2">
 			<file path="./textures/spaceship2.jpg" /> 
-			<amplif_factor s="1" t="1" /> 
-		</TEXTURE>
-		<TEXTURE id="sky">
-			<file path="./textures/sky.jpg" /> 
 			<amplif_factor s="1" t="1" /> 
 		</TEXTURE>
 		<TEXTURE id="landscape">
@@ -364,6 +368,7 @@
 	    <LEAF id="triangle4" type="triangle" args="1 1 0 0 0 0 0 1 -1" />
 	    <LEAF id="plane" type="plane" args="50 50"/>
 	    <LEAF id="VEHICLE" type="vehicle" engine="engine" spaceship="spaceship" flame="flame"/>
+	    <LEAF id="terrain" type="terrain" texture="terrain" heightmap="heightmap" />
 	    <LEAF id="patch" type="patch" args="3 3 10 15">
 	    	<controlpoint x="0" y="0" z="0" />
 			<controlpoint x="1" y="0" z="1" />
@@ -431,7 +436,8 @@
 			<MATERIAL id="iluminated" />
 			<TEXTURE id="space" />
 			<DESCENDANTS>
-				<DESCENDANT id="InvertedSphere"/>
+				<DESCENDANT id="terrain"r/>
+				<!--<DESCENDANT id="InvetedSphere"/>-->
 			</DESCENDANTS>
 		</NODE>
 
