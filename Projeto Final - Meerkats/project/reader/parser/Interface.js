@@ -122,12 +122,20 @@ Interface.prototype.setScene = function(scene) {
 };
 
 Interface.prototype.processKeyDown = function(event) {
-    //console.log(event);
+    console.log(event);
     switch(event.keyIdentifier){
         case 'Enter':
             if(this.scene.stateMachine.currentState == 'Gameplay')
                 this.scene.stateMachine.game.passTurn();
             break;
+        case 'U+001B':
+             if(this.scene.stateMachine.currentState == 'How To')
+             {
+                this.scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0, 50, 0));
+                this.scene.stateMachine.currentState = 'How To to Main Menu';
+             }
+             else if(this.scene.stateMachine.currentState == 'Gameplay') 
+                this.scene.graph.gameStatus['EXIT'];
         default: break;
     }
 }

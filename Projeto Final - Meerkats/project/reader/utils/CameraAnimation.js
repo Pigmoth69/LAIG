@@ -29,7 +29,13 @@ CameraAnimation.prototype.handler = function(){
 				break;
 			case 'Gameplay to Main Menu':
 				this.scene.stateMachine.currentState = 'Main Menu';
-				this.scene.stateMachine.game = new Game(this.scene);
+				break;
+			case 'Main Menu to How To':
+				this.scene.stateMachine.currentState = 'How To';
+				break;
+			case 'How To to Main Menu':
+				this.scene.stateMachine.currentState = 'Main Menu';
+				break;
 			default: break;
 		}
 };

@@ -371,7 +371,9 @@ Game.prototype.pickingTile = function(obj){
 
 Game.prototype.display = function(){
 
-	if(this.scene.stateMachine.currentState != 'Main Menu to Gameplay' && this.scene.stateMachine.currentState != 'Gameplay to Main Menu')
+	if(this.scene.stateMachine.currentState != 'Main Menu to Gameplay' && this.scene.stateMachine.currentState != 'Gameplay to Main Menu'
+		&& this.scene.stateMachine.currentState != 'How To' && this.scene.stateMachine.currentState != 'Main Menu to How To'
+		&& this.scene.stateMachine.currentState != 'How To to Main Menu')
 	{
 
 		this.scene.pushMatrix();
@@ -827,3 +829,5 @@ Game.prototype.getRegistedStoneFromPos = function(Xpos,Ypos){
 		}
 	}
 };
+
+
