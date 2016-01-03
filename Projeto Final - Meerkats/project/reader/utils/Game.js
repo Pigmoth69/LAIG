@@ -57,8 +57,7 @@ Game.prototype.constructor = Game;
 
 
 
-/** Controla as principais açoes durante a execuçao do jogo
- */
+//Controla as principais açoes durante a execuçao do jogo
 Game.prototype.handler = function(){
 
 	//controlo da execuçao do replay, calculando quandos retrocessos deve realizar e quantos replays deverá apresentar
@@ -255,8 +254,7 @@ Game.prototype.handler = function(){
 	}
 };
 
-/**	Inicializa o array de pedras respetivas ao jogo
- */
+//Inicializa o array de pedras respetivas ao jogo
 Game.prototype.prepareStones = function(){
 	var id = 1;
 	var radius = 12;
@@ -291,8 +289,7 @@ Game.prototype.prepareStones = function(){
 	}
 };
 
-/** Handler de controlo do picking dos objectos do jogo, diferenciando Pedras das Peças do tabuleiro
- */
+//Handler de controlo do picking dos objectos do jogo, diferenciando Pedras das Peças do tabuleiro
 Game.prototype.picking = function(obj){
 	if(!this.currentPlayerIsBOT()){
 		if(obj[0] instanceof MyStone)
@@ -302,8 +299,7 @@ Game.prototype.picking = function(obj){
 	}
 };
 
-/** Handler responsavel pelo controlo de Pedras selecionadas pelo picking
- */
+// Handler responsavel pelo controlo de Pedras selecionadas pelo picking
 Game.prototype.pickingStone = function(obj){
 	//restrição para picking das peças, dependendo do movimento esperado (DROP ou DRAG)
 	if((this.roundMove == 'drop' && obj[0].settledTile == null) || (this.roundMove == 'drag' && obj[0].settledTile != null && obj[0].id != this.playedStone.id))
@@ -345,8 +341,7 @@ Game.prototype.pickingStone = function(obj){
 	}
 };
 
-/** Hendler responsavel pelo controlo das Peças do tabuleiro selecionadas
- */
+//Hendler responsavel pelo controlo das Peças do tabuleiro selecionadas
 Game.prototype.pickingTile = function(obj){
 	//um tile so pode ser selecionado se estiver marcado com 'highlight' e se uma Pedra ja tiver sido selecionada
 	if(this.pickedStone != null && obj[0].highlight)
@@ -373,8 +368,7 @@ Game.prototype.pickingTile = function(obj){
 	}
 };
 
-/** função de desenho da cena de jogo
- */
+// função de desenho da cena de jogo
 Game.prototype.display = function(){
 
 	if(this.scene.stateMachine.currentState == 'Gameplay' || this.scene.stateMachine.currentState == 'EndScreen')
@@ -419,8 +413,7 @@ Game.prototype.display = function(){
 	this.scene.popMatrix();
 };
 
-/** função de display e registo das peças do jogo
- */
+// função de display e registo das peças do jogo
 Game.prototype.displayStones = function(){
 	for(var i = 0; i < this.stones.length; i++)
 	{
@@ -433,8 +426,7 @@ Game.prototype.displayStones = function(){
 	}
 };
 
-/** função responsavel pela atualização do score nos marcadores de jogo
- */
+//função responsavel pela atualização do score nos marcadores de jogo
 Game.prototype.updateGameScore = function(){
     var max = 0;
     if(this.scene.socket.scoreResponse[0][1].length > 0)
@@ -465,8 +457,7 @@ Game.prototype.updateGameScore = function(){
     this.updateMarkers();
 };
 
-/** função responsavel pela atualização dos valores nos marcadores de jogo
- */
+// função responsavel pela atualização dos valores nos marcadores de jogo
 Game.prototype.updateMarkers = function(){
     if(this.score[0] > 9)
             this.scoreBoard.blueMarker.first = 1;
@@ -493,8 +484,7 @@ Game.prototype.updateMarkers = function(){
         this.scoreBoard.yellowMarker.second = this.score[3] % 10;
 };
 
-/** função de registo de cada jogada executada pelo jogador
- */
+//função de registo de cada jogada executada pelo jogador
 Game.prototype.saveUNDO = function(){
 	if(this.roundMove == 'drop')
 	{
@@ -532,8 +522,7 @@ Game.prototype.saveUNDO = function(){
 	}
 };
 
-/** execução de cancelamento da jogada anterior realizada pelo jogador
- */
+//execução de cancelamento da jogada anterior realizada pelo jogador
 Game.prototype.processUNDO = function(){
 	this.undo = true;
 
@@ -582,7 +571,7 @@ Game.prototype.processUNDO = function(){
 	this.updateMarkers();
 };
 
-
+//execuçao do replay
 Game.prototype.processREPLAY = function(){
 	if(this.roundMove == 'drop')
 	{
@@ -598,7 +587,7 @@ Game.prototype.processREPLAY = function(){
 	}
 };
 
-
+//função de calculo de rewinds para execuçao de replay
 Game.prototype.prepareREPLAY = function(){
 	if(this.roundMove == 'drag' || (this.roundMove == 'pass' && this.roundNumber == 1))
 		{this.rewinds = 1;}
