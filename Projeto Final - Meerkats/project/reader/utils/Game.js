@@ -607,7 +607,7 @@ Game.prototype.prepareREPLAY = function(){
 	this.replays = this.rewinds;
 };
 
-
+//funçao para preparaçao do proximo turno
 Game.prototype.passTurn = function(){
 	if(this.roundMove == 'pass' && this.animation == false)
 	{
@@ -645,7 +645,7 @@ Game.prototype.passTurn = function(){
  	} 
 };
 
-
+//funçao para calculo do vencedor
 Game.prototype.saveWinner = function(color){
 
 	this.winner = [];
@@ -656,7 +656,7 @@ Game.prototype.saveWinner = function(color){
 		}
 };
 
-
+//funçao para determinação 
 Game.prototype.colorAssigned = function(color){
 	for(var i = 0; i < this.players.length; i++)
 		if(this.players[i][1] == color)
@@ -665,8 +665,7 @@ Game.prototype.colorAssigned = function(color){
 	return false;
 };
 
-/**
- */
+//função de criaçao de da lista de jogadores selecionados na interface
 Game.prototype.generatePlayersList = function(){
 	var totalPlayers = this.scene.Humans + this.scene.Bots;
 	var index = this.scene.socket.colorsResponse.length -1;
