@@ -115,6 +115,13 @@ makeTest7():-
 			
 
 %FIM->TESTES---------------------------------------------------------------------------------------------------------------------------------------------------------
+/*open('hogwarts.txt',write,Stream), 
+write(Stream,Board),  nl(Stream),
+write(Stream,RemainingStones),  nl(Stream), 														
+close(Stream)*/
+
+
+
 %funciona!!
 /*@brief esta função é responsável por selecionar um sitio para colocar uma peça aleatória no tabuleiro
   @param Board tabuleiro actual onde se quer colocar a peça
@@ -123,11 +130,8 @@ makeTest7():-
   @param Xpos posição X da nova peça no tabuleiro
   @param Ypos posição Y da nova peça no tabuleiro
 */
+
 stoneDropBOT(Board,RemainingStones,IDstone,Xpos,Ypos):-
-														/*open('hogwarts.txt',write,Stream), 
-														write(Stream,Board),  nl(Stream),
-														write(Stream,RemainingStones),  nl(Stream), 														
-														close(Stream),*/
 														getEmptyCellBOT(Board,Xpos,Ypos),
 														getRandomStone(RemainingStones,IDstone),
 														formatAsJSON([IDstone,Xpos,Ypos]).

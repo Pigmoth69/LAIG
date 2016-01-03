@@ -1,4 +1,4 @@
-var ROUND_TIME = 60000;
+var ROUND_TIME = 20000;
 var MAX_COLOR_AREA = 2;
 
 function Game(scene) {
@@ -149,7 +149,7 @@ Game.prototype.handler = function(){
 
 
 	//caso seja um bot a jogar, é preciso ir fazer um pedido ao prolgo para saber onde se vai jogar
-	if(this.isBotTurn && this.scene.socket.botResponseDROP == null && this.remainingStones.length > 0) {
+	if(this.isBotTurn && this.scene.socket.botResponseDROP == null && this.remainingStones.length > 0 && this.scene.cameraAnimation.span == 0) {
 		this.isBotTurn=false;
 
 		//fazer o pedido ao prolog para que o bot possa ter a resposta para  -->DROP
@@ -629,7 +629,7 @@ Game.prototype.passTurn = function(){
 		this.currentPlayer.texture = this.players[playerIndex][0];
 		console.log(this.players[playerIndex][0]);
 
-		//this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+		this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
 
 		if(this.currentPlayerIsBOT())
 			this.isBotTurn=true;
