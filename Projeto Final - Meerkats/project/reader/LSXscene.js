@@ -104,6 +104,7 @@ LSXscene.prototype.loadInterface = function () {
   	}
 
   	this.graph.gameStatus['EXIT']=function(){
+  		scene.stateMachine.game = new Game(scene);
   		scene.stateMachine.currentState = 'Gameplay to Main Menu';
   		scene.cameraAnimation.startCameraAnimation(1500, vec3.fromValues(0, 40, 15), vec3.fromValues(0,50,0));
   	}

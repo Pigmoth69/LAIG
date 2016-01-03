@@ -64,7 +64,7 @@ Socket.prototype.postGameRequest = function(requestString, type){
 		request.onload = function(data){
 									var message = data.target.response.split(";");
 									socket.botResponseDRAG = [parseInt(message[0]),parseInt(message[1]),parseInt(message[2]),parseInt(message[3])];
-									console.warn(socket.botResponseDRAG);
+									//console.warn(socket.botResponseDRAG);
 								};						
 
 	request.onerror = function(){console.log("Error waiting for response");};

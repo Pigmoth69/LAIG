@@ -1,5 +1,5 @@
-var ROUND_TIME = 20000;
-var MAX_COLOR_AREA = 2;
+var ROUND_TIME = 60000;
+var MAX_COLOR_AREA = 15;
 
 function Game(scene) {
 
@@ -116,7 +116,7 @@ Game.prototype.handler = function(){
 	//se as rondas do jogo forem superiores a 15, poderá ocorrer uma situação de vitoria
 	var groupOf15 = this.score.indexOf(MAX_COLOR_AREA) + 1;
 	if(groupOf15 != 0)
-		if((this.colorAssigned(groupOf15) || this.playedStones == 60) && !this.endGame)
+		if((this.colorAssigned(groupOf15) || this.remainingStones == 0) && !this.endGame)
 		{
 			this.endGame = true;
 
