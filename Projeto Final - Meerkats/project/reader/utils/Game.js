@@ -1,5 +1,5 @@
 var ROUND_TIME = 60000;
-var MAX_COLOR_AREA = 2;
+var MAX_COLOR_AREA = 15;
 
 function Game(scene) {
 
