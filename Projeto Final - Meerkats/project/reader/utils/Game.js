@@ -1,5 +1,5 @@
 var ROUND_TIME = 60000;
-var MAX_COLOR_AREA = 5;
+var MAX_COLOR_AREA = 2;
 
 function Game(scene) {
 
@@ -208,10 +208,10 @@ Game.prototype.handler = function(){
 		}
 		this.botCanPickStoneDRAG=true;
 	}
-	if(this.botCanPickStoneDRAG == true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null){
+	if(this.botCanPickStoneDRAG == true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.playedStone !=null){
 		this.botCanPickStoneDRAG =false;
-
 		console.warn("Fazer o picking STONE para o DRAG!");
+		console.warn("--------------------IMPORTANTE--------------------");
 		var response = this.scene.socket.botResponseDRAG;
 		var Xinicial = response[0];
 		var Yinicial = response[1];
@@ -219,6 +219,7 @@ Game.prototype.handler = function(){
 		var movingStone = this.getRegistedStoneFromPos(Xinicial,Yinicial);
 		console.warn("Pedra a mover: ");
 		console.warn(movingStone);
+		this.roundMove = "drag";
 		this.pickingStone(movingStone);
 		console.warn("saiu!");
 		this.botCanPickTileDRAG = true;
@@ -305,15 +306,19 @@ Game.prototype.picking = function(obj){
 
 
 Game.prototype.pickingStone = function(obj){
-	/*console.warn("--------------------COMEÇA--------------------");
+	console.warn("--------------------COMEÇA--------------------");
 	console.warn("setled: ");
 	if(obj[0].settledTile == null)
 		console.warn("É NULL");
 	else
-		console.warn("Não é NULL");*/
+		console.warn("Não é NULL");
+	console.warn(this.roundMove);
+	console.warn(obj[0]);
+	console.warn(obj[0].settledTile);
 	//registando peça selecionada no picking dependendo da jogada
-	/*if(this.playedStone !=null)
-	console.warn("played: "+this.playedStone.id);*/
+	if(this.playedStone !=null)
+	console.warn("played: "+this.playedStone.id);
+	console.warn("--------------------COMEÇA--------------------");
 	if((this.roundMove == 'drop' && obj[0].settledTile == null) || (this.roundMove == 'drag' && obj[0].settledTile != null && obj[0].id != this.playedStone.id))
 	{
 		//console.warn("Entrou!!!");
@@ -366,6 +371,8 @@ Game.prototype.pickingTile = function(obj){
 		//guardar na stone o tile onde ela vai ficar
 		this.pickedStone.settledTile = obj[0];
 		this.animation = true;
+		if(!this.currentPlayerIsBOT())
+			this.updateStones(obj[0].id);
 		this.moveStone(obj[0]);
 		this.board.resetHighlight();
 
