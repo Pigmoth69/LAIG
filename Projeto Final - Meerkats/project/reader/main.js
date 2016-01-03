@@ -15,11 +15,11 @@ serialInclude(['../lib/CGF.js', './LSXscene.js','./parser/LSXreader.js','./parse
                './parser/LinearAnimation.js', './parser/CircularAnimation.js', './parser/ControlPoint.js',
                './parser/Light.js','./parser/Texture.js','./parser/Node.js','./parser/Material.js',
                './parser/Initials.js', './parser/Illumination.js','./parser/Graph.js',
-               './primitives/MyRectangle.js', './primitives/MyCylinder.js', './primitives/MySphere.js',
+               './primitives/MyRectangle.js', './primitives/MyCylinder.js',
                './primitives/MyTriangle.js', './primitives/MyPlane.js', './primitives/MyPatch.js',
                './primitives/MyTerrain.js','./primitives/MyVehicle.js','./primitives/MyStone.js',
                './primitives/MyBoard.js', './primitives/MyBoardTile.js','./primitives/MyMarker.js',
-               './utils/Coords.js','./primitives/MyBag.js','./primitives/MyQuad.js',
+               './utils/Coords.js','./primitives/MyQuad.js',
                './utils/CameraAnimation.js', './utils/StateMachine.js', './utils/Socket.js',
                './utils/PlayMenu.js', './utils/Game.js', './primitives/MyPannel.js',
                './primitives/MyScoreBoard.js', './utils/PlayMenu.js', './utils/Game.js', './primitives/MyInvertedSphere.js',
@@ -39,7 +39,7 @@ main=function()
   myScene.setInterface(myInterface);
   myInterface.setScene(myScene);
 
-  myInterface.setActiveCamera(myScene.camera);
+  //myInterface.setActiveCamera(myScene.camera);
 
 	var filename=getUrlVars()['file'] || "teste.lsx";
 

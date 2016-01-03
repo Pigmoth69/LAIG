@@ -110,7 +110,6 @@ Game.prototype.handler = function(){
 		if((this.colorAssigned(groupOf15) || this.playedStones == 60) && !this.endGame)
 		{
 			this.endGame = true;
-			console.alert(this.playedStones);
 
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[checkWinner," + stringBoard + ",_Result]";

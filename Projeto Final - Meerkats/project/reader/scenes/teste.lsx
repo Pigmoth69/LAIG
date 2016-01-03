@@ -335,7 +335,6 @@
 	    <LEAF id="cylinder" type="cylinder" args="1 1 1 5 20" />
 	    <LEAF id="base" type="cylinder" args="1 13 13 5 50" />
 	    <LEAF id="circle" type="cylinder" args="0 1 0 1 20" />
-	    <LEAF id="sphere" type="sphere" args="1 20 20" />
 	    <LEAF id="InvertedSphere" type="invertedSphere" args="60 50 50" />
 	    <LEAF id="triangle" type="triangle" args="0 0 0 0 0 1 0 1 0" />
 	    <LEAF id="triangle2" type="triangle" args="0 0 1 0 0 0 0 1 0" />
@@ -344,27 +343,6 @@
 	    <LEAF id="plane" type="plane" args="50 50"/>
 	    <LEAF id="VEHICLE" type="vehicle" engine="engine" spaceship="spaceship" flame="flame"/>
 	    <LEAF id="patch" type="patch" args="3 3 10 15">
-	    	<controlpoint x="0" y="0" z="0" />
-			<controlpoint x="1" y="0" z="1" />
-			<controlpoint x="1" y="0" z="2" />
-			<controlpoint x="0" y="0" z="3" />	
-
-			<controlpoint x="0" y="0" z="0" />
-			<controlpoint x="0.3" y="0.6" z="1" />
-			<controlpoint x="0.3" y="0.6" z="2" />
-			<controlpoint x="0" y="0" z="3" />
-
-			<controlpoint x="0" y="0" z="0" />
-			<controlpoint x="-0.3" y="0.6" z="1" />
-			<controlpoint x="-0.3" y="0.6" z="2" />
-			<controlpoint x="0" y="0" z="3" />
-
-			<controlpoint x="0" y="0" z="0" />
-			<controlpoint x="-1" y="0" z="1" />
-			<controlpoint x="-1" y="0" z="2" />
-			<controlpoint x="0" y="0" z="3" />
-	    </LEAF>
-	    <LEAF id="StoneBag" type="bag" args="3 3 10 15">
 	    	<controlpoint x="0" y="0" z="0" />
 			<controlpoint x="1" y="0" z="1" />
 			<controlpoint x="1" y="0" z="2" />

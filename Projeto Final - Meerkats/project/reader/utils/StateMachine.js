@@ -36,9 +36,7 @@ StateMachine.prototype.displayHandler = function(){
 		case 'EndScreen':
 			//this.scene.interface.close();
 			this.game.display();
-			//this.endScreen.display();
 		case 'Gameplay to Main Menu':
-			this.scene.interface.game.close();
 			this.scene.interface.camera.close();
 			this.scene.interface.players.open();
 			this.playMenu.display();			
