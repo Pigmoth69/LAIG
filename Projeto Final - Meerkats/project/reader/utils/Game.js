@@ -1,5 +1,5 @@
 var ROUND_TIME = 60000;
-var MAX_COLOR_AREA = 5;
+var MAX_COLOR_AREA = 2;
 
 function Game(scene) {
 
@@ -40,10 +40,18 @@ function Game(scene) {
 	//vê se é a vez do bot jogar
 	this.isBotTurn=false;
 	//quando já tem a resposta fica a true para o bot poder jogar
+
 	this.botCanPlay=false;
 	this.botCanDrag=false;
 	this.moveHasFinished=false;
-	this.canPass = false;
+
+	//Ver se pode fazer o pcikstone e pickTile no DROP
+	this.botCanPickStoneDROP=false;
+	this.botCanPickTileDROP=false;
+	//Ver se pode fazer o pcikstone e pickTile no DRAG
+	this.botCanPickStoneDRAG=false;
+	this.botCanPickTileDRAG=false;
+
 };
 
 
@@ -94,7 +102,7 @@ Game.prototype.handler = function(){
 				case 4:
 					screenMaterial = 'yellowMarker';
 					this.animateStones('yellowStone');
-					break;
+					break; 
 				default: break;
 			}
 		}
@@ -123,16 +131,15 @@ Game.prototype.handler = function(){
 	if(this.scene.socket.colorsResponse != null)
 		this.generatePlayersList();
 
-	//se for o bot a jogar, passar a vez dele para o próximo
+	//INICIO DA PARTE DE JOGADA DO BOT
 
-	if(this.players.length != 0)
+	//se for o bot a jogar, passar a vez dele para o próximo
+	if(this.players.length != 0 )
 		if(this.currentPlayerIsBOT()){
-			if(this.roundNumber== 1 && this.canPass==true && this.moveHasFinished == true){
-				this.canPass=false;
+			if(this.roundNumber== 1 && this.roundMove == 'pass' && this.moveHasFinished == true){
 				this.moveHasFinished = false;
 				this.passTurn();
-			}else if(this.roundNumber>1 && this.canPass==true  && this.moveHasFinished == true){
-				this.canPass=false;
+			}else if(this.roundNumber>1 && this.roundMove == 'pass'  && this.moveHasFinished == true){
 				this.moveHasFinished = false;
 				this.passTurn();
 			}
@@ -141,48 +148,97 @@ Game.prototype.handler = function(){
 
 
 	//caso seja um bot a jogar, é preciso ir fazer um pedido ao prolgo para saber onde se vai jogar
-	if(this.isBotTurn && this.scene.socket.botResponseDROP == null) {
+	if(this.isBotTurn && this.scene.socket.botResponseDROP == null && this.remainingStones.length > 0) {
 		this.isBotTurn=false;
+
 		//fazer o pedido ao prolog para que o bot possa ter a resposta para  -->DROP
 		var board = this.scene.socket.processBoardToString();
 		var remainingStones =  this.scene.socket.processRemainingStonesToString();
 		var requestString = "[stoneDropBOT,"+ board+","+ remainingStones + ",_IDstone,_Xpos,_Ypos]";
 		this.scene.socket.sendRequest(requestString, 'botdrop');
-		this.botCanPlay=true;
-		//fazer o pedido ao prolog para que o bot possa ter a resposta para  -->DRAG
+		this.botCanPickStoneDROP=true;
+	}
+	if(this.botCanPickStoneDROP == true && this.scene.socket.botResponseDROP !=null){
+		this.botCanPickStoneDROP=false;
+		console.warn("Fazer o picking STONE para o DROP!");
+		var response = this.scene.socket.botResponseDROP;
+
+		//resultados da resposta do prolog que vem num array deste genero [2,5,6]
+		var stoneID = response[0];
+		//funções responsáveis por irem buscar os obj para enviar ao picking
+		var stone = this.getRegistedStone(stoneID);
+
+		//vai fazer o picking
+		this.pickingStone(stone);
+
+		this.updateStones(stoneID);
+		this.botCanPickTileDROP=true;
+	}
+	if(this.botCanPickTileDROP == true && this.scene.socket.botResponseDROP !=null){
+		this.botCanPickTileDROP = false;
+		console.warn("Fazer o picking TILE para o DROP!");
+		var response = this.scene.socket.botResponseDROP;
+
+		//resultados da resposta do prolog que vem num array deste genero [2,5,6]
+		var Xpos = response[1];
+		var Ypos = response[2];
+		//funções responsáveis por ir buscar tile para enviar ao picking
+		var tile = this.board.getRegistedBoard(Xpos,Ypos);
+
+		this.pickingTile(tile);
+		this.botCanDrag=true;
 
 	}
-	if(this.botCanPlay && this.scene.socket.botResponseDROP != null){
-		this.botCanPlay=false;
-		this.moveHasFinished=false;
-		//se não for a primeira ronda fazer o pedido de drag
-		//console.log("buscar o draag!1");
-		this.makeDropBOT();
-		if(this.roundNumber !=1){
-		//console.log("buscar o draag!2");
-		var board = this.scene.socket.processBoardToString();
-		var XplayedStone = this.scene.socket.botResponseDROP[1];
-		var YplayedStone = this.scene.socket.botResponseDROP[2];
-		var requestString = "[stoneDragBOT,"+ board+",[\""+ XplayedStone +"\"],[\""+YplayedStone+ "\"],_Xinicial,_Yinicial,_Xfinal,_Yfinal]";
-		this.scene.socket.sendRequest(requestString, 'botdrag');
-	//	console.log("buscar o draag!3");
-		}
-		this.botCanDrag=true;
-	}
-	if(this.roundNumber == 1 && this.botCanDrag && this.moveHasFinished==true){
-		this.botCanDrag = false;
-		this.canPass = true;
-	}
-	else if(this.botCanDrag && this.scene.socket.botResponseDRAG!= null && this.moveHasFinished==true){
-		//console.warn("era suposto o movimento acabar!!");
-		this.moveHasFinished = false;
+
+	if(this.botCanDrag==true && this.scene.socket.botResponseDROP!=null && this.moveHasFinished == true){
 		this.botCanDrag=false;
-		//console.warn("entrei");
-		this.makeDragBOT();
+		console.warn("Fazer o DRAG!");
+		if(this.roundNumber !=1){
+			console.warn("NÃO é a round 1");
+			this.moveHasFinished=false;
+			var board = this.scene.socket.processBoardToString();
+			var XplayedStone = this.scene.socket.botResponseDROP[1];
+			var YplayedStone = this.scene.socket.botResponseDROP[2];
+			var requestString = "[stoneDragBOT,"+ board+",[\""+ XplayedStone +"\"],[\""+YplayedStone+ "\"],_Xinicial,_Yinicial,_Xfinal,_Yfinal]";
+			this.scene.socket.sendRequest(requestString, 'botdrag');
+		}else{
+			console.warn("É a round 1");
+			return;
+		}
+		this.botCanPickStoneDRAG=true;
+	}
+	if(this.botCanPickStoneDRAG == true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.playedStone !=null){
+		this.botCanPickStoneDRAG =false;
+		console.warn("Fazer o picking STONE para o DRAG!");
+		console.warn("--------------------IMPORTANTE--------------------");
+		var response = this.scene.socket.botResponseDRAG;
+		var Xinicial = response[0];
+		var Yinicial = response[1];
+		//pedra que se vai mover
+		var movingStone = this.getRegistedStoneFromPos(Xinicial,Yinicial);
+		console.warn("Pedra a mover: ");
+		console.warn(movingStone);
+		this.roundMove = "drag";
+		this.pickingStone(movingStone);
+		console.warn("saiu!");
+		this.botCanPickTileDRAG = true;
+	}
+
+	if(this.botCanPickTileDRAG==true && this.scene.socket.botResponseDROP!=null && this.scene.socket.botResponseDRAG!=null && this.scene.socket.boardResponse!=null ){
+		this.botCanPickTileDRAG=false;
+		console.warn("Fazer o picking TILE para o DRAG!");
+		var response = this.scene.socket.botResponseDRAG;
+		this.board.highlightDragPositions(this.scene.socket.boardResponse);
+		var Xfinal = response[2];
+		var Yfinal = response[3];
+		//pedra que se vai mover
+		var tileToMove = this.board.getRegistedBoard(Xfinal,Yfinal);
+		console.warn(tileToMove);
+		this.pickingTile(tileToMove);
 		this.canPass=true;
 	}
 
-
+	//FIM DO BOT
 
 
 	//se o socket contiver informação respetiva ao arrasto de uma peça, o tabuleiro é alterado
@@ -190,6 +246,7 @@ Game.prototype.handler = function(){
 	{
 		this.board.highlightDragPositions(this.scene.socket.boardResponse);
 		this.validDragPositions = false;
+	//	if(!this.currentPlayerIsBOT())
 		this.scene.socket.boardResponse = null;
 	}
 	//se o socket contiver informaçao respetiva a novos valores de score, o array de scores é atualizado
@@ -248,10 +305,22 @@ Game.prototype.picking = function(obj){
 
 
 Game.prototype.pickingStone = function(obj){
-
+	console.warn("--------------------COMEÇA--------------------");
+	console.warn("setled: ");
+	if(obj[0].settledTile == null)
+		console.warn("É NULL");
+	else
+		console.warn("Não é NULL");
+	console.warn(this.roundMove);
+	console.warn(obj[0]);
+	console.warn(obj[0].settledTile);
 	//registando peça selecionada no picking dependendo da jogada
+	if(this.playedStone !=null)
+	console.warn("played: "+this.playedStone.id);
+	console.warn("--------------------COMEÇA--------------------");
 	if((this.roundMove == 'drop' && obj[0].settledTile == null) || (this.roundMove == 'drag' && obj[0].settledTile != null && obj[0].id != this.playedStone.id))
 	{
+		//console.warn("Entrou!!!");
 		//se pickedStone ja estiver atribuido a alguma pedra
 		if(this.pickedStone != null)
 		{
@@ -282,7 +351,7 @@ Game.prototype.pickingStone = function(obj){
 
 			var stringBoard = this.scene.socket.processBoardToString();
 			var requestString = "[validDragPositions," + this.pickedStone.settledTile.row + ',' + this.pickedStone.settledTile.col + ',' + stringBoard + ",_Result" + "]";
-			//console.warn(requestString);
+			console.warn(requestString);
 			this.scene.socket.sendRequest(requestString, 'board');
 		}
 	}
@@ -292,6 +361,7 @@ Game.prototype.pickingStone = function(obj){
 Game.prototype.pickingTile = function(obj){
 	if(this.pickedStone != null && obj[0].highlight)
 	{
+
 		if(this.roundMove == 'drag')
 			this.pickedStone.settledTile.info = 0;
 
@@ -300,6 +370,8 @@ Game.prototype.pickingTile = function(obj){
 		//guardar na stone o tile onde ela vai ficar
 		this.pickedStone.settledTile = obj[0];
 		this.animation = true;
+		if(!this.currentPlayerIsBOT())
+			this.updateStones(obj[0].id);
 		this.moveStone(obj[0]);
 		this.board.resetHighlight();
 
@@ -533,6 +605,13 @@ Game.prototype.passTurn = function(){
 		//console.log("passa de ronda!");
   		this.scene.socket.botResponseDROP = null;
 		this.scene.socket.botResponseDRAG = null;
+		this.scene.socket.boardResponse = null;
+		//socket.boardResponse
+		this.botCanPickStoneDROP=false;
+		this.botCanPickTileDROP=false;
+		this.botCanPickStoneDRAG=false;
+		this.botCanPickTileDRAG=false;
+
   		this.roundNumber++;
 		this.roundMove = 'drop';
 		this.roundTime = this.scene.milliseconds + ROUND_TIME;
@@ -548,7 +627,7 @@ Game.prototype.passTurn = function(){
 		var playerIndex = (this.roundNumber - 1) % this.players.length;
 		this.currentPlayer.texture = this.players[playerIndex][0];
 
-		this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
+		//this.scene.cameraAnimation.startCameraOrbit(1000, vec3.fromValues(0,1,0), -2*Math.PI/this.players.length);
 
 		if(this.currentPlayerIsBOT())
 			this.isBotTurn=true;
@@ -677,6 +756,8 @@ Game.prototype.updateTimer = function(){
 };
 
 
+
+
 Game.prototype.animateStones = function(material){
 	for(var i = 0; i < this.stones.length; i++)
 		if(this.stones[i].colorMaterial == material)
@@ -717,52 +798,6 @@ Game.prototype.animateStones = function(material){
 		var requestString = "[stoneDragBOT,"+ board+",[\""+ XplayedStone +"\"],[\""+YplayedStone+ "\"],_Xinicial,_Yinicial,_Xfinal,_Yfinal]";
 		console.warn(requestString);
 		this.scene.socket.sendRequest(requestString, 'botdrag');*/
-
-
-Game.prototype.makeDragBOT = function(){
-	var response = this.scene.socket.botResponseDRAG;
-
-	var Xinicial = response[0];
-	var Yinicial = response[1];
-	var Xfinal = response[2];
-	var Yfinal = response[3];
-	//pedra que se vai mover
-	var movingStone = this.getRegistedStoneFromPos(Xinicial,Yinicial);
-	var tileToMove = this.board.getRegistedBoard(Xfinal,Yfinal);
-
-	var cena = this;
-
-	cena.pickingStone(movingStone);
-	//cena.pickingTile(tileToMove);
-	setTimeout(function(){ 
-		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
-   		cena.pickingTile(tileToMove);
-		},500);
-};
-
-
-Game.prototype.makeDropBOT = function(){
-	var response = this.scene.socket.botResponseDROP;
-
-	//resultados da resposta do prolog que vem num array deste genero [2,5,6]
-	var stoneID = response[0];
-	var Xpos = response[1];
-	var Ypos = response[2];
-	//funções responsáveis por irem buscar os obj para enviar ao picking
-	var stone = this.getRegistedStone(stoneID);
-	var position = this.board.getRegistedBoard(Xpos,Ypos);
-
-	var cena = this;
-	//vai fazer o picking e a animação da pedra selecionada pelo bot
-
-	cena.pickingStone(stone);
-	// cena.pickingTile(position);
-	setTimeout(function(){ 
-		//coloca a peça selecionada pelo bot na posição por ele definida passado 1 segundo
-   		cena.pickingTile(position);
-		},500);
-	this.updateStones(stoneID);
-};
 
 
 Game.prototype.currentPlayerIsBOT = function(){

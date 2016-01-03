@@ -140,8 +140,12 @@ MyStone.prototype.movementAnimation = function(){
 		this.scene.stateMachine.game.animation = false;
 
 		if(this.roundNumberAction == this.scene.stateMachine.game.roundNumber)
-			if(!this.scene.stateMachine.game.undo)
+			if(!this.scene.stateMachine.game.undo){
+				console.warn("Vai fazer o nextMove!!");
+				console.warn(this);
 				this.scene.stateMachine.game.nextMove(this);
+			}
+				
 			else
 				this.scene.stateMachine.game.previousMove(this);
 			
